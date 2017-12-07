@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+
+<script id="vertex-shader" type="x-shader/x-vertex">
+
+attribute  vec4 vPosition;
+attribute  vec4 vColor;
+varying vec4 fColor;
+
+uniform mat4 modelViewMatrix;
+uniform mat4 projectionMatrix;
+
+void main()
+{
+    fColor = vColor;
+    gl_Position = projectionMatrix * modelViewMatrix * vPosition;
+}
+</script>
+
+<script id="fragment-shader" type="x-shader/x-fragment">
+
+precision mediump float;
+
+varying vec4 fColor;
+
+void main()
+{
+    gl_FragColor = fColor;
+}
+</script>
+
+<script type="text/javascript" src="../Common/webgl-utils.js"></script>
+<script type="text/javascript" src="../Common/initShaders.js"></script>
+<script type="text/javascript" src="../Common/MV.js"></script>
+<script type="text/javascript" src="Pikachu.js"></script>
+
+<body>
+<canvas id="gl-canvas" width="512" height="512">
+Oops ... your browser doesn't support the HTML5 canvas element
+</canvas>
+
+<br/>
+<button id = "AntiRotate">Anti Rotate </button>
+<button id = "ClockRotate">Clock Rotate</button>
+<button id = "IncreaseZ">Increase Z</button>
+<button id = "DecreaseZ">Decrease Z</button>
+<button id = "IncreaseR">Increase R</button>
+<button id = "DecreaseR">Decrease R</button>
+<button id = "IncreaseTheta">Increase theta</button>
+<button id = "DecreaseTheta">Decrease theta</button>
+<button id = "IncreasePhi">Increase phi</button>
+<button id = "DecreasePhi">Decrease phi</button>
+</body>
+</html>
