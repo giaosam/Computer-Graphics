@@ -21,9 +21,11 @@ var RotateAngle = 0; //旋转角度
 
 var CurModelViewMatrix = mat4(); //当前变换矩阵
 var CurProjectionMatrix = mat4(); //当前投影矩阵
-var CurConversionMatrix = mat4(); //当前变换矩阵 
+var CurConversionMatrix = mat4(); //当前变换矩阵
 var CurModelViewMatrixLoc; //shader 变量
 var CurProjectionMatrixLoc; //shader 变量
+var normalMatrix;
+var normalMatrixLoc;
 
 var iBufferCubeID, cBufferCubeID, vBufferCubeID; //立方体的3个buffer
 var vCubeColor, vCubePosition;
@@ -34,132 +36,185 @@ var cBufferTetraID, vBufferTetraID; //四面体的2个buffer
 var vTetraColor, vTetraPosition;
 var TetraTx = 0; //四面体平移量
 
-var iBufferSphereID1, cBufferSphereID1, vBufferSphereID1; //第一个球体的3个buffer
-var vSphereColor1,vSpherePosition1;
+var iBufferSphereID1, cBufferSphereID1, vBufferSphereID1, nBuffer1; //第一个球体的3个buffer
+var vSphereColor1,vSpherePosition1, vSphereNormal1;
 var numSphereVertex1; //球的顶点数
 var sphereVertices1 = []; //球的顶点
 var sphereIndices1 = []; //球的索引
 var sphereColors1 = []; //球的颜色
+var sphereNormals1 = [];//球上顶点的法向量
 
-var iBufferSphereID2, cBufferSphereID2, vBufferSphereID2; //第二个球体的3个buffer
-var vSphereColor2,vSpherePosition2;
+var iBufferSphereID2, cBufferSphereID2, vBufferSphereID2, nBuffer2; //第二个球体的3个buffer
+var vSphereColor2,vSpherePosition2, vSphereNormal2;
 var numSphereVertex2; //球的顶点数
 var sphereVertices2 = []; //球的顶点
 var sphereIndices2 = []; //球的索引
 var sphereColors2 = []; //球的颜色
+var sphereNormals2 = [];//球上顶点的法向量
 
-var iBufferSphereID3, cBufferSphereID3, vBufferSphereID3; //第三个球体的3个buffer
-var vSphereColor3,vSpherePosition3;
+
+var iBufferSphereID3, cBufferSphereID3, vBufferSphereID3, nBuffer3; //第三个球体的3个buffer
+var vSphereColor3,vSpherePosition3, vSphereNormal3;
 var numSphereVertex3; //球的顶点数
 var sphereVertices3 = []; //球的顶点
 var sphereIndices3 = []; //球的索引
 var sphereColors3 = []; //球的颜色
+var sphereNormals3 = [];//球上顶点的法向量
 
-var iBufferSphereID4, cBufferSphereID4, vBufferSphereID4; //第四个球体的3个buffer
-var vSphereColor4,vSpherePosition4;
+
+var iBufferSphereID4, cBufferSphereID4, vBufferSphereID4, nBuffer4; //第四个球体的3个buffer
+var vSphereColor4,vSpherePosition4, vSphereNormal4;
 var numSphereVertex4; //球的顶点数
 var sphereVertices4 = []; //球的顶点
 var sphereIndices4 = []; //球的索引
 var sphereColors4 = []; //球的颜色
+var sphereNormals4 = [];//球上顶点的法向量
 
-var iBufferSphereID5, cBufferSphereID5, vBufferSphereID5; //第五个球体的3个buffer
-var vSphereColor5,vSpherePosition5;
+
+var iBufferSphereID5, cBufferSphereID5, vBufferSphereID5, nBuffer5; //第五个球体的3个buffer
+var vSphereColor5,vSpherePosition5, vSphereNormal5;
 var numSphereVertex5; //球的顶点数
 var sphereVertices5 = []; //球的顶点
 var sphereIndices5 = []; //球的索引
 var sphereColors5 = []; //球的颜色
+var sphereNormals5 = [];//球上顶点的法向量
 
-var iBufferSphereID6, cBufferSphereID6, vBufferSphereID6; //第六个球体的3个buffer
-var vSphereColor6,vSpherePosition6;
+
+var iBufferSphereID6, cBufferSphereID6, vBufferSphereID6, nBuffer6; //第六个球体的3个buffer
+var vSphereColor6,vSpherePosition6, vSphereNormal6;
 var numSphereVertex6; //球的顶点数
 var sphereVertices6 = []; //球的顶点
 var sphereIndices6 = []; //球的索引
 var sphereColors6 = []; //球的颜色
+var sphereNormals6 = [];//球上顶点的法向量
 
-var iBufferSphereID7, cBufferSphereID7, vBufferSphereID7; //第七个球体的3个buffer
-var vSphereColor7,vSpherePosition7;
+
+var iBufferSphereID7, cBufferSphereID7, vBufferSphereID7, nBuffer7; //第七个球体的3个buffer
+var vSphereColor7,vSpherePosition7, vSphereNormal7;
 var numSphereVertex7; //球的顶点数
 var sphereVertices7 = []; //球的顶点
 var sphereIndices7 = []; //球的索引
 var sphereColors7 = []; //球的颜色
+var sphereNormals7 = [];//球上顶点的法向量
 
-var iBufferSphereID8, cBufferSphereID8, vBufferSphereID8; //第八个球体的3个buffer
-var vSphereColor8,vSpherePosition8;
+
+var iBufferSphereID8, cBufferSphereID8, vBufferSphereID8, nBuffer8; //第八个球体的3个buffer
+var vSphereColor8,vSpherePosition8, vSphereNormal8;
 var numSphereVertex8; //球的顶点数
 var sphereVertices8 = []; //球的顶点
 var sphereIndices8 = []; //球的索引
 var sphereColors8 = []; //球的颜色
+var sphereNormals8 = [];//球上顶点的法向量
 
-var iBufferSphereID9, cBufferSphereID9, vBufferSphereID9; //第九个球体的3个buffer
-var vSphereColor9,vSpherePosition9;
+
+var iBufferSphereID9, cBufferSphereID9, vBufferSphereID9, nBuffer9; //第九个球体的3个buffer
+var vSphereColor9,vSpherePosition9, vSphereNormal9;
 var numSphereVertex9; //球的顶点数
 var sphereVertices9 = []; //球的顶点
 var sphereIndices9 = []; //球的索引
 var sphereColors9 = []; //球的颜色
+var sphereNormals9 = [];//球上顶点的法向量
 
-var iBufferSphereID10, cBufferSphereID10, vBufferSphereID10; //第十个球体的3个buffer
-var vSphereColor10,vSpherePosition10;
+
+var iBufferSphereID10, cBufferSphereID10, vBufferSphereID10, nBuffer10; //第十个球体的3个buffer
+var vSphereColor10,vSpherePosition10, vSphereNormal10;
 var numSphereVertex10; //球的顶点数
 var sphereVertices10 = []; //球的顶点
 var sphereIndices10 = []; //球的索引
 var sphereColors10 = []; //球的颜色
+var sphereNormals10 = [];//球上顶点的法向量
 
-var iBufferSphereID11, cBufferSphereID11, vBufferSphereID11; //第十一个球体的3个buffer
-var vSphereColor11,vSpherePosition11;
+
+var iBufferSphereID11, cBufferSphereID11, vBufferSphereID11, nBuffer11; //第十一个球体的3个buffer
+var vSphereColor11,vSpherePosition11, vSphereNormal11;
 var numSphereVertex11; //球的顶点数
 var sphereVertices11 = []; //球的顶点
 var sphereIndices11 = []; //球的索引
 var sphereColors11 = []; //球的颜色
+var sphereNormals11 = [];//球上顶点的法向量
 
-var iBufferSphereID12, cBufferSphereID12, vBufferSphereID12; //第十二个球体的3个buffer
-var vSphereColor12,vSpherePosition12;
+
+var iBufferSphereID12, cBufferSphereID12, vBufferSphereID12, nBuffer12; //第十二个球体的3个buffer
+var vSphereColor12,vSpherePosition12, vSphereNormal12;
 var numSphereVertex12; //球的顶点数
 var sphereVertices12 = []; //球的顶点
 var sphereIndices12 = []; //球的索引
 var sphereColors12 = []; //球的颜色
+var sphereNormals12 = [];//球上顶点的法向量
 
-var iBufferSphereID13, cBufferSphereID13, vBufferSphereID13; //第十三个球体的3个buffer
-var vSphereColor13,vSpherePosition13;
+
+var iBufferSphereID13, cBufferSphereID13, vBufferSphereID13, nBuffer13; //第十三个球体的3个buffer
+var vSphereColor13,vSpherePosition13, vSphereNormal13;
 var numSphereVertex13; //球的顶点数
 var sphereVertices13 = []; //球的顶点
 var sphereIndices13 = []; //球的索引
 var sphereColors13 = []; //球的颜色
+var sphereNormals13 = [];//球上顶点的法向量
 
-var iBufferSphereID14, cBufferSphereID14, vBufferSphereID14; //第十四个球体的3个buffer
-var vSphereColor14,vSpherePosition14;
+
+var iBufferSphereID14, cBufferSphereID14, vBufferSphereID14, nBuffer14; //第十四个球体的3个buffer
+var vSphereColor14,vSpherePosition14, vSphereNormal14;
 var numSphereVertex14; //球的顶点数
 var sphereVertices14 = []; //球的顶点
 var sphereIndices14 = []; //球的索引
 var sphereColors14 = []; //球的颜色
+var sphereNormals14 = [];//球上顶点的法向量
 
-var iBufferSphereID15, cBufferSphereID15, vBufferSphereID15; //第十五个球体的3个buffer
-var vSphereColor15,vSpherePosition15;
+
+var iBufferSphereID15, cBufferSphereID15, vBufferSphereID15, nBuffer15; //第十五个球体的3个buffer
+var vSphereColor15,vSpherePosition15, vSphereNormal15;
 var numSphereVertex15; //球的顶点数
 var sphereVertices15 = []; //球的顶点
 var sphereIndices15 = []; //球的索引
 var sphereColors15 = []; //球的颜色
+var sphereNormals15 = [];//球上顶点的法向量
 
-var iBufferSphereID16, cBufferSphereID16, vBufferSphereID16; //第十六个球体的3个buffer
-var vSphereColor16,vSpherePosition16;
+
+var iBufferSphereID16, cBufferSphereID16, vBufferSphereID16, nBuffer16; //第十六个球体的3个buffer
+var vSphereColor16,vSpherePosition16, vSphereNormal16;
 var numSphereVertex16; //球的顶点数
 var sphereVertices16 = []; //球的顶点
 var sphereIndices16 = []; //球的索引
 var sphereColors16 = []; //球的颜色
+var sphereNormals16 = [];//球上顶点的法向量
 
-var iBufferSphereID17, cBufferSphereID17, vBufferSphereID17; //第十七个球体的3个buffer
-var vSphereColor17,vSpherePosition17;
+
+var iBufferSphereID17, cBufferSphereID17, vBufferSphereID17, nBuffer17; //第十七个球体的3个buffer
+var vSphereColor17,vSpherePosition17, vSphereNormal17;
 var numSphereVertex17; //球的顶点数
 var sphereVertices17 = []; //球的顶点
 var sphereIndices17 = []; //球的索引
 var sphereColors17 = []; //球的颜色
+var sphereNormals17 = [];//球上顶点的法向量
 
-var iBufferTorusID,cBufferTorusID,vBufferTorusID; //圆台的3个buffer
-var vTorusColor,vTorusPosition;
+
+var iBufferTorusID,cBufferTorusID, vBufferTorusID, nBufferTorusID;//
+var vTorusColor,vTorusPosition, vTorusNormal;
 var numTorusVertex; //圆台的顶点数
 var torusVertices = []; //圆台的顶点
 var torusIndices = []; //圆台的索引
 var torusColors = []; //圆台的颜色
+var torusNormals = [];
 
+
+
+
+//FCB 1210
+
+var lightPosition = vec4(1.0, 0, 0, 0.0);
+
+//var lightAmbient = vec4(0.2, 0.2, 0.2, 1.0 );
+
+var lightAmbient = vec4(0.2, 0.2, 1, 1.0);
+var lightDiffuse = vec4(1.0, 1.0, 1.0, 1.0);
+var lightSpecular = vec4(1.0, 1.0, 1.0, 1.0);
+
+var materialAmbient = vec4(1.0, 0.0, 1.0, 1.0);
+var materialDiffuse = vec4(1.0, 0.8, 0.0, 1.0);
+var materialSpecular = vec4(1.0, 0.8, 0.0, 1.0);
+var materialShininess = 100.0;
+
+var projection;
 
 // //立方体相关数组，直接设置
 //     var vertices = [
@@ -319,7 +374,10 @@ function mouseMotion( x,  y)
            lastPos[2] = curPos[2];
       }
     }
-    
+
+
+
+
     render();
 }
 
@@ -372,12 +430,12 @@ window.onload = function init() {
     // gl.bufferData(gl.ARRAY_BUFFER, flatten(vertexColors), gl.STATIC_DRAW);
     // vCubeColor = gl.getAttribLocation(program, "vColor");
     // gl.enableVertexAttribArray(vCubeColor);
-  
+
     // // array element buffer
     // iBufferCubeID = gl.createBuffer();
     // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferCubeID);
-    // gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(indices), gl.STATIC_DRAW); //注意类型转换  
-       
+    // gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(indices), gl.STATIC_DRAW); //注意类型转换
+
     // //vertex buffer
     // vBufferCubeID = gl.createBuffer();
     // gl.bindBuffer(gl.ARRAY_BUFFER, vBufferCubeID);
@@ -392,7 +450,7 @@ window.onload = function init() {
     //gl.bufferData(gl.ARRAY_BUFFER, flatten(vertices_tetrahedron), gl.STATIC_DRAW);
     //vTetraPosition = gl.getAttribLocation(program, "vPosition");
     //gl.enableVertexAttribArray(vTetraPosition);
-    
+
     // color array atrribute buffer
     //cBufferTetraID = gl.createBuffer();
     //gl.bindBuffer(gl.ARRAY_BUFFER, cBufferTetraID);
@@ -403,20 +461,21 @@ window.onload = function init() {
 
     //第一个球体各参数-头部下部分的球
     var colorsVec4 = vec4(1.0, 246/255, 93/255, 1.0);
-    numSphereVertex1 = initSphereBuffers(gl, program, 0.35, sphereVertices1, sphereColors1, sphereIndices1, colorsVec4);
-    
+    numSphereVertex1 = initSphereBuffers(gl, program, 0.35, sphereVertices1, sphereColors1, sphereIndices1, colorsVec4, sphereNormals1);
+
     // color array attribute buffer
-    cBufferSphereID1 = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID1);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors1), gl.STATIC_DRAW);
-    vSphereColor1 = gl.getAttribLocation(program, "vColor");
-    gl.enableVertexAttribArray(vSphereColor1);
+    // cBufferSphereID1 = gl.createBuffer();
+    // gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID1);
+    // gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors1), gl.STATIC_DRAW);
+    // vSphereColor1 = gl.getAttribLocation(program, "vColor");
+    // gl.enableVertexAttribArray(vSphereColor1);
+
 
     // array element buffer
     iBufferSphereID1 = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID1);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(sphereIndices1), gl.STATIC_DRAW);
-    
+
     //vertex buffer
     vBufferSphereID1 = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID1);
@@ -424,23 +483,29 @@ window.onload = function init() {
     vSpherePosition1 = gl.getAttribLocation(program, "vPosition");
     gl.enableVertexAttribArray(vSpherePosition1);
 
+    //normal buffer
+    nBuffer1 = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer1);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereNormals1), gl.STATIC_DRAW);
+    vSphereNormal1 = gl.getAttribLocation( program, "vNormal" );
+    gl.enableVertexAttribArray(vSphereNormal1);
 
     //第二个球体各参数-头部上部分的球
     var colorsVec4 = vec4(1.0, 246/255, 93/255, 1.0);
-    numSphereVertex2 = initSphereBuffers(gl, program, 0.35, sphereVertices2, sphereColors2, sphereIndices2, colorsVec4);
-    
+    numSphereVertex2 = initSphereBuffers(gl, program, 0.35, sphereVertices2, sphereColors2, sphereIndices2, colorsVec4, sphereNormals2);
+
     // color array attribute buffer
-    cBufferSphereID2 = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID2);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors2), gl.STATIC_DRAW);
-    vSphereColor2 = gl.getAttribLocation(program, "vColor");
-    gl.enableVertexAttribArray(vSphereColor2);
+    // cBufferSphereID2 = gl.createBuffer();
+    // gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID2);
+    // gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors2), gl.STATIC_DRAW);
+    // vSphereColor2 = gl.getAttribLocation(program, "vColor");
+    // gl.enableVertexAttribArray(vSphereColor2);
 
     // array element buffer
     iBufferSphereID2 = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID2);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(sphereIndices2), gl.STATIC_DRAW);
-    
+
     //vertex buffer
     vBufferSphereID2 = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID2);
@@ -448,23 +513,30 @@ window.onload = function init() {
     vSpherePosition2 = gl.getAttribLocation(program, "vPosition");
     gl.enableVertexAttribArray(vSpherePosition2);
 
+    //normal buffer
+    nBuffer2 = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer2);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereNormals2), gl.STATIC_DRAW);
+    vSphereNormal2 = gl.getAttribLocation( program, "vNormal" );
+    gl.enableVertexAttribArray(vSphereNormal2);
+
 
     //第三个球体各参数-左耳朵
     var colorsVec4 = vec4(1.0, 246/255, 93/255, 1.0);
-    numSphereVertex3 = initSphereBuffers(gl, program, 0.245, sphereVertices3, sphereColors3, sphereIndices3, colorsVec4);
-    
+    numSphereVertex3 = initSphereBuffers(gl, program, 0.245, sphereVertices3, sphereColors3, sphereIndices3, colorsVec4, sphereNormals3);
+
     // color array attribute buffer
-    cBufferSphereID3 = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID3);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors3), gl.STATIC_DRAW);
-    vSphereColor3 = gl.getAttribLocation(program, "vColor");
-    gl.enableVertexAttribArray(vSphereColor3);
+    // cBufferSphereID3 = gl.createBuffer();
+    // gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID3);
+    // gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors3), gl.STATIC_DRAW);
+    // vSphereColor3 = gl.getAttribLocation(program, "vColor");
+    // gl.enableVertexAttribArray(vSphereColor3);
 
     // array element buffer
     iBufferSphereID3 = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID3);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(sphereIndices3), gl.STATIC_DRAW);
-    
+
     //vertex buffer
     vBufferSphereID3 = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID3);
@@ -472,23 +544,30 @@ window.onload = function init() {
     vSpherePosition3 = gl.getAttribLocation(program, "vPosition");
     gl.enableVertexAttribArray(vSpherePosition3);
 
+    //normal buffer
+    nBuffer3 = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer3);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereNormals3), gl.STATIC_DRAW);
+    vSphereNormal3 = gl.getAttribLocation( program, "vNormal" );
+    gl.enableVertexAttribArray(vSphereNormal3);
+
 
     //第四个球体各参数-右耳朵
     var colorsVec4 = vec4(1.0, 246/255, 93/255, 1.0);
-    numSphereVertex4 = initSphereBuffers(gl, program, 0.245, sphereVertices4, sphereColors4, sphereIndices4, colorsVec4);
-    
+    numSphereVertex4 = initSphereBuffers(gl, program, 0.245, sphereVertices4, sphereColors4, sphereIndices4, colorsVec4, sphereNormals4);
+
     // color array attribute buffer
-    cBufferSphereID4 = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID4);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors4), gl.STATIC_DRAW);
-    vSphereColor4 = gl.getAttribLocation(program, "vColor");
-    gl.enableVertexAttribArray(vSphereColor4);
+    // cBufferSphereID4 = gl.createBuffer();
+    // gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID4);
+    // gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors4), gl.STATIC_DRAW);
+    // vSphereColor4 = gl.getAttribLocation(program, "vColor");
+    // gl.enableVertexAttribArray(vSphereColor4);
 
     // array element buffer
     iBufferSphereID4 = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID4);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(sphereIndices4), gl.STATIC_DRAW);
-    
+
     //vertex buffer
     vBufferSphereID4 = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID4);
@@ -496,23 +575,30 @@ window.onload = function init() {
     vSpherePosition4 = gl.getAttribLocation(program, "vPosition");
     gl.enableVertexAttribArray(vSpherePosition4);
 
+    //normal buffer
+    nBuffer4 = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer4);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereNormals4), gl.STATIC_DRAW);
+    vSphereNormal4 = gl.getAttribLocation( program, "vNormal" );
+    gl.enableVertexAttribArray(vSphereNormal4);
+
 
     //第五个球体各参数-身体竖着的球
     var colorsVec4 = vec4(1.0, 246/255, 93/255, 1.0);
-    numSphereVertex5 = initSphereBuffers(gl, program, 0.35, sphereVertices5, sphereColors5, sphereIndices5, colorsVec4);
-    
+    numSphereVertex5 = initSphereBuffers(gl, program, 0.35, sphereVertices5, sphereColors5, sphereIndices5, colorsVec4, sphereNormals5);
+
     // color array attribute buffer
-    cBufferSphereID5 = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID5);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors5), gl.STATIC_DRAW);
-    vSphereColor5 = gl.getAttribLocation(program, "vColor");
-    gl.enableVertexAttribArray(vSphereColor5);
+    // cBufferSphereID5 = gl.createBuffer();
+    // gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID5);
+    // gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors5), gl.STATIC_DRAW);
+    // vSphereColor5 = gl.getAttribLocation(program, "vColor");
+    // gl.enableVertexAttribArray(vSphereColor5);
 
     // array element buffer
     iBufferSphereID5 = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID5);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(sphereIndices5), gl.STATIC_DRAW);
-    
+
     //vertex buffer
     vBufferSphereID5 = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID5);
@@ -520,23 +606,30 @@ window.onload = function init() {
     vSpherePosition5 = gl.getAttribLocation(program, "vPosition");
     gl.enableVertexAttribArray(vSpherePosition5);
 
+    //normal buffer
+    nBuffer5 = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer5);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereNormals5), gl.STATIC_DRAW);
+    vSphereNormal5 = gl.getAttribLocation( program, "vNormal" );
+    gl.enableVertexAttribArray(vSphereNormal5);
+
 
     //第六个球体各参数-身体横着的左边的球
     var colorsVec4 = vec4(1.0, 246/255, 93/255, 1.0);
-    numSphereVertex6 = initSphereBuffers(gl, program, 0.245, sphereVertices6, sphereColors6, sphereIndices6, colorsVec4);
-    
+    numSphereVertex6 = initSphereBuffers(gl, program, 0.245, sphereVertices6, sphereColors6, sphereIndices6, colorsVec4, sphereNormals6);
+
     // color array attribute buffer
-    cBufferSphereID6 = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID6);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors6), gl.STATIC_DRAW);
-    vSphereColor6 = gl.getAttribLocation(program, "vColor");
-    gl.enableVertexAttribArray(vSphereColor6);
+    // cBufferSphereID6 = gl.createBuffer();
+    // gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID6);
+    // gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors6), gl.STATIC_DRAW);
+    // vSphereColor6 = gl.getAttribLocation(program, "vColor");
+    // gl.enableVertexAttribArray(vSphereColor6);
 
     // array element buffer
     iBufferSphereID6 = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID6);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(sphereIndices6), gl.STATIC_DRAW);
-    
+
     //vertex buffer
     vBufferSphereID6 = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID6);
@@ -544,23 +637,30 @@ window.onload = function init() {
     vSpherePosition6 = gl.getAttribLocation(program, "vPosition");
     gl.enableVertexAttribArray(vSpherePosition6);
 
+    //normal buffer
+    nBuffer6 = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer6);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereNormals6), gl.STATIC_DRAW);
+    vSphereNormal6 = gl.getAttribLocation( program, "vNormal" );
+    gl.enableVertexAttribArray(vSphereNormal6);
+
 
     //第七个球体各参数-身体横着的右边的球
     var colorsVec4 = vec4(1.0, 246/255, 93/255, 1.0);
-    numSphereVertex7 = initSphereBuffers(gl, program, 0.245, sphereVertices7, sphereColors7, sphereIndices7, colorsVec4);
-    
+    numSphereVertex7 = initSphereBuffers(gl, program, 0.245, sphereVertices7, sphereColors7, sphereIndices7, colorsVec4, sphereNormals7);
+
     // color array attribute buffer
-    cBufferSphereID7 = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID7);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors7), gl.STATIC_DRAW);
-    vSphereColor7 = gl.getAttribLocation(program, "vColor");
-    gl.enableVertexAttribArray(vSphereColor7);
+    // cBufferSphereID7 = gl.createBuffer();
+    // gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID7);
+    // gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors7), gl.STATIC_DRAW);
+    // vSphereColor7 = gl.getAttribLocation(program, "vColor");
+    // gl.enableVertexAttribArray(vSphereColor7);
 
     // array element buffer
     iBufferSphereID7 = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID7);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(sphereIndices7), gl.STATIC_DRAW);
-    
+
     //vertex buffer
     vBufferSphereID7 = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID7);
@@ -568,23 +668,30 @@ window.onload = function init() {
     vSpherePosition7 = gl.getAttribLocation(program, "vPosition");
     gl.enableVertexAttribArray(vSpherePosition7);
 
+    //normal buffer
+    nBuffer7 = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer7);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereNormals7), gl.STATIC_DRAW);
+    vSphereNormal7 = gl.getAttribLocation( program, "vNormal" );
+    gl.enableVertexAttribArray(vSphereNormal7);
+
 
     //第八个球体各参数-左腮红
     var colorsVec4 = vec4(255/255, 55/255, 55/255, 1.0);
-    numSphereVertex8 = initSphereBuffers(gl, program, 0.245, sphereVertices8, sphereColors8, sphereIndices8, colorsVec4);
-    
+    numSphereVertex8 = initSphereBuffers(gl, program, 0.245, sphereVertices8, sphereColors8, sphereIndices8, colorsVec4, sphereNormals8);
+
     // color array attribute buffer
-    cBufferSphereID8 = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID8);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors8), gl.STATIC_DRAW);
-    vSphereColor8 = gl.getAttribLocation(program, "vColor");
-    gl.enableVertexAttribArray(vSphereColor8);
+    // cBufferSphereID8 = gl.createBuffer();
+    // gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID8);
+    // gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors8), gl.STATIC_DRAW);
+    // vSphereColor8 = gl.getAttribLocation(program, "vColor");
+    // gl.enableVertexAttribArray(vSphereColor8);
 
     // array element buffer
     iBufferSphereID8 = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID8);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(sphereIndices8), gl.STATIC_DRAW);
-    
+
     //vertex buffer
     vBufferSphereID8 = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID8);
@@ -592,23 +699,29 @@ window.onload = function init() {
     vSpherePosition8 = gl.getAttribLocation(program, "vPosition");
     gl.enableVertexAttribArray(vSpherePosition8);
 
+    //normal buffer
+    nBuffer8 = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer8);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereNormals8), gl.STATIC_DRAW);
+    vSphereNormal8 = gl.getAttribLocation( program, "vNormal" );
+    gl.enableVertexAttribArray(vSphereNormal8);
 
     //第九个球体各参数-右腮红
     var colorsVec4 = vec4(255/255, 55/255, 55/255, 1.0);
-    numSphereVertex9 = initSphereBuffers(gl, program, 0.245, sphereVertices9, sphereColors9, sphereIndices9, colorsVec4);
-    
+    numSphereVertex9 = initSphereBuffers(gl, program, 0.245, sphereVertices9, sphereColors9, sphereIndices9, colorsVec4, sphereNormals9);
+
     // color array attribute buffer
-    cBufferSphereID9 = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID9);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors9), gl.STATIC_DRAW);
-    vSphereColor9 = gl.getAttribLocation(program, "vColor");
-    gl.enableVertexAttribArray(vSphereColor9);
+    // cBufferSphereID9 = gl.createBuffer();
+    // gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID9);
+    // gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors9), gl.STATIC_DRAW);
+    // vSphereColor9 = gl.getAttribLocation(program, "vColor");
+    // gl.enableVertexAttribArray(vSphereColor9);
 
     // array element buffer
     iBufferSphereID9 = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID9);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(sphereIndices9), gl.STATIC_DRAW);
-    
+
     //vertex buffer
     vBufferSphereID9 = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID9);
@@ -616,23 +729,30 @@ window.onload = function init() {
     vSpherePosition9 = gl.getAttribLocation(program, "vPosition");
     gl.enableVertexAttribArray(vSpherePosition9);
 
+    //normal buffer
+    nBuffer9 = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer9);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereNormals9), gl.STATIC_DRAW);
+    vSphereNormal9 = gl.getAttribLocation( program, "vNormal" );
+    gl.enableVertexAttribArray(vSphereNormal9);
+
 
     //第十个球体各参数-嘴巴
     var colorsVec4 = vec4(255/255, 182/255, 193/255, 1.0);
-    numSphereVertex10 = initSphereBuffers(gl, program, 0.245, sphereVertices10, sphereColors10, sphereIndices10, colorsVec4);
-    
+    numSphereVertex10 = initSphereBuffers(gl, program, 0.245, sphereVertices10, sphereColors10, sphereIndices10, colorsVec4, sphereNormals10);
+
     // color array attribute buffer
-    cBufferSphereID10 = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID10);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors10), gl.STATIC_DRAW);
-    vSphereColor10 = gl.getAttribLocation(program, "vColor");
-    gl.enableVertexAttribArray(vSphereColor10);
+    // cBufferSphereID10 = gl.createBuffer();
+    // gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID10);
+    // gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors10), gl.STATIC_DRAW);
+    // vSphereColor10 = gl.getAttribLocation(program, "vColor");
+    // gl.enableVertexAttribArray(vSphereColor10);
 
     // array element buffer
     iBufferSphereID10 = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID10);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(sphereIndices10), gl.STATIC_DRAW);
-    
+
     //vertex buffer
     vBufferSphereID10 = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID10);
@@ -640,23 +760,30 @@ window.onload = function init() {
     vSpherePosition10 = gl.getAttribLocation(program, "vPosition");
     gl.enableVertexAttribArray(vSpherePosition10);
 
+    //normal buffer
+    nBuffer10 = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer10);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereNormals10), gl.STATIC_DRAW);
+    vSphereNormal10 = gl.getAttribLocation( program, "vNormal" );
+    gl.enableVertexAttribArray(vSphereNormal10);
+
 
     //第十一个球体各参数-左眼睛
     var colorsVec4 = vec4(0.0, 0.0, 0.0, 1.0);
-    numSphereVertex11 = initSphereBuffers(gl, program, 0.245, sphereVertices11, sphereColors11, sphereIndices11, colorsVec4);
-    
+    numSphereVertex11 = initSphereBuffers(gl, program, 0.245, sphereVertices11, sphereColors11, sphereIndices11, colorsVec4, sphereNormals11);
+
     // color array attribute buffer
-    cBufferSphereID11 = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID11);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors11), gl.STATIC_DRAW);
-    vSphereColor11 = gl.getAttribLocation(program, "vColor");
-    gl.enableVertexAttribArray(vSphereColor11);
+    // cBufferSphereID11 = gl.createBuffer();
+    // gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID11);
+    // gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors11), gl.STATIC_DRAW);
+    // vSphereColor11 = gl.getAttribLocation(program, "vColor");
+    // gl.enableVertexAttribArray(vSphereColor11);
 
     // array element buffer
     iBufferSphereID11 = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID11);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(sphereIndices11), gl.STATIC_DRAW);
-    
+
     //vertex buffer
     vBufferSphereID11 = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID11);
@@ -664,23 +791,30 @@ window.onload = function init() {
     vSpherePosition11 = gl.getAttribLocation(program, "vPosition");
     gl.enableVertexAttribArray(vSpherePosition11);
 
+    //normal buffer
+    nBuffer11 = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer11);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereNormals11), gl.STATIC_DRAW);
+    vSphereNormal11 = gl.getAttribLocation( program, "vNormal" );
+    gl.enableVertexAttribArray(vSphereNormal11);
+
 
     //第十二个球体各参数-右眼睛
     var colorsVec4 = vec4(0.0, 0.0, 0.0, 1.0);
-    numSphereVertex12 = initSphereBuffers(gl, program, 0.245, sphereVertices12, sphereColors12, sphereIndices12, colorsVec4);
-    
+    numSphereVertex12 = initSphereBuffers(gl, program, 0.245, sphereVertices12, sphereColors12, sphereIndices12, colorsVec4, sphereNormals12);
+
     // color array attribute buffer
-    cBufferSphereID12 = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID12);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors12), gl.STATIC_DRAW);
-    vSphereColor12 = gl.getAttribLocation(program, "vColor");
-    gl.enableVertexAttribArray(vSphereColor12);
+    // cBufferSphereID12 = gl.createBuffer();
+    // gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID12);
+    // gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors12), gl.STATIC_DRAW);
+    // vSphereColor12 = gl.getAttribLocation(program, "vColor");
+    // gl.enableVertexAttribArray(vSphereColor12);
 
     // array element buffer
     iBufferSphereID12 = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID12);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(sphereIndices12), gl.STATIC_DRAW);
-    
+
     //vertex buffer
     vBufferSphereID12 = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID12);
@@ -688,23 +822,30 @@ window.onload = function init() {
     vSpherePosition12 = gl.getAttribLocation(program, "vPosition");
     gl.enableVertexAttribArray(vSpherePosition12);
 
+    //normal buffer
+    nBuffer12 = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer12);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereNormals12), gl.STATIC_DRAW);
+    vSphereNormal12 = gl.getAttribLocation( program, "vNormal" );
+    gl.enableVertexAttribArray(vSphereNormal12);
+
 
     //第十三个球体各参数-左眼珠
     var colorsVec4 = vec4(1.0, 1.0, 1.0, 1.0);
-    numSphereVertex13 = initSphereBuffers(gl, program, 0.245, sphereVertices13, sphereColors13, sphereIndices13, colorsVec4);
-    
+    numSphereVertex13 = initSphereBuffers(gl, program, 0.245, sphereVertices13, sphereColors13, sphereIndices13, colorsVec4, sphereNormals13);
+
     // color array attribute buffer
-    cBufferSphereID13 = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID13);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors13), gl.STATIC_DRAW);
-    vSphereColor13 = gl.getAttribLocation(program, "vColor");
-    gl.enableVertexAttribArray(vSphereColor13);
+    // cBufferSphereID13 = gl.createBuffer();
+    // gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID13);
+    // gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors13), gl.STATIC_DRAW);
+    // vSphereColor13 = gl.getAttribLocation(program, "vColor");
+    // gl.enableVertexAttribArray(vSphereColor13);
 
     // array element buffer
     iBufferSphereID13 = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID13);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(sphereIndices13), gl.STATIC_DRAW);
-    
+
     //vertex buffer
     vBufferSphereID13 = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID13);
@@ -712,23 +853,30 @@ window.onload = function init() {
     vSpherePosition13 = gl.getAttribLocation(program, "vPosition");
     gl.enableVertexAttribArray(vSpherePosition13);
 
+    //normal buffer
+    nBuffer13 = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer13);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereNormals13), gl.STATIC_DRAW);
+    vSphereNormal13 = gl.getAttribLocation( program, "vNormal" );
+    gl.enableVertexAttribArray(vSphereNormal13);
+
 
     //第十四个球体各参数-右眼珠
     var colorsVec4 = vec4(1.0, 1.0, 1.0, 1.0);
-    numSphereVertex14 = initSphereBuffers(gl, program, 0.245, sphereVertices14, sphereColors14, sphereIndices14, colorsVec4);
-    
+    numSphereVertex14 = initSphereBuffers(gl, program, 0.245, sphereVertices14, sphereColors14, sphereIndices14, colorsVec4, sphereNormals14);
+
     // color array attribute buffer
-    cBufferSphereID14 = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID14);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors14), gl.STATIC_DRAW);
-    vSphereColor14 = gl.getAttribLocation(program, "vColor");
-    gl.enableVertexAttribArray(vSphereColor14);
+    // cBufferSphereID14 = gl.createBuffer();
+    // gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID14);
+    // gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors14), gl.STATIC_DRAW);
+    // vSphereColor14 = gl.getAttribLocation(program, "vColor");
+    // gl.enableVertexAttribArray(vSphereColor14);
 
     // array element buffer
     iBufferSphereID14 = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID14);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(sphereIndices14), gl.STATIC_DRAW);
-    
+
     //vertex buffer
     vBufferSphereID14 = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID14);
@@ -736,23 +884,30 @@ window.onload = function init() {
     vSpherePosition14 = gl.getAttribLocation(program, "vPosition");
     gl.enableVertexAttribArray(vSpherePosition14);
 
+    //normal buffer
+    nBuffer14 = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer14);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereNormals14), gl.STATIC_DRAW);
+    vSphereNormal14 = gl.getAttribLocation( program, "vNormal" );
+    gl.enableVertexAttribArray(vSphereNormal14);
+
 
     //第十五个球体各参数-左手
     var colorsVec4 = vec4(1.0, 246/255, 93/255, 1.0);
-    numSphereVertex15 = initSphereBuffers(gl, program, 0.245, sphereVertices15, sphereColors15, sphereIndices15, colorsVec4);
-    
+    numSphereVertex15 = initSphereBuffers(gl, program, 0.245, sphereVertices15, sphereColors15, sphereIndices15, colorsVec4, sphereNormals15);
+
     // color array attribute buffer
-    cBufferSphereID15 = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID15);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors15), gl.STATIC_DRAW);
-    vSphereColor15 = gl.getAttribLocation(program, "vColor");
-    gl.enableVertexAttribArray(vSphereColor15);
+    // cBufferSphereID15 = gl.createBuffer();
+    // gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID15);
+    // gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors15), gl.STATIC_DRAW);
+    // vSphereColor15 = gl.getAttribLocation(program, "vColor");
+    // gl.enableVertexAttribArray(vSphereColor15);
 
     // array element buffer
     iBufferSphereID15 = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID15);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(sphereIndices15), gl.STATIC_DRAW);
-    
+
     //vertex buffer
     vBufferSphereID15 = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID15);
@@ -760,23 +915,29 @@ window.onload = function init() {
     vSpherePosition15 = gl.getAttribLocation(program, "vPosition");
     gl.enableVertexAttribArray(vSpherePosition15);
 
+    //normal buffer
+    nBuffer15 = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer15);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereNormals15), gl.STATIC_DRAW);
+    vSphereNormal15 = gl.getAttribLocation( program, "vNormal" );
+    gl.enableVertexAttribArray(vSphereNormal15);
 
     //第十六个球体各参数-右手
     var colorsVec4 = vec4(1.0, 246/255, 93/255, 1.0);
-    numSphereVertex16 = initSphereBuffers(gl, program, 0.245, sphereVertices16, sphereColors16, sphereIndices16, colorsVec4);
-    
+    numSphereVertex16 = initSphereBuffers(gl, program, 0.245, sphereVertices16, sphereColors16, sphereIndices16, colorsVec4, sphereNormals16);
+
     // color array attribute buffer
-    cBufferSphereID16 = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID16);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors16), gl.STATIC_DRAW);
-    vSphereColor16 = gl.getAttribLocation(program, "vColor");
-    gl.enableVertexAttribArray(vSphereColor16);
+    // cBufferSphereID16 = gl.createBuffer();
+    // gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID16);
+    // gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors16), gl.STATIC_DRAW);
+    // vSphereColor16 = gl.getAttribLocation(program, "vColor");
+    // gl.enableVertexAttribArray(vSphereColor16);
 
     // array element buffer
     iBufferSphereID16 = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID16);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(sphereIndices16), gl.STATIC_DRAW);
-    
+
     //vertex buffer
     vBufferSphereID16 = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID16);
@@ -784,29 +945,43 @@ window.onload = function init() {
     vSpherePosition16 = gl.getAttribLocation(program, "vPosition");
     gl.enableVertexAttribArray(vSpherePosition16);
 
+    //normal buffer
+    nBuffer16 = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer16);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereNormals16), gl.STATIC_DRAW);
+    vSphereNormal16 = gl.getAttribLocation( program, "vNormal" );
+    gl.enableVertexAttribArray(vSphereNormal16);
+
 
     //第十七个球体各参数-银子
     var colorsVec4 = vec4(192/255, 192/255, 192/255, 1.0);
-    numSphereVertex17 = initSphereBuffers(gl, program, 0.245, sphereVertices17, sphereColors17, sphereIndices17, colorsVec4);
-    
+    //numSphereVertex17 = initSphereBuffers(gl, program, 0.245, sphereVertices17, sphereColors17, sphereIndices17, colorsVec4);
+
     // color array attribute buffer
-    cBufferSphereID17 = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID17);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors17), gl.STATIC_DRAW);
-    vSphereColor17 = gl.getAttribLocation(program, "vColor");
-    gl.enableVertexAttribArray(vSphereColor17);
+    // cBufferSphereID17 = gl.createBuffer();
+    // gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID17);
+    // gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereColors17), gl.STATIC_DRAW);
+    // vSphereColor17 = gl.getAttribLocation(program, "vColor");
+    // gl.enableVertexAttribArray(vSphereColor17);
 
     // array element buffer
     iBufferSphereID17 = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID17);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(sphereIndices17), gl.STATIC_DRAW);
-    
+
     //vertex buffer
     vBufferSphereID17 = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID17);
     gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereVertices17), gl.STATIC_DRAW);
     vSpherePosition17 = gl.getAttribLocation(program, "vPosition");
     gl.enableVertexAttribArray(vSpherePosition17);
+
+    //normal buffer
+    nBuffer17 = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer17);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(sphereNormals17), gl.STATIC_DRAW);
+    vSphereNormal17 = gl.getAttribLocation( program, "vNormal" );
+    gl.enableVertexAttribArray(vSphereNormal17);
 
 
     //圆台各参数
@@ -817,17 +992,17 @@ window.onload = function init() {
     numTorusVertex = torusIndices.length;
 
     // color array attribute buffer
-    cBufferTorusID = gl.createBuffer();
-    gl.bindBuffer(gl.ARRAY_BUFFER, cBufferTorusID);
-    gl.bufferData(gl.ARRAY_BUFFER, flatten(torusColors), gl.STATIC_DRAW);
-    vTorusColor = gl.getAttribLocation(program, "vColor");
-    gl.enableVertexAttribArray(vTorusColor);
+    // cBufferTorusID = gl.createBuffer();
+    // gl.bindBuffer(gl.ARRAY_BUFFER, cBufferTorusID);
+    // gl.bufferData(gl.ARRAY_BUFFER, flatten(torusColors), gl.STATIC_DRAW);
+    // vTorusColor = gl.getAttribLocation(program, "vColor");
+    // gl.enableVertexAttribArray(vTorusColor);
 
     // array element buffer
     iBufferTorusID = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferTorusID);
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(torusIndices), gl.STATIC_DRAW);
-    
+
     //vertex buffer
     vBufferTorusID = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferTorusID);
@@ -835,11 +1010,18 @@ window.onload = function init() {
     vTorusPosition = gl.getAttribLocation(program, "vPosition");
     gl.enableVertexAttribArray(vTorusPosition);
 
+    //normal buffer
+    nBufferTorusID = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBufferTorusID);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(torusNormals), gl.STATIC_DRAW);
+    vTorusNormal = gl.getAttribLocation( program, "vNormal" );
+    gl.enableVertexAttribArray(vTorusNormal);
 
     //获得模型视图矩阵和投影矩阵的位置
     CurModelViewMatrixLoc = gl.getUniformLocation(program, "modelViewMatrix");
     CurProjectionMatrixLoc = gl.getUniformLocation(program, "projectionMatrix");
-    
+    normalMatrixLoc = gl.getUniformLocation(program, "normalMatrix");
+
 
     //event listeners for buttons
 
@@ -850,11 +1032,11 @@ window.onload = function init() {
         RotateAngle += 5;
     };
     document.getElementById("IncreaseZ").onclick = function(){
-        near  *= 1.1; 
+        near  *= 1.1;
         far *= 1.1;
     };
     document.getElementById("DecreaseZ").onclick = function(){
-        near *= 0.9; 
+        near *= 0.9;
         far *= 0.9;
     };
     document.getElementById("IncreaseR").onclick = function(){
@@ -893,8 +1075,31 @@ window.onload = function init() {
       var x = 2*event.clientX/canvas.width-1;
       var y = 2*(canvas.height-event.clientY)/canvas.height-1;
       mouseMotion(x, y);
-    } );
-    
+    });
+
+    //FCB 1210
+
+    var ambientProduct = mult(lightAmbient, materialAmbient);
+    var diffuseProduct = mult(lightDiffuse, materialDiffuse);
+    var specularProduct = mult(lightSpecular, materialSpecular);
+
+    projection = ortho(-1, 1, -1, 1, -100, 100);
+
+    gl.uniform4fv(gl.getUniformLocation(program, "ambientProduct"),
+      flatten(ambientProduct));
+    gl.uniform4fv(gl.getUniformLocation(program, "diffuseProduct"),
+       flatten(diffuseProduct));
+    gl.uniform4fv(gl.getUniformLocation(program, "specularProduct"),
+       flatten(specularProduct));
+    gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
+       flatten(lightPosition));
+
+    gl.uniform1f(gl.getUniformLocation(program,
+       "shininess"), materialShininess);
+
+    gl.uniformMatrix4fv(gl.getUniformLocation(program, "projectionMatrix"),
+       false, flatten(projection));
+
     render();
 }
 
@@ -907,7 +1112,7 @@ function render() {
     // var R = rotateY(RotateAngle);
     // CurModelViewMatrix = mult(T, R);
     // gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
-    
+
     // //立方体颜色
     // gl.bindBuffer(gl.ARRAY_BUFFER, cBufferCubeID);
     // gl.vertexAttribPointer(vCubeColor, 4, gl.FLOAT, false, 0, 0);
@@ -939,21 +1144,25 @@ function render() {
 
 
     //对eye的值进行计算
-    eye = vec3(radius*Math.sin(theta)*Math.cos(phi), 
+    eye = vec3(radius*Math.sin(theta)*Math.cos(phi),
         radius*Math.sin(theta)*Math.sin(phi), radius*Math.cos(theta));
 
 
     //虚拟跟踪球实现代码
     if(trackballMove) {
-        eye = vec3(radius*Math.sin(theta)*Math.cos(phi), 
+        eye = vec3(radius*Math.sin(theta)*Math.cos(phi),
         radius*Math.sin(theta)*Math.sin(phi), radius*Math.cos(theta));
     }
 
-    
+
     //初始化模型视图矩阵和投影矩阵
     CurModelViewMatrix = lookAt(eye, at, up);
     CurProjectionMatrix = perspective(fovy, aspect, near, far);
-
+    normalMatrix = [
+        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
+        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
+        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+    ];
 
     //头的下部分球 head bottom sphere
     var RY = rotateY(RotateAngle);
@@ -961,14 +1170,25 @@ function render() {
     var S = scalem(0.68, 0.41, 0.55);
     CurConversionMatrix = mult(RY,mult(T, S));
     CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    normalMatrix = [
+        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
+        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
+        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+    ];
+
     gl.uniformMatrix4fv( CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
-    gl.uniformMatrix4fv( CurProjectionMatrixLoc, false, flatten(CurProjectionMatrix));
+    gl.uniformMatrix4fv(CurProjectionMatrixLoc, false, flatten(CurProjectionMatrix));
+    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
+
 
     gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID1);
     gl.vertexAttribPointer(vSphereColor1, 4, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID1);
     gl.vertexAttribPointer(vSpherePosition1, 3, gl.FLOAT, false, 0, 0);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer1);
+    gl.vertexAttribPointer(vSphereNormal1, 3, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID1);
 
@@ -982,14 +1202,23 @@ function render() {
     CurConversionMatrix = mult(RY,mult(T, S));
     CurModelViewMatrix = lookAt(eye, at, up);
     CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    normalMatrix = [
+        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
+        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
+        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+    ];
     gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
-    gl.uniformMatrix4fv( CurProjectionMatrixLoc, false, flatten(CurProjectionMatrix) );
+    gl.uniformMatrix4fv( CurProjectionMatrixLoc, false, flatten(CurProjectionMatrix));
+    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
     gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID2);
     gl.vertexAttribPointer(vSphereColor2, 4, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID2);
     gl.vertexAttribPointer(vSpherePosition2, 3, gl.FLOAT, false, 0, 0);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer2);
+    gl.vertexAttribPointer(vSphereNormal2, 3, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID2);
 
@@ -1004,13 +1233,22 @@ function render() {
     CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
     CurModelViewMatrix = lookAt(eye, at, up);
     CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    normalMatrix = [
+        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
+        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
+        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+    ];
     gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
+    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
     gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID3);
     gl.vertexAttribPointer(vSphereColor3, 4, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID3);
     gl.vertexAttribPointer(vSpherePosition3, 3, gl.FLOAT, false, 0, 0);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer3);
+    gl.vertexAttribPointer(vSphereNormal3, 3, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID3);
 
@@ -1025,13 +1263,22 @@ function render() {
     CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
     CurModelViewMatrix = lookAt(eye, at, up);
     CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    normalMatrix = [
+        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
+        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
+        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+    ];
     gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
+    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
     gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID4);
     gl.vertexAttribPointer(vSphereColor4, 4, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID4);
     gl.vertexAttribPointer(vSpherePosition4, 3, gl.FLOAT, false, 0, 0);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer4);
+    gl.vertexAttribPointer(vSphereNormal4, 3, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID4);
 
@@ -1046,13 +1293,22 @@ function render() {
     CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
     CurModelViewMatrix = lookAt(eye, at, up);
     CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    normalMatrix = [
+        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
+        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
+        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+    ];
     gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
+    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
     gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID5);
     gl.vertexAttribPointer(vSphereColor5, 4, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID5);
     gl.vertexAttribPointer(vSpherePosition5, 3, gl.FLOAT, false, 0, 0);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer5);
+    gl.vertexAttribPointer(vSphereNormal5, 3, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID5);
 
@@ -1067,13 +1323,22 @@ function render() {
     CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
     CurModelViewMatrix = lookAt(eye, at, up);
     CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    normalMatrix = [
+        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
+        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
+        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+    ];
     gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
+    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
     gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID6);
     gl.vertexAttribPointer(vSphereColor6, 4, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID6);
     gl.vertexAttribPointer(vSpherePosition6, 3, gl.FLOAT, false, 0, 0);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer6);
+    gl.vertexAttribPointer(vSphereNormal6, 3, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID6);
 
@@ -1088,13 +1353,22 @@ function render() {
     CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
     CurModelViewMatrix = lookAt(eye, at, up);
     CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    normalMatrix = [
+        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
+        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
+        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+    ];
     gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
+    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
     gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID7);
     gl.vertexAttribPointer(vSphereColor7, 4, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID7);
     gl.vertexAttribPointer(vSpherePosition7, 3, gl.FLOAT, false, 0, 0);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer7);
+    gl.vertexAttribPointer(vSphereNormal7, 3, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID7);
 
@@ -1109,13 +1383,22 @@ function render() {
     CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
     CurModelViewMatrix = lookAt(eye, at, up);
     CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    normalMatrix = [
+        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
+        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
+        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+    ];
     gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
+    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
     gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID8);
     gl.vertexAttribPointer(vSphereColor8, 4, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID8);
     gl.vertexAttribPointer(vSpherePosition8, 3, gl.FLOAT, false, 0, 0);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer8);
+    gl.vertexAttribPointer(vSphereNormal8, 3, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID8);
 
@@ -1130,13 +1413,22 @@ function render() {
     CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
     CurModelViewMatrix = lookAt(eye, at, up);
     CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    normalMatrix = [
+        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
+        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
+        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+    ];
     gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
+    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
     gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID9);
     gl.vertexAttribPointer(vSphereColor9, 4, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID9);
     gl.vertexAttribPointer(vSpherePosition9, 3, gl.FLOAT, false, 0, 0);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer9);
+    gl.vertexAttribPointer(vSphereNormal9, 3, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID9);
 
@@ -1151,13 +1443,22 @@ function render() {
     CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
     CurModelViewMatrix = lookAt(eye, at, up);
     CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    normalMatrix = [
+        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
+        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
+        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+    ];
     gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
+    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
     gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID10);
     gl.vertexAttribPointer(vSphereColor10, 4, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID10);
     gl.vertexAttribPointer(vSpherePosition10, 3, gl.FLOAT, false, 0, 0);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer10);
+    gl.vertexAttribPointer(vSphereNormal10, 3, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID10);
 
@@ -1172,13 +1473,22 @@ function render() {
     CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
     CurModelViewMatrix = lookAt(eye, at, up);
     CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    normalMatrix = [
+        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
+        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
+        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+    ];
     gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
+    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
     gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID11);
     gl.vertexAttribPointer(vSphereColor11, 4, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID11);
     gl.vertexAttribPointer(vSpherePosition11, 3, gl.FLOAT, false, 0, 0);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer11);
+    gl.vertexAttribPointer(vSphereNormal11, 3, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID11);
 
@@ -1193,13 +1503,22 @@ function render() {
     CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
     CurModelViewMatrix = lookAt(eye, at, up);
     CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    normalMatrix = [
+        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
+        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
+        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+    ];
     gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
+    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
     gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID12);
     gl.vertexAttribPointer(vSphereColor12, 4, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID12);
     gl.vertexAttribPointer(vSpherePosition12, 3, gl.FLOAT, false, 0, 0);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer12);
+    gl.vertexAttribPointer(vSphereNormal12, 3, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID12);
 
@@ -1214,13 +1533,22 @@ function render() {
     CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
     CurModelViewMatrix = lookAt(eye, at, up);
     CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    normalMatrix = [
+        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
+        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
+        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+    ];
     gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
+    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
     gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID13);
     gl.vertexAttribPointer(vSphereColor13, 4, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID13);
     gl.vertexAttribPointer(vSpherePosition13, 3, gl.FLOAT, false, 0, 0);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer13);
+    gl.vertexAttribPointer(vSphereNormal13, 3, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID13);
 
@@ -1235,13 +1563,22 @@ function render() {
     CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
     CurModelViewMatrix = lookAt(eye, at, up);
     CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    normalMatrix = [
+        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
+        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
+        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+    ];
     gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
+    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
     gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID14);
     gl.vertexAttribPointer(vSphereColor14, 4, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID14);
     gl.vertexAttribPointer(vSpherePosition14, 3, gl.FLOAT, false, 0, 0);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer14);
+    gl.vertexAttribPointer(vSphereNormal14, 3, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID14);
 
@@ -1256,13 +1593,22 @@ function render() {
     CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
     CurModelViewMatrix = lookAt(eye, at, up);
     CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    normalMatrix = [
+        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
+        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
+        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+    ];
     gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
+    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
     gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID15);
     gl.vertexAttribPointer(vSphereColor15, 4, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID15);
     gl.vertexAttribPointer(vSpherePosition15, 3, gl.FLOAT, false, 0, 0);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer15);
+    gl.vertexAttribPointer(vSphereNormal15, 3, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID15);
 
@@ -1277,7 +1623,13 @@ function render() {
     CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
     CurModelViewMatrix = lookAt(eye, at, up);
     CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    normalMatrix = [
+        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
+        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
+        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+    ];
     gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
+    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
     gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID16);
     gl.vertexAttribPointer(vSphereColor16, 4, gl.FLOAT, false, 0, 0);
@@ -1285,10 +1637,12 @@ function render() {
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID16);
     gl.vertexAttribPointer(vSpherePosition16, 3, gl.FLOAT, false, 0, 0);
 
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer16);
+    gl.vertexAttribPointer(vSphereNormal16, 3, gl.FLOAT, false, 0, 0);
+
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID16);
 
     gl.drawElements( gl.TRIANGLES, numSphereVertex16, gl.UNSIGNED_BYTE, 0 );
-
 
     //银子 silver
     var RY = rotateY(RotateAngle);
@@ -1298,13 +1652,22 @@ function render() {
     CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
     CurModelViewMatrix = lookAt(eye, at, up);
     CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    normalMatrix = [
+        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
+        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
+        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+    ];
     gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
+    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
     gl.bindBuffer(gl.ARRAY_BUFFER, cBufferSphereID17);
     gl.vertexAttribPointer(vSphereColor17, 4, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID17);
     gl.vertexAttribPointer(vSpherePosition17, 3, gl.FLOAT, false, 0, 0);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer17);
+    gl.vertexAttribPointer(vSphereNormal17, 3, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID17);
 
@@ -1320,62 +1683,81 @@ function render() {
     CurConversionMatrix = mult(RY,mult(R,mult(S, T)));
     CurModelViewMatrix = lookAt(eye, at, up);
     CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    normalMatrix = [
+        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
+        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
+        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+    ];
     gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
-    
+    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
+
     gl.bindBuffer( gl.ARRAY_BUFFER, cBufferTorusID);
     gl.vertexAttribPointer( vTorusColor, 4, gl.FLOAT, false, 0, 0 );
 
     gl.bindBuffer( gl.ARRAY_BUFFER, vBufferTorusID);
     gl.vertexAttribPointer( vTorusPosition, 3, gl.FLOAT, false, 0, 0 );
 
+    gl.bindBuffer(gl.ARRAY_BUFFER, nBufferTorusID);
+    gl.vertexAttribPointer(vTorusNormal, 3, gl.FLOAT, false, 0, 0);
+
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferTorusID);
 
-    gl.drawElements( gl.TRIANGLES, numTorusVertex, gl.UNSIGNED_BYTE, 0 ); 
-
-
+    gl.drawElements( gl.TRIANGLES, numTorusVertex, gl.UNSIGNED_BYTE, 0 );
 
     requestAnimFrame(render);
 }
 
 //画球函数
-function initSphereBuffers(gl,program,radius,spherePositions,sphereColors,sphereIndices,colorsVect4) { // Create a sphere
-    var SPHERE_DIV = 15;
-    var i, ai, si, ci;
-    var j, aj, sj, cj;
-    var p1, p2;
+function initSphereBuffers(gl,program,radius,spherePositions,sphereColors,sphereIndices,colorsVect4,sphereNormals) { // Create a sphere
+    var latitudeBands = 15;
+    var longitudeBands = 15;
 
-    // Generate coordinates
-    for (j = 0; j <= SPHERE_DIV; j++) {
-        aj = j * Math.PI / SPHERE_DIV;
-        sj = Math.sin(aj);
-        cj = Math.cos(aj);
-        for (i = 0; i <= SPHERE_DIV; i++) {
-            ai = i * 2 * Math.PI / SPHERE_DIV;
-            si = Math.sin(ai);
-            ci = Math.cos(ai);
+    for (var latNumber = 0; latNumber <= latitudeBands; latNumber++) {
+      var theta = latNumber * Math.PI / latitudeBands;
+      var sinTheta = Math.sin(theta);
+      var cosTheta = Math.cos(theta);
 
-            spherePositions.push(radius*si * sj);  // X
-            spherePositions.push(radius*cj);       // Y
-            spherePositions.push(radius*ci * sj);  // Z
-            sphereColors.push(colorsVect4);
-        }
+      for (var longNumber = 0; longNumber <= longitudeBands; longNumber++) {
+        var phi = longNumber * 2 * Math.PI / longitudeBands;
+        var sinPhi = Math.sin(phi);
+        var cosPhi = Math.cos(phi);
+
+        var x = cosPhi * sinTheta; // x = r sinθ cosφ
+        var y = cosTheta;          // y = r cosθ
+        var z = sinPhi * sinTheta; // z = r sinθ sinφ
+        var u = 1 - (longNumber / longitudeBands);
+        var v = 1 - (latNumber / latitudeBands);
+
+        sphereNormals.push(x);
+        sphereNormals.push(y);
+        sphereNormals.push(z);
+        // textureCoordData.push(u);
+        // textureCoordData.push(v);
+        spherePositions.push(radius * x);
+        spherePositions.push(radius * y);
+        spherePositions.push(radius * z);
+
+        // sphereColors.push([1, 1, 1, 1]);
+      }
     }
 
-    // Generate indices
-    for (j = 0; j < SPHERE_DIV; j++) {
-        for (i = 0; i < SPHERE_DIV; i++) {
-            p1 = j * (SPHERE_DIV+1) + i;
-            p2 = p1 + (SPHERE_DIV+1);
+    // Now that we have the vertices, we need to stitch them together by generating a list of vertex indices
+    // that contains sequences of six values, each representing a square expressed as a pair of triangles.
+    var indexData = [];
+    for (var latNumber = 0; latNumber < latitudeBands; latNumber++) {
+      for (var longNumber = 0; longNumber < longitudeBands; longNumber++) {
+        var first = (latNumber * (longitudeBands + 1)) + longNumber;
+        var second = first + longitudeBands + 1;
+        sphereIndices.push(first);
+        sphereIndices.push(second);
+        sphereIndices.push(first + 1);
 
-            sphereIndices.push(p1);
-            sphereIndices.push(p2);
-            sphereIndices.push(p1 + 1);
-
-            sphereIndices.push(p1 + 1);
-            sphereIndices.push(p2);
-            sphereIndices.push(p2 + 1);
-        }
+        sphereIndices.push(second);
+        sphereIndices.push(second + 1);
+        sphereIndices.push(first + 1);
+      }
     }
+
     return sphereIndices.length;
 }
 
@@ -1416,7 +1798,7 @@ function hsva(h, s, v, a){
     var k = v * (1 - s * (1 - f));
     var color = new Array();
     if(!s > 0 && !s < 0){
-        color.push(v, v, v, a); 
+        color.push(v, v, v, a);
     } else {
         var r = new Array(v, n, m, m, k, v);
         var g = new Array(k, v, v, n, m, m);
