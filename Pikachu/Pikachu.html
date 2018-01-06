@@ -24,8 +24,6 @@ void main()
 {
     vec3 pos = -(modelViewMatrix * vPosition).xyz;
 
-    //fixed light postion
-
     vec3 light = lightPosition.xyz;
 
     if(lightPosition.w == 0.0)

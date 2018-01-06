@@ -497,7 +497,7 @@ window.onload = function init() {
 
 
     //第一个球体各参数-头部下部分的球
-    numSphereVertex1 = initSphereBuffers(gl, program, 0.35, sphereVertices1, sphereTextureCoords1, sphereIndices1, sphereNormals1);
+    numSphereVertex1 = initSphereBuffers(0.35, sphereVertices1, sphereTextureCoords1, sphereIndices1, sphereNormals1);
 
     //vertex buffer
     vBufferSphereID1 = gl.createBuffer();
@@ -520,7 +520,7 @@ window.onload = function init() {
     // array element buffer
     iBufferSphereID1 = gl.createBuffer();
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID1);
-    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint8Array(sphereIndices1), gl.STATIC_DRAW);
+    gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(sphereIndices1), gl.STATIC_DRAW);
 
     // texture coordinate buffer
     tBufferSphereID1 = gl.createBuffer();
@@ -530,7 +530,7 @@ window.onload = function init() {
 
     //第二个球体各参数-头部上部分的球
     var colorsVec4 = vec4(1.0, 246/255, 93/255, 1.0);
-    numSphereVertex2 = initSphereBuffers(gl, program, 0.35, sphereVertices2, sphereTextureCoords2, sphereIndices2, sphereNormals2);
+    numSphereVertex2 = initSphereBuffers(0.35, sphereVertices2, sphereTextureCoords2, sphereIndices2, sphereNormals2);
 
     // array element buffer
     iBufferSphereID2 = gl.createBuffer();
@@ -559,7 +559,7 @@ window.onload = function init() {
 
     //第三个球体各参数-左耳朵
     var colorsVec4 = vec4(1.0, 246/255, 93/255, 1.0);
-    numSphereVertex3 = initSphereBuffers(gl, program, 0.245, sphereVertices3, sphereTextureCoords3, sphereIndices3, sphereNormals3);
+    numSphereVertex3 = initSphereBuffers(0.245, sphereVertices3, sphereTextureCoords3, sphereIndices3, sphereNormals3);
 
     // color array attribute buffer
     // tBufferSphereID3 = gl.createBuffer();
@@ -595,7 +595,7 @@ window.onload = function init() {
 
     //第四个球体各参数-右耳朵
     var colorsVec4 = vec4(1.0, 246/255, 93/255, 1.0);
-    numSphereVertex4 = initSphereBuffers(gl, program, 0.245, sphereVertices4, sphereTextureCoords4, sphereIndices4, sphereNormals4);
+    numSphereVertex4 = initSphereBuffers(0.245, sphereVertices4, sphereTextureCoords4, sphereIndices4, sphereNormals4);
 
     // color array attribute buffer
     // tBufferSphereID4 = gl.createBuffer();
@@ -631,7 +631,7 @@ window.onload = function init() {
 
     //第五个球体各参数-身体竖着的球
     var colorsVec4 = vec4(1.0, 246/255, 93/255, 1.0);
-    numSphereVertex5 = initSphereBuffers(gl, program, 0.35, sphereVertices5, sphereTextureCoords5, sphereIndices5, sphereNormals5);
+    numSphereVertex5 = initSphereBuffers(0.35, sphereVertices5, sphereTextureCoords5, sphereIndices5, sphereNormals5);
 
     // color array attribute buffer
     // tBufferSphereID5 = gl.createBuffer();
@@ -667,7 +667,7 @@ window.onload = function init() {
 
     //第六个球体各参数-身体横着的左边的球
     var colorsVec4 = vec4(1.0, 246/255, 93/255, 1.0);
-    numSphereVertex6 = initSphereBuffers(gl, program, 0.245, sphereVertices6, sphereTextureCoords6, sphereIndices6, sphereNormals6);
+    numSphereVertex6 = initSphereBuffers(0.245, sphereVertices6, sphereTextureCoords6, sphereIndices6, sphereNormals6);
 
     // color array attribute buffer
     // tBufferSphereID6 = gl.createBuffer();
@@ -703,7 +703,7 @@ window.onload = function init() {
 
     //第七个球体各参数-身体横着的右边的球
     var colorsVec4 = vec4(1.0, 246/255, 93/255, 1.0);
-    numSphereVertex7 = initSphereBuffers(gl, program, 0.245, sphereVertices7, sphereTextureCoords7, sphereIndices7, sphereNormals7);
+    numSphereVertex7 = initSphereBuffers(0.245, sphereVertices7, sphereTextureCoords7, sphereIndices7, sphereNormals7);
 
     // color array attribute buffer
     // tBufferSphereID7 = gl.createBuffer();
@@ -739,7 +739,7 @@ window.onload = function init() {
 
     //第八个球体各参数-左腮红
     var colorsVec4 = vec4(255/255, 55/255, 55/255, 1.0);
-    numSphereVertex8 = initSphereBuffers(gl, program, 0.245, sphereVertices8, sphereTextureCoords8, sphereIndices8, sphereNormals8);
+    numSphereVertex8 = initSphereBuffers(0.245, sphereVertices8, sphereTextureCoords8, sphereIndices8, sphereNormals8);
 
     // color array attribute buffer
     // tBufferSphereID8 = gl.createBuffer();
@@ -774,7 +774,7 @@ window.onload = function init() {
 
 
     //第九个球体各参数-右腮红
-    numSphereVertex9 = initSphereBuffers(gl, program, 0.245, sphereVertices9, sphereTextureCoords9, sphereIndices9, sphereNormals9);
+    numSphereVertex9 = initSphereBuffers(0.245, sphereVertices9, sphereTextureCoords9, sphereIndices9, sphereNormals9);
 
     // color array attribute buffer
     // tBufferSphereID9 = gl.createBuffer();
@@ -809,7 +809,7 @@ window.onload = function init() {
 
 
     //第十个球体各参数-嘴巴
-    numSphereVertex10 = initSphereBuffers(gl, program, 0.245, sphereVertices10, sphereTextureCoords10, sphereIndices10, sphereNormals10);
+    numSphereVertex10 = initSphereBuffers(0.245, sphereVertices10, sphereTextureCoords10, sphereIndices10, sphereNormals10);
 
     // color array attribute buffer
     // tBufferSphereID10 = gl.createBuffer();
@@ -845,7 +845,7 @@ window.onload = function init() {
 
     //第十一个球体各参数-左眼睛
     var colorsVec4 = vec4(0.0, 0.0, 0.0, 1.0);
-    numSphereVertex11 = initSphereBuffers(gl, program, 0.245, sphereVertices11, sphereTextureCoords11, sphereIndices11, sphereNormals11);
+    numSphereVertex11 = initSphereBuffers(0.245, sphereVertices11, sphereTextureCoords11, sphereIndices11, sphereNormals11);
 
     // color array attribute buffer
     // tBufferSphereID11 = gl.createBuffer();
@@ -881,7 +881,7 @@ window.onload = function init() {
 
     //第十二个球体各参数-右眼睛
     var colorsVec4 = vec4(0.0, 0.0, 0.0, 1.0);
-    numSphereVertex12 = initSphereBuffers(gl, program, 0.245, sphereVertices12, sphereTextureCoords12, sphereIndices12, sphereNormals12);
+    numSphereVertex12 = initSphereBuffers(0.245, sphereVertices12, sphereTextureCoords12, sphereIndices12, sphereNormals12);
 
     // color array attribute buffer
     // tBufferSphereID12 = gl.createBuffer();
@@ -917,7 +917,7 @@ window.onload = function init() {
 
     //第十三个球体各参数-左眼珠
     var colorsVec4 = vec4(1.0, 1.0, 1.0, 1.0);
-    numSphereVertex13 = initSphereBuffers(gl, program, 0.245, sphereVertices13, sphereTextureCoords13, sphereIndices13, sphereNormals13);
+    numSphereVertex13 = initSphereBuffers(0.245, sphereVertices13, sphereTextureCoords13, sphereIndices13, sphereNormals13);
 
     // color array attribute buffer
     // tBufferSphereID13 = gl.createBuffer();
@@ -953,7 +953,7 @@ window.onload = function init() {
 
     //第十四个球体各参数-右眼珠
     var colorsVec4 = vec4(1.0, 1.0, 1.0, 1.0);
-    numSphereVertex14 = initSphereBuffers(gl, program, 0.245, sphereVertices14, sphereTextureCoords14, sphereIndices14, sphereNormals14);
+    numSphereVertex14 = initSphereBuffers(0.245, sphereVertices14, sphereTextureCoords14, sphereIndices14, sphereNormals14);
 
     // color array attribute buffer
     // tBufferSphereID14 = gl.createBuffer();
@@ -989,7 +989,7 @@ window.onload = function init() {
 
     //第十五个球体各参数-左手
     var colorsVec4 = vec4(1.0, 246/255, 93/255, 1.0);
-    numSphereVertex15 = initSphereBuffers(gl, program, 0.245, sphereVertices15, sphereTextureCoords15, sphereIndices15, sphereNormals15);
+    numSphereVertex15 = initSphereBuffers(0.245, sphereVertices15, sphereTextureCoords15, sphereIndices15, sphereNormals15);
 
     // color array attribute buffer
     // tBufferSphereID15 = gl.createBuffer();
@@ -1024,7 +1024,7 @@ window.onload = function init() {
 
     //第十六个球体各参数-右手
     var colorsVec4 = vec4(1.0, 246/255, 93/255, 1.0);
-    numSphereVertex16 = initSphereBuffers(gl, program, 0.245, sphereVertices16, sphereTextureCoords16, sphereIndices16, sphereNormals16);
+    numSphereVertex16 = initSphereBuffers(0.245, sphereVertices16, sphereTextureCoords16, sphereIndices16, sphereNormals16);
 
     // color array attribute buffer
     // tBufferSphereID16 = gl.createBuffer();
@@ -1281,7 +1281,7 @@ function render() {
     var RY = rotateY(RotateAngle);
     var T = translate(0, 0.2, 0);
     var S = scalem(0.68, 0.41, 0.55);
-    CurConversionMatrix = mult(RY,mult(T, S));
+    CurConversionMatrix = mult(RY,T);
     CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
     normalMatrix = [
         vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
@@ -1304,322 +1304,59 @@ function render() {
     gl.vertexAttribPointer(vSphereTextureCoord1, 2, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID1);
-    gl.vertexAttribPointer(vSpherePosition1, 3, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribPointer(vSpherePosition1, 4, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer1);
-    gl.vertexAttribPointer(vSphereNormal1, 3, gl.FLOAT, false, 0, 0);
+    gl.vertexAttribPointer(vSphereNormal1, 4, gl.FLOAT, false, 0, 0);
 
     gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID1);
 
-    gl.drawElements( gl.TRIANGLES, numSphereVertex1, gl.UNSIGNED_BYTE, 0 );
+    gl.drawElements( gl.TRIANGLES, numSphereVertex1, gl.UNSIGNED_SHORT, 0 );
 
 
     //头的上部分球 head top sphere
-    var RY = rotateY(RotateAngle);
-    var T = translate(0, 0.3, 0);
-    var S = scalem(0.6, 0.5, 0.55);
-    CurConversionMatrix = mult(RY,mult(T, S));
-    CurModelViewMatrix = lookAt(eye, at, up);
-    CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
-    normalMatrix = [
-        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
-        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
-        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
-    ];
-    gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
-    gl.uniformMatrix4fv( CurProjectionMatrixLoc, false, flatten(CurProjectionMatrix));
-    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
-
-    if(lighting)
-        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
-    else
-        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), -1);
-    gl.activeTexture(gl.TEXTURE0);
-    gl.enableVertexAttribArray(vSphereTextureCoord2);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, tBufferSphereID2);
-    gl.vertexAttribPointer(vSphereTextureCoord2, 2, gl.FLOAT, false, 0, 0);
-
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID2);
-    gl.vertexAttribPointer(vSpherePosition2, 3, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer2);
-    gl.vertexAttribPointer(vSphereNormal2, 3, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID2);
-
-    gl.drawElements( gl.TRIANGLES, numSphereVertex2, gl.UNSIGNED_BYTE, 0 );
-
-
-    //左耳朵 left ear
-    var RY = rotateY(RotateAngle);
-    var T = translate(-0.53, 0.23, 0);
-    var R = rotateZ(46);
-    var S = scalem(0.7, 0.2, 0.2);
-    CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
-    CurModelViewMatrix = lookAt(eye, at, up);
-    CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
-    normalMatrix = [
-        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
-        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
-        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
-    ];
-    gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
-    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
-
-    if(lighting)
-        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
-    else
-        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), -1);
-    gl.activeTexture(gl.TEXTURE0);
-    gl.enableVertexAttribArray(vSphereTextureCoord3);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, tBufferSphereID3);
-    gl.vertexAttribPointer(vSphereTextureCoord3, 2, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID3);
-    gl.vertexAttribPointer(vSpherePosition3, 3, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer3);
-    gl.vertexAttribPointer(vSphereNormal3, 3, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID3);
-
-    gl.drawElements( gl.TRIANGLES, numSphereVertex3, gl.UNSIGNED_BYTE, 0 );
-
-
-    //右耳朵 right ear
-    var RY = rotateY(RotateAngle);
-    var T = translate(0.53, 0.23, 0);
-    var R = rotateZ(-46);
-    var S = scalem(0.7, 0.2, 0.2);
-    CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
-    CurModelViewMatrix = lookAt(eye, at, up);
-    CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
-    normalMatrix = [
-        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
-        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
-        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
-    ];
-    gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
-    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
-
-    if(lighting)
-        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
-    else
-        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), -1);
-    gl.activeTexture(gl.TEXTURE0);
-    gl.enableVertexAttribArray(vSphereTextureCoord4);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, tBufferSphereID4);
-    gl.vertexAttribPointer(vSphereTextureCoord4, 2, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID4);
-    gl.vertexAttribPointer(vSpherePosition4, 3, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer4);
-    gl.vertexAttribPointer(vSphereNormal4, 3, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID4);
-
-    gl.drawElements( gl.TRIANGLES, numSphereVertex4, gl.UNSIGNED_BYTE, 0 );
-
-
-    //身体竖 body main
-    var RY = rotateY(RotateAngle);
-    var T = translate(0, 0, 0);
-    var R = rotateZ(90);
-    var S = scalem(0.88, 0.52, 0.50);
-    CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
-    CurModelViewMatrix = lookAt(eye, at, up);
-    CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
-    normalMatrix = [
-        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
-        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
-        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
-    ];
-    gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
-    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
-
-    if(lighting)
-        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
-    else
-        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), -1);
-    gl.activeTexture(gl.TEXTURE0);
-    gl.enableVertexAttribArray(vSphereTextureCoord5);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, tBufferSphereID5);
-    gl.vertexAttribPointer(vSphereTextureCoord5, 2, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID5);
-    gl.vertexAttribPointer(vSpherePosition5, 3, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer5);
-    gl.vertexAttribPointer(vSphereNormal5, 3, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID5);
-
-    gl.drawElements( gl.TRIANGLES, numSphereVertex5, gl.UNSIGNED_BYTE, 0 );
-
-
-    //身体横左 body left
-    var RY = rotateY(RotateAngle);
-    var T = translate(-0.042, -0.09, 0);
-    var R = rotateZ(0);
-    var S = scalem(0.64, 0.86, 0.50);
-    CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
-    CurModelViewMatrix = lookAt(eye, at, up);
-    CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
-    normalMatrix = [
-        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
-        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
-        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
-    ];
-    gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
-    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
-
-    if(lighting)
-        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
-    else
-        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), -1);
-    gl.activeTexture(gl.TEXTURE0);
-    gl.enableVertexAttribArray(vSphereTextureCoord6);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, tBufferSphereID6);
-    gl.vertexAttribPointer(vSphereTextureCoord6, 2, gl.FLOAT, false, 0, 0);
-
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID6);
-    gl.vertexAttribPointer(vSpherePosition6, 3, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer6);
-    gl.vertexAttribPointer(vSphereNormal6, 3, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID6);
-
-    gl.drawElements( gl.TRIANGLES, numSphereVertex6, gl.UNSIGNED_BYTE, 0 );
-
-
-    //身体横右 body right
-    var RY = rotateY(RotateAngle);
-    var T = translate(0.042, -0.09, 0);
-    var R = rotateZ(0);
-    var S = scalem(0.64, 0.86, 0.50);
-    CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
-    CurModelViewMatrix = lookAt(eye, at, up);
-    CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
-    normalMatrix = [
-        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
-        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
-        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
-    ];
-    gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
-    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
-
-    if(lighting)
-        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
-    else
-        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), -1);
-    gl.activeTexture(gl.TEXTURE0);
-    gl.enableVertexAttribArray(vSphereTextureCoord7);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, tBufferSphereID7);
-    gl.vertexAttribPointer(vSphereTextureCoord7, 2, gl.FLOAT, false, 0, 0);
-
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID7);
-    gl.vertexAttribPointer(vSpherePosition7, 3, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer7);
-    gl.vertexAttribPointer(vSphereNormal7, 3, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID7);
-
-    gl.drawElements( gl.TRIANGLES, numSphereVertex7, gl.UNSIGNED_BYTE, 0 );
-
-
-    //左腮红 left blusher
-    var RY = rotateY(RotateAngle);
-    var T = translate(-0.145, 0.16, 0.135);
-    var R = rotateZ(0);
-    var S = scalem(0.13, 0.13, 0.03);
-    CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
-    CurModelViewMatrix = lookAt(eye, at, up);
-    CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
-    normalMatrix = [
-        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
-        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
-        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
-    ];
-    gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
-    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
-
-    if(lighting)
-        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 1);
-    else
-        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), -2);
-    gl.activeTexture(gl.TEXTURE1);
-    gl.enableVertexAttribArray(vSphereTextureCoord8);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, tBufferSphereID8);
-    gl.vertexAttribPointer(vSphereTextureCoord8, 2, gl.FLOAT, false, 0, 0);
-
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID8);
-    gl.vertexAttribPointer(vSpherePosition8, 3, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer8);
-    gl.vertexAttribPointer(vSphereNormal8, 3, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID8);
-
-    gl.drawElements( gl.TRIANGLES, numSphereVertex8, gl.UNSIGNED_BYTE, 0 );
-
-
-    //右腮红 right blusher
-    var RY = rotateY(RotateAngle);
-    var T = translate(0.145, 0.16, 0.135);
-    var R = rotateZ(0);
-    var S = scalem(0.13, 0.13, 0.03);
-    CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
-    CurModelViewMatrix = lookAt(eye, at, up);
-    CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
-    normalMatrix = [
-        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
-        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
-        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
-    ];
-    gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
-    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
-
-    if(lighting)
-        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 1);
-    else
-        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), -2);
-    gl.activeTexture(gl.TEXTURE1);
-    gl.enableVertexAttribArray(vSphereTextureCoord9);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, tBufferSphereID9);
-    gl.vertexAttribPointer(vSphereTextureCoord9, 2, gl.FLOAT, false, 0, 0);
-
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID9);
-    gl.vertexAttribPointer(vSpherePosition9, 3, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer9);
-    gl.vertexAttribPointer(vSphereNormal9, 3, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID9);
-
-    gl.drawElements( gl.TRIANGLES, numSphereVertex9, gl.UNSIGNED_BYTE, 0 );
-
-
-    //嘴巴 mouth
     // var RY = rotateY(RotateAngle);
-    // var T = translate(0, 0.18, 0.19);
-    // var R = rotateZ(0);
-    // var S = scalem(0.15, 0.2, 0.03);
+    // var T = translate(0, 0.3, 0);
+    // var S = scalem(0.6, 0.5, 0.55);
+    // CurConversionMatrix = mult(RY,mult(T, S));
+    // CurModelViewMatrix = lookAt(eye, at, up);
+    // CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    // normalMatrix = [
+    //     vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
+    //     vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
+    //     vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+    // ];
+    // gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
+    // gl.uniformMatrix4fv( CurProjectionMatrixLoc, false, flatten(CurProjectionMatrix));
+    // gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
+    //
+    // if(lighting)
+    //     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
+    // else
+    //     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), -1);
+    // gl.activeTexture(gl.TEXTURE0);
+    // gl.enableVertexAttribArray(vSphereTextureCoord2);
+    //
+    // gl.bindBuffer(gl.ARRAY_BUFFER, tBufferSphereID2);
+    // gl.vertexAttribPointer(vSphereTextureCoord2, 2, gl.FLOAT, false, 0, 0);
+    //
+    //
+    // gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID2);
+    // gl.vertexAttribPointer(vSpherePosition2, 3, gl.FLOAT, false, 0, 0);
+    //
+    // gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer2);
+    // gl.vertexAttribPointer(vSphereNormal2, 3, gl.FLOAT, false, 0, 0);
+    //
+    // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID2);
+    //
+    // gl.drawElements( gl.TRIANGLES, numSphereVertex2, gl.UNSIGNED_BYTE, 0 );
+    //
+    //
+    // //左耳朵 left ear
+    // var RY = rotateY(RotateAngle);
+    // var T = translate(-0.53, 0.23, 0);
+    // var R = rotateZ(46);
+    // var S = scalem(0.7, 0.2, 0.2);
     // CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
     // CurModelViewMatrix = lookAt(eye, at, up);
     // CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
@@ -1631,25 +1368,32 @@ function render() {
     // gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
     // gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
     //
-    // gl.bindBuffer(gl.ARRAY_BUFFER, tBufferSphereID10);
-    // gl.vertexAttribPointer(vSphereColor10, 4, gl.FLOAT, false, 0, 0);
+    // if(lighting)
+    //     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
+    // else
+    //     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), -1);
+    // gl.activeTexture(gl.TEXTURE0);
+    // gl.enableVertexAttribArray(vSphereTextureCoord3);
     //
-    // gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID10);
-    // gl.vertexAttribPointer(vSpherePosition10, 3, gl.FLOAT, false, 0, 0);
+    // gl.bindBuffer(gl.ARRAY_BUFFER, tBufferSphereID3);
+    // gl.vertexAttribPointer(vSphereTextureCoord3, 2, gl.FLOAT, false, 0, 0);
     //
-    // gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer10);
-    // gl.vertexAttribPointer(vSphereNormal10, 3, gl.FLOAT, false, 0, 0);
+    // gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID3);
+    // gl.vertexAttribPointer(vSpherePosition3, 3, gl.FLOAT, false, 0, 0);
     //
-    // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID10);
+    // gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer3);
+    // gl.vertexAttribPointer(vSphereNormal3, 3, gl.FLOAT, false, 0, 0);
     //
-    // gl.drawElements( gl.TRIANGLES, numSphereVertex10, gl.UNSIGNED_BYTE, 0 );
-
-
-    //左眼睛 left eye
+    // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID3);
+    //
+    // gl.drawElements( gl.TRIANGLES, numSphereVertex3, gl.UNSIGNED_BYTE, 0 );
+    //
+    //
+    // //右耳朵 right ear
     // var RY = rotateY(RotateAngle);
-    // var T = translate(-0.09, 0.29, 0.18);
-    // var R = rotateZ(0);
-    // var S = scalem(0.15, 0.15, 0.03);
+    // var T = translate(0.53, 0.23, 0);
+    // var R = rotateZ(-46);
+    // var S = scalem(0.7, 0.2, 0.2);
     // CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
     // CurModelViewMatrix = lookAt(eye, at, up);
     // CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
@@ -1661,25 +1405,32 @@ function render() {
     // gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
     // gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
     //
-    // gl.bindBuffer(gl.ARRAY_BUFFER, tBufferSphereID11);
-    // gl.vertexAttribPointer(vSphereColor11, 4, gl.FLOAT, false, 0, 0);
+    // if(lighting)
+    //     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
+    // else
+    //     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), -1);
+    // gl.activeTexture(gl.TEXTURE0);
+    // gl.enableVertexAttribArray(vSphereTextureCoord4);
     //
-    // gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID11);
-    // gl.vertexAttribPointer(vSpherePosition11, 3, gl.FLOAT, false, 0, 0);
+    // gl.bindBuffer(gl.ARRAY_BUFFER, tBufferSphereID4);
+    // gl.vertexAttribPointer(vSphereTextureCoord4, 2, gl.FLOAT, false, 0, 0);
     //
-    // gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer11);
-    // gl.vertexAttribPointer(vSphereNormal11, 3, gl.FLOAT, false, 0, 0);
+    // gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID4);
+    // gl.vertexAttribPointer(vSpherePosition4, 3, gl.FLOAT, false, 0, 0);
     //
-    // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID11);
+    // gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer4);
+    // gl.vertexAttribPointer(vSphereNormal4, 3, gl.FLOAT, false, 0, 0);
     //
-    // gl.drawElements( gl.TRIANGLES, numSphereVertex11, gl.UNSIGNED_BYTE, 0 );
-
-
-    //右眼睛 right eye
+    // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID4);
+    //
+    // gl.drawElements( gl.TRIANGLES, numSphereVertex4, gl.UNSIGNED_BYTE, 0 );
+    //
+    //
+    // //身体竖 body main
     // var RY = rotateY(RotateAngle);
-    // var T = translate(0.09, 0.29, 0.18);
-    // var R = rotateZ(0);
-    // var S = scalem(0.15, 0.15, 0.03);
+    // var T = translate(0, 0, 0);
+    // var R = rotateZ(90);
+    // var S = scalem(0.88, 0.52, 0.50);
     // CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
     // CurModelViewMatrix = lookAt(eye, at, up);
     // CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
@@ -1691,25 +1442,32 @@ function render() {
     // gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
     // gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
     //
-    // gl.bindBuffer(gl.ARRAY_BUFFER, tBufferSphereID12);
-    // gl.vertexAttribPointer(vSphereColor12, 4, gl.FLOAT, false, 0, 0);
+    // if(lighting)
+    //     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
+    // else
+    //     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), -1);
+    // gl.activeTexture(gl.TEXTURE0);
+    // gl.enableVertexAttribArray(vSphereTextureCoord5);
     //
-    // gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID12);
-    // gl.vertexAttribPointer(vSpherePosition12, 3, gl.FLOAT, false, 0, 0);
-    //1
-    // gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer12);
-    // gl.vertexAttribPointer(vSphereNormal12, 3, gl.FLOAT, false, 0, 0);
+    // gl.bindBuffer(gl.ARRAY_BUFFER, tBufferSphereID5);
+    // gl.vertexAttribPointer(vSphereTextureCoord5, 2, gl.FLOAT, false, 0, 0);
     //
-    // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID12);
+    // gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID5);
+    // gl.vertexAttribPointer(vSpherePosition5, 3, gl.FLOAT, false, 0, 0);
     //
-    // gl.drawElements( gl.TRIANGLES, numSphereVertex12, gl.UNSIGNED_BYTE, 0 );
-
-
-    //左眼珠 left eyeball
+    // gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer5);
+    // gl.vertexAttribPointer(vSphereNormal5, 3, gl.FLOAT, false, 0, 0);
+    //
+    // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID5);
+    //
+    // gl.drawElements( gl.TRIANGLES, numSphereVertex5, gl.UNSIGNED_BYTE, 0 );
+    //
+    //
+    // //身体横左 body left
     // var RY = rotateY(RotateAngle);
-    // var T = translate(-0.11, 0.282, 0.19);
+    // var T = translate(-0.042, -0.09, 0);
     // var R = rotateZ(0);
-    // var S = scalem(0.05, 0.05, 0.03);
+    // var S = scalem(0.64, 0.86, 0.50);
     // CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
     // CurModelViewMatrix = lookAt(eye, at, up);
     // CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
@@ -1721,25 +1479,33 @@ function render() {
     // gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
     // gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
     //
-    // gl.bindBuffer(gl.ARRAY_BUFFER, tBufferSphereID13);
-    // gl.vertexAttribPointer(vSphereColor13, 4, gl.FLOAT, false, 0, 0);
+    // if(lighting)
+    //     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
+    // else
+    //     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), -1);
+    // gl.activeTexture(gl.TEXTURE0);
+    // gl.enableVertexAttribArray(vSphereTextureCoord6);
     //
-    // gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID13);
-    // gl.vertexAttribPointer(vSp1herePosition13, 3, gl.FLOAT, false, 0, 0);
+    // gl.bindBuffer(gl.ARRAY_BUFFER, tBufferSphereID6);
+    // gl.vertexAttribPointer(vSphereTextureCoord6, 2, gl.FLOAT, false, 0, 0);
     //
-    // gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer13);
-    // gl.vertexAttribPointer(vSphereNormal13, 3, gl.FLOAT, false, 0, 0);
     //
-    // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID13);
+    // gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID6);
+    // gl.vertexAttribPointer(vSpherePosition6, 3, gl.FLOAT, false, 0, 0);
     //
-    // gl.drawElements( gl.TRIANGLES, numSphereVertex13, gl.UNSIGNED_BYTE, 0 );
-
-
-    //右眼珠 right eyeball
+    // gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer6);
+    // gl.vertexAttribPointer(vSphereNormal6, 3, gl.FLOAT, false, 0, 0);
+    //
+    // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID6);
+    //
+    // gl.drawElements( gl.TRIANGLES, numSphereVertex6, gl.UNSIGNED_BYTE, 0 );
+    //
+    //
+    // //身体横右 body right
     // var RY = rotateY(RotateAngle);
-    // var T = translate(0.07, 0.28, 0.19);
+    // var T = translate(0.042, -0.09, 0);
     // var R = rotateZ(0);
-    // var S = scalem(0.05, 0.05, 0.03);
+    // var S = scalem(0.64, 0.86, 0.50);
     // CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
     // CurModelViewMatrix = lookAt(eye, at, up);
     // CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
@@ -1751,91 +1517,325 @@ function render() {
     // gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
     // gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
     //
-    // gl.bindBuffer(gl.ARRAY_BUFFER, tBufferSphereID14);
-    // gl.vertexAttribPointer(vSphereColor14, 4, gl.FLOAT, false, 0, 0);
+    // if(lighting)
+    //     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
+    // else
+    //     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), -1);
+    // gl.activeTexture(gl.TEXTURE0);
+    // gl.enableVertexAttribArray(vSphereTextureCoord7);
     //
-    // gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID14);
-    // gl.vertexAttribPointer(vSpherePosition14, 3, gl.FLOAT, false, 0, 0);
-    //var lighting = document.getElementById("lighting").checked;
-    // gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer14);
-    // gl.vertexAttribPointer(vSphereNormal14, 3, gl.FLOAT, false, 0, 0);
+    // gl.bindBuffer(gl.ARRAY_BUFFER, tBufferSphereID7);
+    // gl.vertexAttribPointer(vSphereTextureCoord7, 2, gl.FLOAT, false, 0, 0);
     //
-    // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID14);
     //
-    // gl.drawElements( gl.TRIANGLES, numSphereVertex14, gl.UNSIGNED_BYTE, 0 );
-
-
-    //左手 left hand
-    var RY = rotateY(-20+RotateAngle);
-    var T = translate(-0.18, -0.09, 0);
-    var R = rotateZ(30);
-    var S = scalem(0.6, 0.18, 0.2);
-    CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
-    CurModelViewMatrix = lookAt(eye, at, up);
-    CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
-    normalMatrix = [
-        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
-        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
-        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
-    ];
-    gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
-    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
-
-    if(lighting)
-        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
-    else
-        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), -1);
-    gl.activeTexture(gl.TEXTURE0);
-    gl.enableVertexAttribArray(vSphereTextureCoord15);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, tBufferSphereID15);
-    gl.vertexAttribPointer(vSphereTextureCoord15, 2, gl.FLOAT, false, 0, 0);
-
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID15);
-    gl.vertexAttribPointer(vSpherePosition15, 3, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer15);
-    gl.vertexAttribPointer(vSphereNormal15, 3, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID15);
-
-    gl.drawElements( gl.TRIANGLES, numSphereVertex15, gl.UNSIGNED_BYTE, 0 );
-
-
-    //右手 right hand
-    var RY = rotateY(RotateAngle);
-    var T = translate(0.16, 0.1, 0);
-    var R = rotateZ(34);
-    var S = scalem(0.6, 0.18, 0.2);
-    CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
-    CurModelViewMatrix = lookAt(eye, at, up);
-    CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
-    normalMatrix = [
-        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
-        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
-        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
-    ];
-    gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
-    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
-
-    gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
-    gl.activeTexture(gl.TEXTURE0);
-    gl.enableVertexAttribArray(vSphereTextureCoord16);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, tBufferSphereID16);
-    gl.vertexAttribPointer(vSphereTextureCoord16, 2, gl.FLOAT, false, 0, 0);
-
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID16);
-    gl.vertexAttribPointer(vSpherePosition16, 3, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer16);
-    gl.vertexAttribPointer(vSphereNormal16, 3, gl.FLOAT, false, 0, 0);
-
-    gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID16);
-
-    gl.drawElements( gl.TRIANGLES, numSphereVertex16, gl.UNSIGNED_BYTE, 0 );
+    // gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID7);
+    // gl.vertexAttribPointer(vSpherePosition7, 3, gl.FLOAT, false, 0, 0);
+    //
+    // gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer7);
+    // gl.vertexAttribPointer(vSphereNormal7, 3, gl.FLOAT, false, 0, 0);
+    //
+    // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID7);
+    //
+    // gl.drawElements( gl.TRIANGLES, numSphereVertex7, gl.UNSIGNED_BYTE, 0 );
+    //
+    //
+    // //左腮红 left blusher
+    // var RY = rotateY(RotateAngle);
+    // var T = translate(-0.145, 0.16, 0.135);
+    // var R = rotateZ(0);
+    // var S = scalem(0.13, 0.13, 0.03);
+    // CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
+    // CurModelViewMatrix = lookAt(eye, at, up);
+    // CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    // normalMatrix = [
+    //     vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
+    //     vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
+    //     vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+    // ];
+    // gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
+    // gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
+    //
+    // if(lighting)
+    //     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 1);
+    // else
+    //     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), -2);
+    // gl.activeTexture(gl.TEXTURE1);
+    // gl.enableVertexAttribArray(vSphereTextureCoord8);
+    //
+    // gl.bindBuffer(gl.ARRAY_BUFFER, tBufferSphereID8);
+    // gl.vertexAttribPointer(vSphereTextureCoord8, 2, gl.FLOAT, false, 0, 0);
+    //
+    //
+    // gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID8);
+    // gl.vertexAttribPointer(vSpherePosition8, 3, gl.FLOAT, false, 0, 0);
+    //
+    // gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer8);
+    // gl.vertexAttribPointer(vSphereNormal8, 3, gl.FLOAT, false, 0, 0);
+    //
+    // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID8);
+    //
+    // gl.drawElements( gl.TRIANGLES, numSphereVertex8, gl.UNSIGNED_BYTE, 0 );
+    //
+    //
+    // //右腮红 right blusher
+    // var RY = rotateY(RotateAngle);
+    // var T = translate(0.145, 0.16, 0.135);
+    // var R = rotateZ(0);
+    // var S = scalem(0.13, 0.13, 0.03);
+    // CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
+    // CurModelViewMatrix = lookAt(eye, at, up);
+    // CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    // normalMatrix = [
+    //     vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
+    //     vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
+    //     vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+    // ];
+    // gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
+    // gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
+    //
+    // if(lighting)
+    //     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 1);
+    // else
+    //     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), -2);
+    // gl.activeTexture(gl.TEXTURE1);
+    // gl.enableVertexAttribArray(vSphereTextureCoord9);
+    //
+    // gl.bindBuffer(gl.ARRAY_BUFFER, tBufferSphereID9);
+    // gl.vertexAttribPointer(vSphereTextureCoord9, 2, gl.FLOAT, false, 0, 0);
+    //
+    //
+    // gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID9);
+    // gl.vertexAttribPointer(vSpherePosition9, 3, gl.FLOAT, false, 0, 0);
+    //
+    // gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer9);
+    // gl.vertexAttribPointer(vSphereNormal9, 3, gl.FLOAT, false, 0, 0);
+    //
+    // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID9);
+    //
+    // gl.drawElements( gl.TRIANGLES, numSphereVertex9, gl.UNSIGNED_BYTE, 0 );
+    //
+    //
+    // //嘴巴 mouth
+    // // var RY = rotateY(RotateAngle);
+    // // var T = translate(0, 0.18, 0.19);
+    // // var R = rotateZ(0);
+    // // var S = scalem(0.15, 0.2, 0.03);
+    // // CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
+    // // CurModelViewMatrix = lookAt(eye, at, up);
+    // // CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    // // normalMatrix = [
+    // //     vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
+    // //     vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
+    // //     vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+    // // ];
+    // // gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
+    // // gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
+    // //
+    // // gl.bindBuffer(gl.ARRAY_BUFFER, tBufferSphereID10);
+    // // gl.vertexAttribPointer(vSphereColor10, 4, gl.FLOAT, false, 0, 0);
+    // //
+    // // gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID10);
+    // // gl.vertexAttribPointer(vSpherePosition10, 3, gl.FLOAT, false, 0, 0);
+    // //
+    // // gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer10);
+    // // gl.vertexAttribPointer(vSphereNormal10, 3, gl.FLOAT, false, 0, 0);
+    // //
+    // // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID10);
+    // //
+    // // gl.drawElements( gl.TRIANGLES, numSphereVertex10, gl.UNSIGNED_BYTE, 0 );
+    //
+    //
+    // //左眼睛 left eye
+    // // var RY = rotateY(RotateAngle);
+    // // var T = translate(-0.09, 0.29, 0.18);
+    // // var R = rotateZ(0);
+    // // var S = scalem(0.15, 0.15, 0.03);
+    // // CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
+    // // CurModelViewMatrix = lookAt(eye, at, up);
+    // // CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    // // normalMatrix = [
+    // //     vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
+    // //     vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
+    // //     vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+    // // ];
+    // // gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
+    // // gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
+    // //
+    // // gl.bindBuffer(gl.ARRAY_BUFFER, tBufferSphereID11);
+    // // gl.vertexAttribPointer(vSphereColor11, 4, gl.FLOAT, false, 0, 0);
+    // //
+    // // gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID11);
+    // // gl.vertexAttribPointer(vSpherePosition11, 3, gl.FLOAT, false, 0, 0);
+    // //
+    // // gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer11);
+    // // gl.vertexAttribPointer(vSphereNormal11, 3, gl.FLOAT, false, 0, 0);
+    // //
+    // // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID11);
+    // //
+    // // gl.drawElements( gl.TRIANGLES, numSphereVertex11, gl.UNSIGNED_BYTE, 0 );
+    //
+    //
+    // //右眼睛 right eye
+    // // var RY = rotateY(RotateAngle);
+    // // var T = translate(0.09, 0.29, 0.18);
+    // // var R = rotateZ(0);
+    // // var S = scalem(0.15, 0.15, 0.03);
+    // // CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
+    // // CurModelViewMatrix = lookAt(eye, at, up);
+    // // CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    // // normalMatrix = [
+    // //     vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
+    // //     vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
+    // //     vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+    // // ];
+    // // gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
+    // // gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
+    // //
+    // // gl.bindBuffer(gl.ARRAY_BUFFER, tBufferSphereID12);
+    // // gl.vertexAttribPointer(vSphereColor12, 4, gl.FLOAT, false, 0, 0);
+    // //
+    // // gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID12);
+    // // gl.vertexAttribPointer(vSpherePosition12, 3, gl.FLOAT, false, 0, 0);
+    // //1
+    // // gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer12);
+    // // gl.vertexAttribPointer(vSphereNormal12, 3, gl.FLOAT, false, 0, 0);
+    // //
+    // // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID12);
+    // //
+    // // gl.drawElements( gl.TRIANGLES, numSphereVertex12, gl.UNSIGNED_BYTE, 0 );
+    //
+    //
+    // //左眼珠 left eyeball
+    // // var RY = rotateY(RotateAngle);
+    // // var T = translate(-0.11, 0.282, 0.19);
+    // // var R = rotateZ(0);
+    // // var S = scalem(0.05, 0.05, 0.03);
+    // // CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
+    // // CurModelViewMatrix = lookAt(eye, at, up);
+    // // CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    // // normalMatrix = [
+    // //     vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
+    // //     vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
+    // //     vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+    // // ];
+    // // gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
+    // // gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
+    // //
+    // // gl.bindBuffer(gl.ARRAY_BUFFER, tBufferSphereID13);
+    // // gl.vertexAttribPointer(vSphereColor13, 4, gl.FLOAT, false, 0, 0);
+    // //
+    // // gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID13);
+    // // gl.vertexAttribPointer(vSp1herePosition13, 3, gl.FLOAT, false, 0, 0);
+    // //
+    // // gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer13);
+    // // gl.vertexAttribPointer(vSphereNormal13, 3, gl.FLOAT, false, 0, 0);
+    // //
+    // // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID13);
+    // //
+    // // gl.drawElements( gl.TRIANGLES, numSphereVertex13, gl.UNSIGNED_BYTE, 0 );
+    //
+    //
+    // //右眼珠 right eyeball
+    // // var RY = rotateY(RotateAngle);
+    // // var T = translate(0.07, 0.28, 0.19);
+    // // var R = rotateZ(0);
+    // // var S = scalem(0.05, 0.05, 0.03);
+    // // CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
+    // // CurModelViewMatrix = lookAt(eye, at, up);
+    // // CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    // // normalMatrix = [
+    // //     vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
+    // //     vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
+    // //     vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+    // // ];
+    // // gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
+    // // gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
+    // //
+    // // gl.bindBuffer(gl.ARRAY_BUFFER, tBufferSphereID14);
+    // // gl.vertexAttribPointer(vSphereColor14, 4, gl.FLOAT, false, 0, 0);
+    // //
+    // // gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID14);
+    // // gl.vertexAttribPointer(vSpherePosition14, 3, gl.FLOAT, false, 0, 0);
+    // //var lighting = document.getElementById("lighting").checked;
+    // // gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer14);
+    // // gl.vertexAttribPointer(vSphereNormal14, 3, gl.FLOAT, false, 0, 0);
+    // //
+    // // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID14);
+    // //
+    // // gl.drawElements( gl.TRIANGLES, numSphereVertex14, gl.UNSIGNED_BYTE, 0 );
+    //
+    //
+    // //左手 left hand
+    // var RY = rotateY(-20+RotateAngle);
+    // var T = translate(-0.18, -0.09, 0);
+    // var R = rotateZ(30);
+    // var S = scalem(0.6, 0.18, 0.2);
+    // CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
+    // CurModelViewMatrix = lookAt(eye, at, up);
+    // CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    // normalMatrix = [
+    //     vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
+    //     vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
+    //     vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+    // ];
+    // gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
+    // gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
+    //
+    // if(lighting)
+    //     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
+    // else
+    //     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), -1);
+    // gl.activeTexture(gl.TEXTURE0);
+    // gl.enableVertexAttribArray(vSphereTextureCoord15);
+    //
+    // gl.bindBuffer(gl.ARRAY_BUFFER, tBufferSphereID15);
+    // gl.vertexAttribPointer(vSphereTextureCoord15, 2, gl.FLOAT, false, 0, 0);
+    //
+    //
+    // gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID15);
+    // gl.vertexAttribPointer(vSpherePosition15, 3, gl.FLOAT, false, 0, 0);
+    //
+    // gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer15);
+    // gl.vertexAttribPointer(vSphereNormal15, 3, gl.FLOAT, false, 0, 0);
+    //
+    // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID15);
+    //
+    // gl.drawElements( gl.TRIANGLES, numSphereVertex15, gl.UNSIGNED_BYTE, 0 );
+    //
+    //
+    // //右手 right hand
+    // var RY = rotateY(RotateAngle);
+    // var T = translate(0.16, 0.1, 0);
+    // var R = rotateZ(34);
+    // var S = scalem(0.6, 0.18, 0.2);
+    // CurConversionMatrix = mult(RY,mult(R,mult(T, S)));
+    // CurModelViewMatrix = lookAt(eye, at, up);
+    // CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    // normalMatrix = [
+    //     vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
+    //     vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
+    //     vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+    // ];
+    // gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
+    // gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
+    //
+    // gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
+    // gl.activeTexture(gl.TEXTURE0);
+    // gl.enableVertexAttribArray(vSphereTextureCoord16);
+    //
+    // gl.bindBuffer(gl.ARRAY_BUFFER, tBufferSphereID16);
+    // gl.vertexAttribPointer(vSphereTextureCoord16, 2, gl.FLOAT, false, 0, 0);
+    //
+    //
+    // gl.bindBuffer(gl.ARRAY_BUFFER, vBufferSphereID16);
+    // gl.vertexAttribPointer(vSpherePosition16, 3, gl.FLOAT, false, 0, 0);
+    //
+    // gl.bindBuffer(gl.ARRAY_BUFFER, nBuffer16);
+    // gl.vertexAttribPointer(vSphereNormal16, 3, gl.FLOAT, false, 0, 0);
+    //
+    // gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, iBufferSphereID16);
+    //
+    // gl.drawElements( gl.TRIANGLES, numSphereVertex16, gl.UNSIGNED_BYTE, 0 );
 
     //银子 silver
     // var RY = rotateY(RotateAngle);
@@ -1901,9 +1901,9 @@ function render() {
 }
 
 //画球函数
-function initSphereBuffers(gl, program, radius, spherePositions, sphereTextureCoords, sphereIndices, sphereNormals) { // Create a sphere
-    var latitudeBands = 15;
-    var longitudeBands = 15;
+function initSphereBuffers(radius, spherePositions, sphereTextureCoords, sphereIndices, sphereNormals) { // Create a sphere
+    var latitudeBands = 30;
+    var longitudeBands = 30;
 
     for (var latNumber = 0; latNumber <= latitudeBands; latNumber++) {
       var theta = latNumber * Math.PI / latitudeBands;
@@ -1924,11 +1924,13 @@ function initSphereBuffers(gl, program, radius, spherePositions, sphereTextureCo
         sphereNormals.push(x);
         sphereNormals.push(y);
         sphereNormals.push(z);
+        sphereNormals.push(1.0);
         sphereTextureCoords.push(u);
         sphereTextureCoords.push(v);
         spherePositions.push(radius * x);
         spherePositions.push(radius * y);
         spherePositions.push(radius * z);
+        spherePositions.push(1.0);
       }
     }
 
