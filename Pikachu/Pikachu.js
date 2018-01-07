@@ -213,29 +213,28 @@ window.onload = function init() {
     pHead.initBuffer(gl);
 
     //第三个球体各参数-左耳朵
-    pLeftEar = new Sphere(0.245, 0.245, 0.245);
+    pLeftEar = new Sphere(0.8, 0.24, 0.24);
     pLeftEar.createSphere();
     pLeftEar.initBuffer(gl);
 
-
     //第四个球体各参数-右耳朵
-    pRightEar = new Sphere(0.245, 0.245, 0.245);
+    pRightEar = new Sphere(0.8, 0.24, 0.24);
     pRightEar.createSphere();
     pRightEar.initBuffer(gl);
 
     //第五个球体各参数-身体竖着的球
-    pBody = new Sphere(0.35, 0.35, 0.35);
+    pBody = new Sphere(1.0, 1.15, 0.9);
     pBody.createSphere();
     pBody.initBuffer(gl);
 
 
     //第十五个球体各参数-左手
-    pLeftArm = new Sphere(0.245, 0.245, 0.245);
+    pLeftArm = new Sphere(0.85, 0.20, 0.35);
     pLeftArm.createSphere();
     pLeftArm.initBuffer(gl);
 
     //第十六个球体各参数-右手
-    pRightArm = new Sphere(0.245, 0.245, 0.245);
+    pRightArm = new Sphere(0.85, 0.20, 0.35);
     pRightArm.createSphere();
     pRightArm.initBuffer(gl);
 
@@ -280,7 +279,7 @@ window.onload = function init() {
         phi -= dr;
     };
 
-    canvas.addEventListener("mousedown", function(event){
+    canvas.addEventListener("mousedown", function(evendinglixiangzhut){
       var x = 2*event.clientX/canvas.width-1;
       var y = 2*(canvas.height-event.clientY)/canvas.height-1;
       startMotion(x, y);
@@ -349,7 +348,7 @@ function render() {
     }
 
 
-    //初始化模型视图矩阵和投影矩阵
+    //初始化模型视图矩阵和投影矩阵dinglixiangzhu
     CurModelViewMatrix = lookAt(eye, at, up);
     CurProjectionMatrix = perspective(fovy, aspect, near, far);
     normalMatrix = [
@@ -378,10 +377,10 @@ function render() {
 
     //左耳朵 left ear
     var RY = rotateY(RotateAngle);
-    var T = translate(-2, 0.23, 0);
+    var T = translate(-1.75, 0.18, 0);
     var R = rotateZ(46);
     // var S = scalem(0.7, 0.2, 0.2);
-    CurConversionMatrix = mult(RY,mult(R,T));
+    CurConversionMatrix = mult(RY, mult(R,T));
     CurModelViewMatrix = lookAt(eye, at, up);
     CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
     normalMatrix = [
@@ -392,17 +391,12 @@ function render() {
     gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
     gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
-    if(lighting)
-        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
-    else
-        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), -1);
-
     pLeftEar.draw(gl);
 
 
     //右耳朵 right ear
     var RY = rotateY(RotateAngle);
-    var T = translate(2, 0.23, 0);
+    var T = translate(1.75, 0.18, 0);
     var R = rotateZ(-46);
     // var S = scalem(0.7, 0.2, 0.2);
     CurConversionMatrix = mult(RY,mult(R,T));
@@ -416,17 +410,17 @@ function render() {
     gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
     gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
-    if(lighting)
-        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
-    else
-        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), -1);
+    // if(lighting)
+    //     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
+    // else
+    //     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), -1);
     pRightEar.draw(gl);
 
 
     //身体竖 body main
     var RY = rotateY(RotateAngle);
-    var T = translate(0, -2, 0);
-    var R = rotateZ(90);
+    var T = translate(0, -1.6, 0);
+    var R = rotateZ(0);
     // var S = scalem(0.88, 0.52, 0.50);
     CurConversionMatrix = mult(RY,mult(R,T));
     CurModelViewMatrix = lookAt(eye, at, up);
@@ -439,15 +433,15 @@ function render() {
     gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
     gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
-    if(lighting)
-        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
-    else
-        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), -1);
+    // if(lighting)
+    //     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
+    // else
+    //     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), -1);
     pBody.draw(gl);
 
     //左手 left hand
-    var RY = rotateY(-20+RotateAngle);
-    var T = translate(-0.18, -1.09, 0);
+    var RY = rotateY(-20 + RotateAngle);
+    var T = translate(-0.5, -1.15, 0);
     var R = rotateZ(30);
     // var S = scalem(0.6, 0.18, 0.2);
     CurConversionMatrix = mult(RY,mult(R, T));
@@ -461,17 +455,17 @@ function render() {
     gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
     gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
-    if(lighting)
-        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
-    else
-        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), -1);
+    // if(lighting)
+    //     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
+    // else
+    //     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), -1);
     pLeftArm.draw(gl);
 
 
     //右手 right hand
     var RY = rotateY(RotateAngle);
-    var T = translate(0.16, 1.1, 0);
-    var R = rotateZ(34);
+    var T = translate(1.0, -1.15, 0);
+    var R = rotateZ(0);
     // var S = scalem(0.6, 0.18, 0.2);
     CurConversionMatrix = mult(RY,mult(R, T));
     CurModelViewMatrix = lookAt(eye, at, up);
@@ -484,8 +478,10 @@ function render() {
     gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
     gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
-    gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
+    // gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
     pRightArm.draw(gl);
+
+    gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
 
     //银子 silver
     // var RY = rotateY(RotateAngle);
