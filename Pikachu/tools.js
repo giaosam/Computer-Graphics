@@ -66,8 +66,25 @@ Sphere.prototype = {
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.indexData), gl.STATIC_DRAW);
   },
 
-  draw: function(gl) {
-    gl.activeTexture(gl.TEXTURE0);
+  draw: function(gl, id) {
+    switch(id) {
+      case 0:
+        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
+        gl.activeTexture(gl.TEXTURE0);
+        break;
+      case 1:
+        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 1);
+        gl.activeTexture(gl.TEXTURE1);
+        break;
+      case 2:
+        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 2);
+        gl.activeTexture(gl.TEXTURE2);
+        break;
+      case 3:
+        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 3);
+        gl.activeTexture(gl.TEXTURE3);
+        break;
+    }
     gl.enableVertexAttribArray(this.vTextureCoords);
 
     gl.bindBuffer(gl.ARRAY_BUFFER, this.vTextureCoordBuffer);
@@ -85,9 +102,6 @@ Sphere.prototype = {
 }
 
 
-
-
-
 /**
  * 球状物体绘制函数
  * @param  {[type]} xRadius             x轴半径
@@ -95,7 +109,7 @@ Sphere.prototype = {
  * @param  {[type]} zRadius             z轴半径
  * @param  {[type]} vPositionData       存放顶点坐标位置数据
  * @param  {[type]} vTextureCoordData   存放顶点对应的二维纹理坐标数据
- * @param  {[type]} vNormalData         存放每个顶点对应的法向量数据
+ * @param  {[type]} vNormalDat 25;a         存放每个顶点对应的法向量数据
  * @param  {[type]} indexData           存放索引数据
  * @return {[type]} indexData.length    索引个数
  */
@@ -179,6 +193,7 @@ function torus(row, column, irad, orad){
 
 function hsva(h, s, v, a){
     if(s > 1 || v > 1 || a > 1){return;}
+
     var th = h % 360;
     var i = Math.floor(th / 60);
     var f = th / 60 - i;
@@ -195,4 +210,49 @@ function hsva(h, s, v, a){
         color.push(192/255, 192/255, 192/255, a);
     }
     return color;
+}
+
+// 指定图像来配置该图像的纹理信息
+function configureTexture(image, id) {
+    var texture = gl.createTexture();
+    console.log(id);
+
+    switch(id) {
+      case 0:
+        gl.activeTexture(gl.TEXTURE0);
+        break;
+      case 1:
+        gl.activeTexture(gl.TEXTURE1);
+        break;
+      case 2:
+        gl.activeTexture(gl.TEXTURE2);
+        break;
+      case 3:
+        gl.activeTexture(gl.TEXTURE3);
+        break;
+    }
+
+    gl.bindTexture(gl.TEXTURE_2D, texture);
+    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
+    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB,
+         gl.RGB, gl.UNSIGNED_BYTE, image);
+    gl.generateMipmap(gl.TEXTURE_2D);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER,
+                      gl.NEAREST_MIPMAP_LINEAR);
+    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
+
+    switch(id) {
+      case 0:
+        gl.uniform1i(gl.getUniformLocation(program, "texture0"), id);
+        break;
+      case 1:
+        gl.uniform1i(gl.getUniformLocation(program, "texture1"), id);
+        break;
+      case 2:
+        gl.uniform1i(gl.getUniformLocation(program, "texture2"), id);
+        break;
+      case 3:
+        gl.uniform1i(gl.getUniformLocation(program, "texture3"), id);
+        break;
+    }
 }

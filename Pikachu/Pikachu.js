@@ -12,8 +12,8 @@ var pLeftArm;
 var pRightArm;
 
 var near = 0.3;
-var far = 12.0;
-var radius = 10.0; // 照相机到物体的距离
+var far = 15.0;
+var radius = 12.0; // 照相机到物体的距离
 var theta  = 0.1745;
 var phi    = 0.0;
 var dr = 5.0 * Math.PI/180.0;
@@ -152,45 +152,6 @@ function trackballView( x,  y ) {
     return v;
 }
 
-// 指定图像来配置该图像的纹理信息
-function configureTexture(image, id, light) {
-    var texture = gl.createTexture();
-
-    switch(id) {
-      case 0:
-        gl.activeTexture(gl.TEXTURE0);
-        break;
-      case 1:
-        gl.activeTexture(gl.TEXTURE1);
-        break;
-      case 2:
-        gl.activeTexture(gl.TEXTURE2);
-        break;
-    }
-
-    gl.bindTexture(gl.TEXTURE_2D, texture);
-    gl.pixelStorei(gl.UNPACK_FLIP_Y_WEBGL, true);
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB,
-         gl.RGB, gl.UNSIGNED_BYTE, image);
-    gl.generateMipmap(gl.TEXTURE_2D);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER,
-                      gl.NEAREST_MIPMAP_LINEAR);
-    gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST);
-
-    switch(id) {
-      case 0:
-        gl.uniform1i(gl.getUniformLocation(program, "texture0"), id);
-        break;
-      case 1:
-        gl.uniform1i(gl.getUniformLocation(program, "texture1"), id);
-        break;
-      case 2:
-        gl.uniform1i(gl.getUniformLocation(program, "texture2"), id);
-        break;
-    }
-}
-
-
 window.onload = function init() {
     canvas = document.getElementById("gl-canvas");
 
@@ -208,22 +169,22 @@ window.onload = function init() {
 
 
     // 第一个球体各参数-头部下部分的球
-    pHead = new Sphere(1, 1, 1);
+    pHead = new Sphere(0.9, 1, 1);
     pHead.createSphere();
     pHead.initBuffer(gl);
 
     //第三个球体各参数-左耳朵
-    pLeftEar = new Sphere(0.8, 0.24, 0.24);
+    pLeftEar = new Sphere(0.24, 0.85, 0.24);
     pLeftEar.createSphere();
     pLeftEar.initBuffer(gl);
 
     //第四个球体各参数-右耳朵
-    pRightEar = new Sphere(0.8, 0.24, 0.24);
+    pRightEar = new Sphere(0.24, 0.85, 0.24);
     pRightEar.createSphere();
     pRightEar.initBuffer(gl);
 
     //第五个球体各参数-身体竖着的球
-    pBody = new Sphere(1.0, 1.15, 0.9);
+    pBody = new Sphere(0.9, 1.15, 1.0);
     pBody.createSphere();
     pBody.initBuffer(gl);
 
@@ -322,14 +283,17 @@ window.onload = function init() {
        false, flatten(projection));
 
 
-     var yellow = document.getElementById("headImage");
-     configureTexture(yellow, 0);
+     var pHeadImg = document.getElementById("pHeadImg");
+     configureTexture(pHeadImg, 0);
 
-     var red = document.getElementById("red");
-     configureTexture(red, 1);
+     var pEarImg = document.getElementById("pEarImg");
+     configureTexture(pEarImg, 1);
 
-    //  var image1 = document.getElementById("texImageBackGround");
-    //  configureTexture1(image1);
+     var pBodyImg = document.getElementById("pBodyImg");
+     configureTexture(pBodyImg, 2);
+
+     var pSkinImg = document.getElementById("pSkinImg");
+     configureTexture(pSkinImg, 3);
 
      render();
 }
@@ -372,15 +336,16 @@ function render() {
     gl.uniformMatrix4fv(CurProjectionMatrixLoc, false, flatten(CurProjectionMatrix));
     gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
-    pHead.draw(gl);
+    pHead.draw(gl, 0);
 
 
     //左耳朵 left ear
     var RY = rotateY(RotateAngle);
-    var T = translate(-1.75, 0.18, 0);
+    var T = translate(-1.7, 0.15, 0);
     var R = rotateZ(46);
     // var S = scalem(0.7, 0.2, 0.2);
     CurConversionMatrix = mult(RY, mult(R,T));
+    CurConversionMatrix = mult(CurConversionMatrix, translate(1.5, 1.5, 0));
     CurModelViewMatrix = lookAt(eye, at, up);
     CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
     normalMatrix = [
@@ -391,15 +356,16 @@ function render() {
     gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
     gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
-    pLeftEar.draw(gl);
+    pLeftEar.draw(gl, 1);
 
 
     //右耳朵 right ear
     var RY = rotateY(RotateAngle);
-    var T = translate(1.75, 0.18, 0);
+    var T = translate(1.7, 0.15, 0);
     var R = rotateZ(-46);
     // var S = scalem(0.7, 0.2, 0.2);
     CurConversionMatrix = mult(RY,mult(R,T));
+    CurConversionMatrix = mult(CurConversionMatrix, translate(-1.5, 1.5, 0));
     CurModelViewMatrix = lookAt(eye, at, up);
     CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
     normalMatrix = [
@@ -414,11 +380,11 @@ function render() {
     //     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
     // else
     //     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), -1);
-    pRightEar.draw(gl);
+    pRightEar.draw(gl, 1);
 
 
     //身体竖 body main
-    var RY = rotateY(RotateAngle);
+    var RY = rotateY(RotateAngle + 90);
     var T = translate(0, -1.6, 0);
     var R = rotateZ(0);
     // var S = scalem(0.88, 0.52, 0.50);
@@ -437,7 +403,7 @@ function render() {
     //     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
     // else
     //     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), -1);
-    pBody.draw(gl);
+    pBody.draw(gl, 2);
 
     //左手 left hand
     var RY = rotateY(-20 + RotateAngle);
@@ -459,7 +425,7 @@ function render() {
     //     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
     // else
     //     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), -1);
-    pLeftArm.draw(gl);
+    pLeftArm.draw(gl, 3);
 
 
     //右手 right hand
@@ -479,7 +445,7 @@ function render() {
     gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
     // gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
-    pRightArm.draw(gl);
+    pRightArm.draw(gl, 3);
 
     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
 
