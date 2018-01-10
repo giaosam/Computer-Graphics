@@ -4,19 +4,32 @@ var canvas;
 var gl;
 var program;
 
+// 皮卡丘各个变量
 var pHead;
 var pLeftEar;
 var pRightEar;
 var pBody;
 var pLeftArm;
 var pRightArm;
-var pBulb;
 var pX = 0;
 var pY = 0;
 var pZ = 0;
 var pR = 0;
 var pS = 1;
 
+//  圆企鹅各个变量
+var yHead;
+var yBody;
+var yBody;
+var yLeftArm;
+var yRightArm;
+var yX = 0;
+var yY = 0;
+var yZ = 0;
+var yR = 0;
+var yS = 1;
+
+var pBulb;
 var tCube;
 
 var bulbX = 0;
@@ -179,32 +192,32 @@ window.onload = function init() {
     gl.useProgram(program);
 
 
-    // 第一个球体各参数-头部下部分的球
+    // 皮卡丘头部
     pHead = new Sphere(0.9, 1, 1);
     pHead.createSphere();
     pHead.initBuffer(gl);
 
-    //第三个球体各参数-左耳朵
+    // 皮卡丘左耳朵
     pLeftEar = new Sphere(0.24, 0.85, 0.24);
     pLeftEar.createSphere();
     pLeftEar.initBuffer(gl);
 
-    //第四个球体各参数-右耳朵
+    // 皮卡丘右耳朵
     pRightEar = new Sphere(0.24, 0.85, 0.24);
     pRightEar.createSphere();
     pRightEar.initBuffer(gl);
 
-    //第五个球体各参数-身体竖着的球
+    // 皮卡丘身体
     pBody = new Sphere(0.75, 1.0, 0.85);
     pBody.createSphere();
     pBody.initBuffer(gl);
 
-    //第十五个球体各参数-左手
+    // 皮卡丘左手
     pLeftArm = new Sphere(0.85, 0.35, 0.20);
     pLeftArm.createSphere();
     pLeftArm.initBuffer(gl);
 
-    //第十六个球体各参数-右手
+    // 皮卡丘右手
     pRightArm = new Sphere(0.85, 0.35, 0.20);
     pRightArm.createSphere();
     pRightArm.initBuffer(gl);
@@ -215,13 +228,32 @@ window.onload = function init() {
     pBulb.initBuffer(gl);
 
 
+    // 圆企鹅头部
+    yHead = new Sphere(1, 0.9, 1);
+    yHead.createSphere();
+    yHead.initBuffer(gl);
+
+    // 圆企鹅身体
+    yBody = new Sphere(0.75, 0.9, 0.80);
+    yBody.createSphere();
+    yBody.initBuffer(gl);
+
+    // 圆企鹅左手
+    yLeftArm = new Sphere(0.64, 0.35, 0.20);
+    yLeftArm.createSphere();
+    yLeftArm.initBuffer(gl);
+
+    // 圆企鹅右手
+    yRightArm = new Sphere(0.64, 0.35, 0.20);
+    yRightArm.createSphere();
+    yRightArm.initBuffer(gl);
+
+
     // 测试立方体
-    tCube = new Cube(2);
-    tCube.createCube();
-    tCube.initBuffer(gl);
+    // tCube = new Cube(2);
+    // tCube.createCube();
+    // tCube.initBuffer(gl);
 
-
-    //
 
     //获得模型视图矩阵和投影矩阵的位置
     modelViewMatrixLoc = gl.getUniformLocation(program, "modelViewMatrix");
@@ -230,7 +262,6 @@ window.onload = function init() {
 
 
     //event listeners for buttons
-
     document.getElementById("AntiRotate").onclick = function() {
         RotateAngle -= 5;
     };
@@ -477,11 +508,12 @@ function render() {
         vec3(modelViewMatrix[2][0], modelViewMatrix[2][1], modelViewMatrix[2][2])
     ];
 
-    // 头
+    // 皮卡丘头部
     var S = scalem(pS, pS, pS);
     var R = rotateY(-90 + pR);
     var T = translate((-3.5 + pX) * pS, (0.5 + pY) * pS, pZ * pS);
     conversionMatrix = matricesCompute(T, R, S);
+    modelViewMatrix = lookAt(eye, at, up);
     matricesConfigure(conversionMatrix, modelViewMatrix, projectionMatrix, normalMatrix, modelViewMatrixLoc, projectionMatrixLoc, normalMatrixLoc);
     modelViewMatrix = mult(modelViewMatrix, conversionMatrix);
     normalMatrix = [
@@ -550,7 +582,7 @@ function render() {
 
     pBody.draw(gl, 2);
 
-    //左手 left hand
+    // 左手 left hand
     var S = scalem(pS, pS, pS);
     var R = mult(rotateY(pR), mult(translate(-pS, 0, 0), mult(rotateZ(30), rotateX(-90))));
     var T = translate((-3.5 + pX) * pS, (-0.5 + pY) * pS, pZ * pS);
@@ -568,7 +600,7 @@ function render() {
     pLeftArm.draw(gl, 3);
 
 
-    //右手 right hand
+    // 右手 right hand
     var S = scalem(pS, pS, pS);
     var R = mult(rotateY(pR), mult(translate(pS, 0, 0), mult(rotateY(30), rotateX(-90))));
     var T = translate((-3.5 + pX) * pS, (-1.1 + pY) * pS, pZ * pS);
@@ -585,6 +617,83 @@ function render() {
 
     // gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
     pRightArm.draw(gl, 3);
+
+
+
+    // 圆企鹅头部
+    var S = scalem(yS, yS, yS);
+    var R = rotateY(-90 + pR);;
+    var T = translate((3.5 + yX) * yS, (0.05 + yY) * yS, yZ * yS);
+    conversionMatrix = matricesCompute(T, R, S);
+    matricesConfigure(conversionMatrix, modelViewMatrix, projectionMatrix, normalMatrix, modelViewMatrixLoc, projectionMatrixLoc, normalMatrixLoc);
+    modelViewMatrix = lookAt(eye, at, up);
+    modelViewMatrix = mult(modelViewMatrix, conversionMatrix);
+    normalMatrix = [
+        vec3(modelViewMatrix[0][0], modelViewMatrix[0][1], modelViewMatrix[0][2]),
+        vec3(modelViewMatrix[1][0], modelViewMatrix[1][1], modelViewMatrix[1][2]),
+        vec3(modelViewMatrix[2][0], modelViewMatrix[2][1], modelViewMatrix[2][2])
+    ];
+
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
+    gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
+    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
+
+    yHead.draw(gl, 4);
+
+
+    // 圆企鹅身体
+    var S = scalem(yS, yS, yS);
+    var R = rotateY(-90 + yR);
+    var T = translate((3.5 + yX) * yS, (-1.5 + yY) * yS, 0 + yZ * yS);
+    conversionMatrix = matricesCompute(T, R, S);
+    modelViewMatrix = lookAt(eye, at, up);
+    modelViewMatrix = mult(modelViewMatrix ,conversionMatrix);
+    normalMatrix = [
+        vec3(modelViewMatrix[0][0], modelViewMatrix[0][1], modelViewMatrix[0][2]),
+        vec3(modelViewMatrix[1][0], modelViewMatrix[1][1], modelViewMatrix[1][2]),
+        vec3(modelViewMatrix[2][0], modelViewMatrix[2][1], modelViewMatrix[2][2])
+    ];
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
+    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
+
+    yBody.draw(gl, 5);
+
+    // 圆企鹅左手
+    var S = scalem(yS, yS, yS);
+    var R = mult(rotateY(yR), mult(translate(-yS, 0, 0), mult(rotateX(30), mult(rotateZ(108), rotateX(90)))));
+    var T = translate((3.6 + yX) * yS, (-1.65 + yY) * yS, (0.2 + yZ) * yS);
+    conversionMatrix = matricesCompute(T, R, S);
+    modelViewMatrix = lookAt(eye, at, up);
+    modelViewMatrix = mult(modelViewMatrix ,conversionMatrix);
+    normalMatrix = [
+        vec3(modelViewMatrix[0][0], modelViewMatrix[0][1], modelViewMatrix[0][2]),
+        vec3(modelViewMatrix[1][0], modelViewMatrix[1][1], modelViewMatrix[1][2]),
+        vec3(modelViewMatrix[2][0], modelViewMatrix[2][1], modelViewMatrix[2][2])
+    ];
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
+    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
+
+    yLeftArm.draw(gl, 6);
+
+
+    // 圆企鹅右手
+    var S = scalem(yS, yS, yS);
+    var R = mult(rotateY(yR), mult(translate(-yS, 0, 0), mult(rotateX(-30), mult(rotateZ(-120), rotateX(90)))));
+    var T = translate((5.4 + yX) * yS, (-1.6 + yY) * yS, yZ * yS);
+    conversionMatrix = matricesCompute(T, R, S);
+    modelViewMatrix = lookAt(eye, at, up);
+    modelViewMatrix = mult(modelViewMatrix ,conversionMatrix);
+    normalMatrix = [
+        vec3(modelViewMatrix[0][0], modelViewMatrix[0][1], modelViewMatrix[0][2]),
+        vec3(modelViewMatrix[1][0], modelViewMatrix[1][1], modelViewMatrix[1][2]),
+        vec3(modelViewMatrix[2][0], modelViewMatrix[2][1], modelViewMatrix[2][2])
+    ];
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
+    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
+
+    // gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
+    yRightArm.draw(gl, 6);
+
 
     var T = translate(bulbX, bulbY, bulbZ);
     if (bulbRotate1) {
@@ -621,22 +730,23 @@ function render() {
 
     pBulb.draw(gl, 2);
 
-    //光源
-    var RX = rotateX(60);
-    var T = translate(3, 0, 0);
+    // // 测试报告
+    // var RX = rotateX(60);
+    // var T = translate(3, 0, 0);
+    //
+    // var transformMatrix = mult(T, RX);
+    // modelViewMatrix = lookAt(eye, at, up);
+    // modelViewMatrix = mult(modelViewMatrix, transformMatrix);
+    // normalMatrix = [
+    //     vec3(modelViewMatrix[0][0], modelViewMatrix[0][1], modelViewMatrix[0][2]),
+    //     vec3(modelViewMatrix[1][0], modelViewMatrix[1][1], modelViewMatrix[1][2]),
+    //     vec3(modelViewMatrix[2][0], modelViewMatrix[2][1], modelViewMatrix[2][2])
+    // ];
+    // gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
+    // gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
+    //
+    // tCube.draw(gl, 7);
 
-    var transformMatrix = mult(T, RX);
-    modelViewMatrix = lookAt(eye, at, up);
-    modelViewMatrix = mult(modelViewMatrix, transformMatrix);
-    normalMatrix = [
-        vec3(modelViewMatrix[0][0], modelViewMatrix[0][1], modelViewMatrix[0][2]),
-        vec3(modelViewMatrix[1][0], modelViewMatrix[1][1], modelViewMatrix[1][2]),
-        vec3(modelViewMatrix[2][0], modelViewMatrix[2][1], modelViewMatrix[2][2])
-    ];
-    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
-    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
-
-    tCube.draw(gl, 7);
 
     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
 
