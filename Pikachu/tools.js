@@ -1,6 +1,6 @@
 'use strict';
 
-/**
+/*********************************************************************************************************************************
  * 球状物体类，用来计算球的顶点坐标、纹理坐标、法向量、索引的数据并且绑定buffer
  * @param       {[type]} xR x轴直径
  * @param       {[type]} yR y轴直径
@@ -18,10 +18,6 @@ function Sphere(xR, yR, zR) {
   this.vNormalData = [];
   this.indexData = [];
 
-  this.vPositionData = [];
-  this.vTextureCoordData = [];
-  this.vNormalData = [];
-  this.indexData = [];
   this.vPositionBuffer; //  = gl.createBuffer()
   this.vTextureCoordBuffer;
   this.vNormalBuffer;
@@ -188,6 +184,149 @@ function initSphereBuffers(xRadius, yRadius, zRadius, vPositionData, vTextureCoo
     }
     return indexData.length;
 }
+/***********************************************************************************************************************************************/
+
+
+function Cube(sideLength) {
+  this.side = sideLength;
+
+  this.vPositionData = [];
+  this.vTextureCoordData = [];
+  this.vNormalData = [];
+
+  this.vPositionBuffer;
+  this.vTextureCoordBuffer;
+  this.vNormalBuffer;
+
+  this.vPostions;
+  this.vTextureCoords;
+  this.vNormals;
+}
+
+Cube.prototype = {
+  //计算立方体的计算球的顶点坐标、纹理坐标、法向量、索引的数据
+  createCube: function() {
+    initCubeBuffers(this.side, this.vPositionData, this.vTextureCoordData, this.vNormalData);
+  },
+
+  /**
+   * 对立方体物体进行各类初始化操作
+   * @param  {[type]} gl WebGL context object
+   */
+  initBuffer: function(gl) {
+    this.vPositionBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.vPositionBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(this.vPositionData), gl.STATIC_DRAW);
+    this.vPositions = gl.getAttribLocation(program, "vPosition");
+    gl.enableVertexAttribArray(this.vPositions);
+
+    //normal buffer
+    this.vNormalBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.vNormalBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(this.vNormalData), gl.STATIC_DRAW);
+    this.vNormals = gl.getAttribLocation( program, "vNormal" );
+    gl.enableVertexAttribArray(this.vNormals);
+
+    // texture coordinate buffer
+    this.vTextureCoordBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.vTextureCoordBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, flatten(this.vTextureCoordData), gl.STATIC_DRAW);
+    this.vTextureCoords = gl.getAttribLocation(program, "vTexCoord");
+    gl.enableVertexAttribArray(this.vTextureCoords);
+  },
+
+  /**
+   * 立方体物体绘制函数，在渲染时调用
+   * @param  {[type]} gl WebGL context object
+   * @param  {[type]} id 纹理图片的唯一标识号
+   */
+  draw: function(gl, id) {
+    switch(id) {
+      case 7:
+        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 7);
+        gl.activeTexture(gl.TEXTURE7);
+        break;
+      case 8:
+        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 8);
+        gl.activeTexture(gl.TEXTURE8);
+        break;
+    }
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.vTextureCoordBuffer);
+    gl.vertexAttribPointer(this.vTextureCoords, 2, gl.FLOAT, false, 0, 0);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.vPositionBuffer);
+    gl.vertexAttribPointer(this.vPositions, 4, gl.FLOAT, false, 0, 0);
+
+    gl.bindBuffer(gl.ARRAY_BUFFER, this.vNormalBuffer);
+    gl.vertexAttribPointer(this.vNormals, 3, gl.FLOAT, false, 0, 0);
+
+    gl.enableVertexAttribArray(this.vTextureCoords);
+    gl.drawArrays(gl.TRIANGLES, 0, 36);
+  }
+}
+
+
+function initCubeBuffers(side, vPositionData, vTextureCoordData, vNormalData) {
+  var n = side / 2;
+  // 顶点坐标、纹理坐标、法向量计算
+  quad(1, 0, 3, 2, n, vPositionData, vTextureCoordData, vNormalData);
+  quad(2, 3, 7, 6, n, vPositionData, vTextureCoordData, vNormalData);
+  quad(3, 0, 4, 7, n, vPositionData, vTextureCoordData, vNormalData);
+  quad(6, 5, 1, 2, n, vPositionData, vTextureCoordData, vNormalData);
+  quad(4, 5, 6, 7, n, vPositionData, vTextureCoordData, vNormalData);
+  quad(5, 4, 0, 1, n, vPositionData, vTextureCoordData, vNormalData);
+}
+
+function quad(a, b, c, d, n, vPositionData, vTextureCoordData, vNormalData) {
+  // 纹理坐标
+  var texCoord = [
+    vec2(0, 0),
+    vec2(0, 1),
+    vec2(1, 1),
+    vec2(1, 0)
+  ];
+  // 顶点坐标
+  var vertices = [
+      vec4(-n, -n, n, 1.0),
+      vec4(-n, n, n, 1.0),
+      vec4(n, n, n, 1.0),
+      vec4(n, -n, n, 1.0),
+      vec4(-n, -n, -n, 1.0),
+      vec4(-n, n, -n, 1.0),
+      vec4(n, n, -n, 1.0),
+      vec4(n, -n, -n, 1.0)
+  ];
+
+  // 法向量
+  var t1 = subtract(vertices[b], vertices[a]);
+  var t2 = subtract(vertices[c], vertices[b]);
+  var normal = cross(t1, t2);
+  var normal = vec3(normal);
+
+  vPositionData.push(vertices[a]);
+  vTextureCoordData.push(texCoord[0]);
+  vNormalData.push(normal);
+
+  vPositionData.push(vertices[b]);
+  vTextureCoordData.push(texCoord[1]);
+  vNormalData.push(normal);
+
+  vPositionData.push(vertices[c]);
+  vTextureCoordData.push(texCoord[2]);
+  vNormalData.push(normal);
+
+  vPositionData.push(vertices[a]);
+  vTextureCoordData.push(texCoord[0]);
+  vNormalData.push(normal);
+
+  vPositionData.push(vertices[c]);
+  vTextureCoordData.push(texCoord[2]);
+  vNormalData.push(normal);
+
+  vPositionData.push(vertices[d]);
+  vTextureCoordData.push(texCoord[3]);
+  vNormalData.push(normal);
+}
 
 //画圆台函数
 function torus(row, column, irad, orad){
@@ -244,7 +383,6 @@ function hsva(h, s, v, a){
  */
 function configureTexture(image, id) {
     var texture = gl.createTexture();
-    console.log(id);
 
     switch(id) {
       case 0:
@@ -267,6 +405,9 @@ function configureTexture(image, id) {
         break;
       case 6:
         gl.activeTexture(gl.TEXTURE6);
+        break;
+      case 7:
+        gl.activeTexture(gl.TEXTURE7);
         break;
     }
 

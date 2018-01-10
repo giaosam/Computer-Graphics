@@ -57,7 +57,6 @@ uniform vec4 specularProduct;
 uniform float shininess;
 varying vec3 N, L, E;
 
-
 varying float s, t;
 
 //纹理
@@ -68,6 +67,7 @@ uniform sampler2D texture3;
 uniform sampler2D texture4;
 uniform sampler2D texture5;
 uniform sampler2D texture6;
+uniform sampler2D texture7;
 
 uniform int bTexCoord;
 varying  vec2 fTexCoord;
@@ -88,7 +88,7 @@ void main()
 
   if(dot(L, N) < 0.0 ) specular = vec4(0.0, 0.0, 0.0, 1.0);
 
-  fColor = ambient + diffuse +specular;
+  fColor = ambient + diffuse + specular;
   fColor.a = 1.0;
 
 
@@ -106,9 +106,12 @@ void main()
     gl_FragColor = fColor * texture2D(texture5, fTexCoord);
   else if (bTexCoord == 6)
     gl_FragColor = fColor * texture2D(texture6, fTexCoord);
+  else if (bTexCoord == 7)
+    gl_FragColor = fColor * texture2D(texture7, fTexCoord);
 }
 </script>
 
+<link href="../CSS/bootstrap.css" rel="stylesheet" type="text/css" media="all"/>
 <script type="text/javascript" src="../Common/webgl-utils.js"></script>
 <script type="text/javascript" src="../Common/initShaders.js"></script>
 <script type="text/javascript" src="../Common/MV.js"></script>
@@ -121,7 +124,7 @@ Oops ... your browser doesn't support the HTML5 canvas element
 </canvas>
 
 <br/>
-<button id = "AntiRotate">Anti Rotate </button>
+<button id = "AntiRotate" class="btn btn-info">Anti Rotate </button>
 <button id = "ClockRotate">Clock Rotate</button>
 <button id = "IncreaseZ">Increase Z</button>
 <button id = "DecreaseZ">Decrease Z</button>
@@ -171,6 +174,7 @@ Oops ... your browser doesn't support the HTML5 canvas element
 <img id = "yHeadImg" src = "../Resources/yHead.gif" hidden></img>
 <img id = "yBodyImg" src = "../Resources/yBody.gif" hidden></img>
 <img id = "ySkinImg" src = "../Resources/ySkin.gif" hidden></img>
+<img id = "glassImg" src = "../Resources/glass.jpg" hidden></img>
 
 </body>
 </html>

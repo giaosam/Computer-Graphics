@@ -13,6 +13,8 @@ var pRightArm;
 var pBulb;
 var forwardX = 0;
 
+var tCube;
+
 var bulbX = 0;
 var bulbY = 0;
 var bulbZ = 0;
@@ -208,6 +210,15 @@ window.onload = function init() {
     pBulb.createSphere();
     pBulb.initBuffer(gl);
 
+
+    // 测试立方体
+    tCube = new Cube(2);
+    tCube.createCube();
+    tCube.initBuffer(gl);
+
+
+    //
+
     //获得模型视图矩阵和投影矩阵的位置
     modelViewMatrixLoc = gl.getUniformLocation(program, "modelViewMatrix");
     projectionMatrixLoc = gl.getUniformLocation(program, "projectionMatrix");
@@ -347,7 +358,6 @@ window.onload = function init() {
       mouseMotion(x, y);
     });
 
-    //FCB 1210
 
     var ambientProduct = mult(lightAmbient, materialAmbient);
     var diffuseProduct = mult(lightDiffuse, materialDiffuse);
@@ -382,6 +392,18 @@ window.onload = function init() {
 
      var pSkinImg = document.getElementById("pSkinImg");
      configureTexture(pSkinImg, 3);
+
+     var yHeadImg = document.getElementById("yHeadImg");
+     configureTexture(yHeadImg, 4);
+
+     var yBodyImg = document.getElementById("yBodyImg");
+     configureTexture(yBodyImg, 5);
+
+     var ySkinImg = document.getElementById("ySkinImg");
+     configureTexture(ySkinImg, 6);
+
+     var glassImg = document.getElementById("glassImg");
+     configureTexture(glassImg, 7);
 
      render();
 }
@@ -559,6 +581,23 @@ function render() {
     gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
     pBulb.draw(gl, 2);
+
+    //光源
+    var RX = rotateX(60);
+    var T = translate(2, 0, 0);
+
+    var transformMatrix = mult(T, RX);
+    modelViewMatrix = lookAt(eye, at, up);
+    modelViewMatrix = mult(modelViewMatrix, transformMatrix);
+    normalMatrix = [
+        vec3(modelViewMatrix[0][0], modelViewMatrix[0][1], modelViewMatrix[0][2]),
+        vec3(modelViewMatrix[1][0], modelViewMatrix[1][1], modelViewMatrix[1][2]),
+        vec3(modelViewMatrix[2][0], modelViewMatrix[2][1], modelViewMatrix[2][2])
+    ];
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
+    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
+
+    tCube.draw(gl, 5);
 
     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
 
