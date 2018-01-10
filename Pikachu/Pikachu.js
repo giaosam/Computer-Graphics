@@ -499,8 +499,8 @@ function render() {
 
     //左耳朵 left ear
     var S = scalem(pS, pS, pS);
-    var R = mult(rotateY(pR), mult(rotateZ(55), rotateY(-120)));
-    var T = translate((-2.3 + pX) * pS, (1.5 + pY) * pS, pZ * pS);
+    var R = mult(rotateY(pR), mult(translate(1.2, 0, 0), mult(rotateZ(55), rotateY(-120))));
+    var T = translate((-3.5 + pX) * pS, (1.5 + pY) * pS, pZ * pS);
     conversionMatrix = matricesCompute(T, R, S);
     modelViewMatrix = lookAt(eye, at, up);
     modelViewMatrix = mult(modelViewMatrix ,conversionMatrix);
@@ -517,8 +517,8 @@ function render() {
 
     //右耳朵 right ear
     var S = scalem(pS, pS, pS);
-    var R = mult(rotateY(pR), mult(rotateZ(-15), rotateY(-90)));
-    var T = translate((-4.2 + pX) * pS, (1.9 + pY) * pS, pZ * pS);
+    var R = mult(rotateY(pR), mult(translate(-0.7, 0, 0), mult(rotateZ(-15), rotateY(-90))));
+    var T = translate((-3.5 + pX) * pS, (1.9 + pY) * pS, pZ * pS);
     conversionMatrix = matricesCompute(T, R, S);
     modelViewMatrix = lookAt(eye, at, up);
     modelViewMatrix = mult(modelViewMatrix ,conversionMatrix);
@@ -552,8 +552,8 @@ function render() {
 
     //左手 left hand
     var S = scalem(pS, pS, pS);
-    var R = mult(rotateY(pR), mult(rotateZ(30), rotateX(-90)));
-    var T = translate((-4.5 + pX) * pS, (-0.5 + pY) * pS, pZ * pS);
+    var R = mult(rotateY(pR), mult(translate(-1, 0, 0), mult(rotateZ(30), rotateX(-90))));
+    var T = translate((-3.5 + pX) * pS, (-0.5 + pY) * pS, pZ * pS);
     conversionMatrix = matricesCompute(T, R, S);
     modelViewMatrix = lookAt(eye, at, up);
     modelViewMatrix = mult(modelViewMatrix ,conversionMatrix);
@@ -570,8 +570,8 @@ function render() {
 
     //右手 right hand
     var S = scalem(pS, pS, pS);
-    var R = mult(rotateY(pR), mult(rotateY(30), rotateX(-90)));
-    var T = translate((-2.5 + pX) * pS, (-1.1 + pY) * pS, pZ * pS);
+    var R = mult(rotateY(pR), mult(translate(1, 0, 0), mult(rotateY(30), rotateX(-90))));
+    var T = translate((-3.5 + pX) * pS, (-1.1 + pY) * pS, pZ * pS);
     conversionMatrix = matricesCompute(T, R, S);
     modelViewMatrix = lookAt(eye, at, up);
     modelViewMatrix = mult(modelViewMatrix ,conversionMatrix);
