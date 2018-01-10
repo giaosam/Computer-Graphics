@@ -10,7 +10,16 @@ var pRightEar;
 var pBody;
 var pLeftArm;
 var pRightArm;
+var pBulb;
 var forwardX = 0;
+
+var bulbX = 0;
+var bulbY = 0;
+var bulbZ = 0;
+var bulbRotate1 = false;
+var bulbRotate2 = false;
+var bulbT1 = 0;
+var bulbT2 = 0;
 
 var near = 0.3;
 var far = 20.0;
@@ -28,11 +37,11 @@ const up = vec3(0.0, 1.0, 0.0);
 
 var RotateAngle = 0; //旋转角度
 
-var CurModelViewMatrix = mat4(); //当前变换矩阵
-var CurProjectionMatrix = mat4(); //当前投影矩阵
-var CurConversionMatrix = mat4(); //当前变换矩阵
-var CurModelViewMatrixLoc; //shader 变量
-var CurProjectionMatrixLoc; //shader 变量
+var modelViewMatrix = mat4(); //当前变换矩阵
+var projectionMatrix = mat4(); //当前投影矩阵
+var conversionMatrix = mat4(); //当前变换矩阵
+var modelViewMatrixLoc; //shader 变量
+var projectionMatrixLoc; //shader 变量
 var normalMatrix;
 var normalMatrixLoc;
 
@@ -194,9 +203,14 @@ window.onload = function init() {
     pRightArm.createSphere();
     pRightArm.initBuffer(gl);
 
+    //光源
+    pBulb = new Sphere(0.3,0.3,0.3);
+    pBulb.createSphere();
+    pBulb.initBuffer(gl);
+
     //获得模型视图矩阵和投影矩阵的位置
-    CurModelViewMatrixLoc = gl.getUniformLocation(program, "modelViewMatrix");
-    CurProjectionMatrixLoc = gl.getUniformLocation(program, "projectionMatrix");
+    modelViewMatrixLoc = gl.getUniformLocation(program, "modelViewMatrix");
+    projectionMatrixLoc = gl.getUniformLocation(program, "projectionMatrix");
     normalMatrixLoc = gl.getUniformLocation(program, "normalMatrix");
 
 
@@ -234,6 +248,85 @@ window.onload = function init() {
     document.getElementById("DecreasePhi").onclick = function(){
         phi -= dr;
     };
+
+    document.getElementById("LightRotate1").onclick = function () {
+        //lightPosition = vec4(0, 1.0, 0, 0.0);
+        lightPosition[0] += 0.2;
+        if (lightPosition[0] > 1) { lightPosition[0] -= 2; }
+        gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
+        flatten(lightPosition));
+    };
+
+    document.getElementById("LightRotate2").onclick = function () {
+        lightPosition[1] += 0.2;
+        if (lightPosition[1] > 1) { lightPosition[1] -= 2; }
+        gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
+        flatten(lightPosition));
+    };
+
+    document.getElementById("LightRotate3").onclick = function () {
+        lightPosition[2] += 0.2;
+        if (lightPosition[2] > 1) { lightPosition[2] -= 2; }
+        gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
+        flatten(lightPosition));
+    };
+
+    document.getElementById("BulbRotate1").onclick = function () {
+        if (bulbRotate1)
+            bulbRotate1 = false;
+        else
+            bulbRotate1 = true;
+    };
+
+    document.getElementById("BulbRotate2").onclick = function () {
+        if (bulbRotate2)
+            bulbRotate2 = false;
+        else
+            bulbRotate2 = true;
+    };
+
+    document.getElementById("BulbUp").onclick = function () {
+        bulbY += 0.2;
+        lightPosition[1] = bulbY;
+        gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
+        flatten(lightPosition));
+    };
+
+    document.getElementById("BulbDown").onclick = function () {
+        bulbY -= 0.2;
+        lightPosition[1] = bulbY;
+        gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
+        flatten(lightPosition));
+    };
+
+    document.getElementById("BulbLeft").onclick = function () {
+        bulbX -= 0.2;
+        lightPosition[0] = bulbX;
+        gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
+        flatten(lightPosition));
+    };
+
+    document.getElementById("BulbRight").onclick = function () {
+        bulbX += 0.2;
+        lightPosition[0] = bulbX;
+        gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
+        flatten(lightPosition));
+    };
+
+    document.getElementById("BulbForward").onclick = function () {
+        bulbZ += 0.2;
+        lightPosition[2] = bulbZ;
+        gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
+        flatten(lightPosition));
+    };
+
+    document.getElementById("BulbBackward").onclick = function () {
+        bulbZ -= 0.2;
+        lightPosition[2] = bulbZ;
+        gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
+        flatten(lightPosition));
+    };
+
 
     canvas.addEventListener("mousedown", function(evendinglixiangzhut){
       var x = 2*event.clientX/canvas.width-1;
@@ -308,27 +401,28 @@ function render() {
 
 
     //初始化模型视图矩阵和投影矩阵dinglixiangzhu
-    CurModelViewMatrix = lookAt(eye, at, up);
-    CurProjectionMatrix = perspective(fovy, aspect, near, far);
+    modelViewMatrix = lookAt(eye, at, up);
+    projectionMatrix = perspective(fovy, aspect, near, far);
     normalMatrix = [
-        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
-        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
-        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+        vec3(modelViewMatrix[0][0], modelViewMatrix[0][1], modelViewMatrix[0][2]),
+        vec3(modelViewMatrix[1][0], modelViewMatrix[1][1], modelViewMatrix[1][2]),
+        vec3(modelViewMatrix[2][0], modelViewMatrix[2][1], modelViewMatrix[2][2])
     ];
 
     //头的下部分球 head bottom sphere
     var RY = rotateY(RotateAngle - 90);
     var T = translate(-3.5, 0.5 + forwardX, 0);
-    CurConversionMatrix = mult(T, RY);
-    CurModelViewMatrix = mult(CurModelViewMatrix, CurConversionMatrix);
+    conversionMatrix = mult(T, RY);
+    matricesConfigure(conversionMatrix, modelViewMatrix, projectionMatrix, normalMatrix, modelViewMatrixLoc, projectionMatrixLoc, normalMatrixLoc);
+    modelViewMatrix = mult(modelViewMatrix, conversionMatrix);
     normalMatrix = [
-        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
-        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
-        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+        vec3(modelViewMatrix[0][0], modelViewMatrix[0][1], modelViewMatrix[0][2]),
+        vec3(modelViewMatrix[1][0], modelViewMatrix[1][1], modelViewMatrix[1][2]),
+        vec3(modelViewMatrix[2][0], modelViewMatrix[2][1], modelViewMatrix[2][2])
     ];
 
-    gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
-    gl.uniformMatrix4fv(CurProjectionMatrixLoc, false, flatten(CurProjectionMatrix));
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
+    gl.uniformMatrix4fv(projectionMatrixLoc, false, flatten(projectionMatrix));
     gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
     pHead.draw(gl, 0);
@@ -339,16 +433,16 @@ function render() {
     var T = translate(-3.5, 0.6 + forwardX, 1.5);
     var RZ = rotateZ(45);
     // var S = scalem(0.7, 0.2, 0.2);
-    CurConversionMatrix = mult(T, mult(RZ, RY));
-    CurConversionMatrix = mult(CurConversionMatrix, translate(1.5, 1.5, 0));
-    CurModelViewMatrix = lookAt(eye, at, up);
-    CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    conversionMatrix = mult(T, mult(RZ, RY));
+    conversionMatrix = mult(conversionMatrix, translate(1.5, 1.5, 0));
+    modelViewMatrix = lookAt(eye, at, up);
+    modelViewMatrix = mult(modelViewMatrix ,conversionMatrix);
     normalMatrix = [
-        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
-        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
-        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+        vec3(modelViewMatrix[0][0], modelViewMatrix[0][1], modelViewMatrix[0][2]),
+        vec3(modelViewMatrix[1][0], modelViewMatrix[1][1], modelViewMatrix[1][2]),
+        vec3(modelViewMatrix[2][0], modelViewMatrix[2][1], modelViewMatrix[2][2])
     ];
-    gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
     gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
     pLeftEar.draw(gl, 1);
@@ -359,16 +453,16 @@ function render() {
     var T = translate(-3.5, 0.5 + forwardX, -1.2);
     var RZ = rotateZ(-30);
     // var S = scalem(0.7, 0.2, 0.2);
-    CurConversionMatrix = mult(T, mult(RZ, RY));
-    CurConversionMatrix = mult(CurConversionMatrix, translate(-1.5, 1.5, 0));
-    CurModelViewMatrix = lookAt(eye, at, up);
-    CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    conversionMatrix = mult(T, mult(RZ, RY));
+    conversionMatrix = mult(conversionMatrix, translate(-1.5, 1.5, 0));
+    modelViewMatrix = lookAt(eye, at, up);
+    modelViewMatrix = mult(modelViewMatrix ,conversionMatrix);
     normalMatrix = [
-        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
-        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
-        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+        vec3(modelViewMatrix[0][0], modelViewMatrix[0][1], modelViewMatrix[0][2]),
+        vec3(modelViewMatrix[1][0], modelViewMatrix[1][1], modelViewMatrix[1][2]),
+        vec3(modelViewMatrix[2][0], modelViewMatrix[2][1], modelViewMatrix[2][2])
     ];
-    gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
     gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
     pRightEar.draw(gl, 1);
@@ -378,15 +472,15 @@ function render() {
     var RY = rotateY(RotateAngle + 90);
     var T = translate(-3.5, -1.2 + forwardX, 0);
 
-    CurConversionMatrix = mult(T, RY);
-    CurModelViewMatrix = lookAt(eye, at, up);
-    CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    conversionMatrix = mult(T, RY);
+    modelViewMatrix = lookAt(eye, at, up);
+    modelViewMatrix = mult(modelViewMatrix ,conversionMatrix);
     normalMatrix = [
-        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
-        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
-        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+        vec3(modelViewMatrix[0][0], modelViewMatrix[0][1], modelViewMatrix[0][2]),
+        vec3(modelViewMatrix[1][0], modelViewMatrix[1][1], modelViewMatrix[1][2]),
+        vec3(modelViewMatrix[2][0], modelViewMatrix[2][1], modelViewMatrix[2][2])
     ];
-    gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
     gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
     pBody.draw(gl, 2);
@@ -396,15 +490,15 @@ function render() {
     var T = translate(-4.5, -0.5 + forwardX, 0);
     var RZ = rotateZ(30);
     // var S = scalem(0.6, 0.18, 0.2);
-    CurConversionMatrix = mult(T, mult(RZ, RX));
-    CurModelViewMatrix = lookAt(eye, at, up);
-    CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    conversionMatrix = mult(T, mult(RZ, RX));
+    modelViewMatrix = lookAt(eye, at, up);
+    modelViewMatrix = mult(modelViewMatrix ,conversionMatrix);
     normalMatrix = [
-        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
-        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
-        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+        vec3(modelViewMatrix[0][0], modelViewMatrix[0][1], modelViewMatrix[0][2]),
+        vec3(modelViewMatrix[1][0], modelViewMatrix[1][1], modelViewMatrix[1][2]),
+        vec3(modelViewMatrix[2][0], modelViewMatrix[2][1], modelViewMatrix[2][2])
     ];
-    gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
     gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
     pLeftArm.draw(gl, 3);
@@ -417,19 +511,54 @@ function render() {
     var T = translate(-2.5, -1.1 + forwardX, 0);
 
     // var S = scalem(0.6, 0.18, 0.2);
-    CurConversionMatrix = mult(T, mult(RY, mult(RZ, RX)));
-    CurModelViewMatrix = lookAt(eye, at, up);
-    CurModelViewMatrix = mult(CurModelViewMatrix ,CurConversionMatrix);
+    conversionMatrix = mult(T, mult(RY, mult(RZ, RX)));
+    modelViewMatrix = lookAt(eye, at, up);
+    modelViewMatrix = mult(modelViewMatrix ,conversionMatrix);
     normalMatrix = [
-        vec3(CurModelViewMatrix[0][0], CurModelViewMatrix[0][1], CurModelViewMatrix[0][2]),
-        vec3(CurModelViewMatrix[1][0], CurModelViewMatrix[1][1], CurModelViewMatrix[1][2]),
-        vec3(CurModelViewMatrix[2][0], CurModelViewMatrix[2][1], CurModelViewMatrix[2][2])
+        vec3(modelViewMatrix[0][0], modelViewMatrix[0][1], modelViewMatrix[0][2]),
+        vec3(modelViewMatrix[1][0], modelViewMatrix[1][1], modelViewMatrix[1][2]),
+        vec3(modelViewMatrix[2][0], modelViewMatrix[2][1], modelViewMatrix[2][2])
     ];
-    gl.uniformMatrix4fv(CurModelViewMatrixLoc, false, flatten(CurModelViewMatrix));
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
     gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
     // gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
     pRightArm.draw(gl, 3);
+
+    var T = translate(bulbX, bulbY, bulbZ);
+    if (bulbRotate1) {
+        bulbT1 += 0.03;
+        lightPosition[0] = 4 * Math.sin(bulbT1);
+        lightPosition[1] = 4 * Math.cos(bulbT1);
+        T = translate(lightPosition[0], lightPosition[1], lightPosition[2]);
+        gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
+        flatten(lightPosition));
+    }
+    if (bulbRotate2) {
+        bulbT2 += 0.03;
+        lightPosition[1] = 4 * Math.sin(bulbT2);
+        lightPosition[2] = 4 * Math.cos(bulbT2);
+        T = translate(bulbX, lightPosition[1], lightPosition[2]);
+        gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
+        flatten(lightPosition));
+    }
+
+    //光源
+    var RY = rotateY(RotateAngle + 90);
+    var T = translate(lightPosition[0], lightPosition[1], lightPosition[2]);
+
+    var transformMatrix = mult(T, RY);
+    modelViewMatrix = lookAt(eye, at, up);
+    modelViewMatrix = mult(modelViewMatrix, transformMatrix);
+    normalMatrix = [
+        vec3(modelViewMatrix[0][0], modelViewMatrix[0][1], modelViewMatrix[0][2]),
+        vec3(modelViewMatrix[1][0], modelViewMatrix[1][1], modelViewMatrix[1][2]),
+        vec3(modelViewMatrix[2][0], modelViewMatrix[2][1], modelViewMatrix[2][2])
+    ];
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
+    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
+
+    pBulb.draw(gl, 2);
 
     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
 

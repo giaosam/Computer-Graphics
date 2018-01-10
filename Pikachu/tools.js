@@ -1,13 +1,12 @@
 'use strict';
 
-var iBufferSphereID1, tBufferSphereID1, vBufferSphereID1, nBuffer1; //第一个球体的3个buffer
-var vSpherePosition1, vSphereTextureCoord1, vSphereNormal1;
-var numSphereVertex1; //球的顶点数
-var sphereVertices1 = []; //球的顶点
-var sphereIndices1 = []; //球的索引
-var sphereTextureCoords1 = []; //球的纹理
-var sphereNormals1 = [];//球上顶点的法向量
-
+/**
+ * 球状物体类，用来计算球的顶点坐标、纹理坐标、法向量、索引的数据并且绑定buffer
+ * @param       {[type]} xR x轴直径
+ * @param       {[type]} yR y轴直径
+ * @param       {[type]} zR z轴直径
+ * @constructor
+ */
 function Sphere(xR, yR, zR) {
   this.xRadius = xR;
   this.yRadius = yR;
@@ -34,11 +33,20 @@ function Sphere(xR, yR, zR) {
   this.indices;
 }
 
+/**
+ * 球状物体类的各个成员函数
+ * @type {Object}
+ */
 Sphere.prototype = {
+  //计算球的计算球的顶点坐标、纹理坐标、法向量、索引的数据
   createSphere: function() {
     this.indicesNum = initSphereBuffers(this.xRadius, this.yRadius, this.zRadius, this.vPositionData, this.vTextureCoordData, this.vNormalData, this.indexData);
   },
 
+  /**
+   * 对球状物体进行各类初始化操作
+   * @param  {[type]} gl WebGL context object
+   */
   initBuffer: function(gl) {
     this.vPositionBuffer = gl.createBuffer();
     gl.bindBuffer(gl.ARRAY_BUFFER, this.vPositionBuffer);
@@ -66,6 +74,11 @@ Sphere.prototype = {
     gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(this.indexData), gl.STATIC_DRAW);
   },
 
+  /**
+   * 球状物体绘制函数，在渲染时调用
+   * @param  {[type]} gl WebGL context object
+   * @param  {[type]} id 纹理图片的唯一标识号
+   */
   draw: function(gl, id) {
     switch(id) {
       case 0:
@@ -83,6 +96,18 @@ Sphere.prototype = {
       case 3:
         gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 3);
         gl.activeTexture(gl.TEXTURE3);
+        break;
+      case 4:
+        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 4);
+        gl.activeTexture(gl.TEXTURE4);
+        break;
+      case 5:
+        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 5);
+        gl.activeTexture(gl.TEXTURE5);
+        break;
+      case 6:
+        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 6);
+        gl.activeTexture(gl.TEXTURE6);
         break;
     }
     gl.enableVertexAttribArray(this.vTextureCoords);
@@ -109,7 +134,7 @@ Sphere.prototype = {
  * @param  {[type]} zRadius             z轴半径
  * @param  {[type]} vPositionData       存放顶点坐标位置数据
  * @param  {[type]} vTextureCoordData   存放顶点对应的二维纹理坐标数据
- * @param  {[type]} vNormalDat 25;a         存放每个顶点对应的法向量数据
+ * @param  {[type]} vNormalData         存放每个顶点对应的法向量数据
  * @param  {[type]} indexData           存放索引数据
  * @return {[type]} indexData.length    索引个数
  */
@@ -212,7 +237,11 @@ function hsva(h, s, v, a){
     return color;
 }
 
-// 指定图像来配置该图像的纹理信息
+/**
+ * 指定图像来配置该图像的纹理信息
+ * @param  {[type]} image 用来贴图的图片名
+ * @param  {[type]} id     [description]
+ */
 function configureTexture(image, id) {
     var texture = gl.createTexture();
     console.log(id);
@@ -229,6 +258,15 @@ function configureTexture(image, id) {
         break;
       case 3:
         gl.activeTexture(gl.TEXTURE3);
+        break;
+      case 4:
+        gl.activeTexture(gl.TEXTURE4);
+        break;
+      case 5:
+        gl.activeTexture(gl.TEXTURE5);
+        break;
+      case 6:
+        gl.activeTexture(gl.TEXTURE6);
         break;
     }
 
@@ -254,5 +292,38 @@ function configureTexture(image, id) {
       case 3:
         gl.uniform1i(gl.getUniformLocation(program, "texture3"), id);
         break;
+      case 4:
+        gl.uniform1i(gl.getUniformLocation(program, "texture4"), id);
+        break;
+      case 5:
+        gl.uniform1i(gl.getUniformLocation(program, "texture5"), id);
+        break;
+      case 6:
+        gl.uniform1i(gl.getUniformLocation(program, "texture6"), id);
+        break;
     }
+}
+
+/**
+ * 矩阵的相关运算和配置
+ * @param  {[type]} tMatrix     [description]
+ * @param  {[type]} mvMatrix    [description]
+ * @param  {[type]} pMatrix     [description]
+ * @param  {[type]} nMatrix     [description]
+ * @param  {[type]} mvMatrixLoc [description]
+ * @param  {[type]} pMatrixLoc  [description]
+ * @param  {[type]} nMatrixLoc  [description]
+ * @return {[type]}             [description]
+ */
+function matricesConfigure(tMatrix, mvMatrix, pMatrix, nMatrix, mvMatrixLoc, pMatrixLoc, nMatrixLoc) {
+  mvMatrix = mult(mvMatrix, tMatrix);
+  normalMatrix = [
+      vec3(mvMatrix[0][0], mvMatrix[0][1], mvMatrix[0][2]),
+      vec3(mvMatrix[1][0], mvMatrix[1][1], mvMatrix[1][2]),
+      vec3(mvMatrix[2][0], mvMatrix[2][1], mvMatrix[2][2])
+  ];
+
+  gl.uniformMatrix4fv(mvMatrixLoc, false, flatten(mvMatrix));
+  gl.uniformMatrix4fv(pMatrixLoc, false, flatten(pMatrix));
+  gl.uniformMatrix3fv(nMatrixLoc, false, flatten(nMatrix));
 }

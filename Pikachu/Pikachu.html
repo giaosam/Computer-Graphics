@@ -32,7 +32,8 @@ void main()
       L = normalize(lightPosition.xyz - pos );
 
     E =  -normalize(pos);
-    N = normalize( normalMatrix*vNormal.xyz);
+    // N = normalize( normalMatrix*vNormal.xyz);
+    N = normalize( (modelViewMatrix*vNormal).xyz);
 
     float pi = acos(0.0);
 
@@ -56,11 +57,17 @@ uniform vec4 specularProduct;
 uniform float shininess;
 varying vec3 N, L, E;
 
+
 varying float s, t;
+
+//纹理
 uniform sampler2D texture0;
 uniform sampler2D texture1;
 uniform sampler2D texture2;
 uniform sampler2D texture3;
+uniform sampler2D texture4;
+uniform sampler2D texture5;
+uniform sampler2D texture6;
 
 uniform int bTexCoord;
 varying  vec2 fTexCoord;
@@ -79,7 +86,7 @@ void main()
   float Ks = pow( max(dot(N, H), 0.0), shininess );
   vec4  specular = Ks * specularProduct;
 
-  if( dot(L, N) < 0.0 ) specular = vec4(0.0, 0.0, 0.0, 1.0);
+  if(dot(L, N) < 0.0 ) specular = vec4(0.0, 0.0, 0.0, 1.0);
 
   fColor = ambient + diffuse +specular;
   fColor.a = 1.0;
@@ -93,9 +100,12 @@ void main()
     gl_FragColor = fColor * texture2D(texture2, fTexCoord);
   else if (bTexCoord == 3)
     gl_FragColor = fColor * texture2D(texture3, fTexCoord);
-  else if (bTexCoord == -2)
-    gl_FragColor = texture2D(texture1, vec2(s, t));
-
+  else if (bTexCoord == 4)
+    gl_FragColor = fColor * texture2D(texture4, fTexCoord);
+  else if (bTexCoord == 5)
+    gl_FragColor = fColor * texture2D(texture5, fTexCoord);
+  else if (bTexCoord == 6)
+    gl_FragColor = fColor * texture2D(texture6, fTexCoord);
 }
 </script>
 
@@ -122,12 +132,45 @@ Oops ... your browser doesn't support the HTML5 canvas element
 <button id = "IncreasePhi">Increase phi</button>
 <button id = "DecreasePhi">Decrease phi</button>
 
+<button id="LightRotate1">Light Rotate1 </button>
+<button id="LightRotate2">Light Rotate2 </button>
+<button id="LightRotate3">Light Rotate3 </button>
+<br/>
+<br />
+<br />
+
+&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;  &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;
+<button id="BulbUp">Bulb Up </button>
+
+<br /><br /><br />&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;
+<button id="BulbLeft">Bulb Left </button>
+&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;
+<button id="BulbRight">Bulb Right </button><br /><br /><br />
+
+&nbsp;&nbsp; &nbsp;  &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;
+<button id="BulbDown">Bulb Down </button>
+
+<br /><br />
+&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;
+<button id="BulbForward">Bulb Forward </button>
+&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;
+<button id="BulbBackward">Bulb Backward </button>
+
+<br /><br />
+&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;
+<button id="BulbRotate1">Bulb Rotate1 </button>
+&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;
+<button id="BulbRotate2">Bulb Rotate2 </button>
+
 <input type="checkbox" id="lighting" checked /> Use lighting<br/>
 
-<img id = "pHeadImg" src = "pHead.gif" hidden></img>
-<img id = "pEarImg" src = "pEar.gif" hidden></img>
-<img id = "pBodyImg" src = "pBody.gif" hidden></img>
-<img id = "pSkinImg" src = "pSkin.gif" hidden></img>
+<img id = "pHeadImg" src = "../Resources/pHead.gif" hidden></img>
+<img id = "pEarImg" src = "../Resources/pEar.gif" hidden></img>
+<img id = "pBodyImg" src = "../Resources/pBody.gif" hidden></img>
+<img id = "pSkinImg" src = "../Resources/pSkin.gif" hidden></img>
+<img id = "yHeadImg" src = "../Resources/yHead.gif" hidden></img>
+<img id = "yBodyImg" src = "../Resources/yBody.gif" hidden></img>
+<img id = "ySkinImg" src = "../Resources/ySkin.gif" hidden></img>
 
 </body>
 </html>
