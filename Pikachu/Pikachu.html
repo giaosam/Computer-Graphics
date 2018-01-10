@@ -76,6 +76,7 @@ uniform sampler2D texture4;
 uniform sampler2D texture5;
 uniform sampler2D texture6;
 uniform sampler2D texture7;
+uniform sampler2D texture8;
 
 uniform int bTexCoord;
 varying  vec2 fTexCoord;
@@ -116,6 +117,8 @@ void main()
     gl_FragColor = fColor * texture2D(texture6, fTexCoord);
   else if (bTexCoord == 7)
     gl_FragColor = fColor * texture2D(texture7, fTexCoord);
+  else if (bTexCoord == 8)
+    gl_FragColor = fColor * texture2D(texture8, fTexCoord);
 }
 </script>
 
@@ -133,69 +136,79 @@ void main()
 
     <div style="margin-left: 784px;margin-top: -510px;">
         <div style="margin-bottom: 1em;display: inline-block;width: 570px;">
-            <button id = "AntiRotate" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">逆时针旋转</button>
-            <button id = "ClockRotate" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">顺时针旋转</button>
-            <button id = "IncreaseZ" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">增加 Z</button>
-            <button id = "DecreaseZ" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">减少 Z</button>
+            <button id = "pLeftMove" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;background-color: #f4f515;border-color: #f4f515;">皮卡丘左移</button>
+            <button id = "pRightMove" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;background-color: #f4f515;border-color: #f4f515;">皮卡丘右移</button>
+            <button id = "pUpMove" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;background-color: #f4f515;border-color: #f4f515;">皮卡丘上移</button>
+            <button id = "pDownMove" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;background-color: #f4f515;border-color: #f4f515;">皮卡丘下移</button>
         </div><br/>
-        <div style="margin-bottom: 1em;display: inline-block;width: 570px;">
-            <button id = "IncreaseR" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">增加 R</button>
-            <button id = "DecreaseR" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">减少 R</button>
-            <button id = "IncreaseTheta" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">增加 theta</button>
-            <button id = "DecreaseTheta" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">减少 theta</button>
-        </div><br/>
-        <div style="margin-bottom: 1em;display: inline-block;width: 570px;">
-            <button id = "IncreasePhi" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">增加 phi</button>
-            <button id = "DecreasePhi" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">减少 phi</button>
-            <button id= "LightRotate1" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">光照旋转1</button>
-            <button id= "LightRotate2" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">光照旋转2</button>
-        </div><br/>
-        <div style="margin-bottom: 1em;display: inline-block;width: 570px;">
-            <button id= "LightRotate3" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">光照旋转3</button>
-            <button id= "BulbUp" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">光源向上</button>
-            <button id= "BulbLeft" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">光源向左</button>
-            <button id= "BulbRight" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">光源向右</button>
-        </div><br/>
-        <div style="margin-bottom: 1em;display: inline-block;width: 570px;">
-            <button id= "BulbDown" class="btn btn-info col-md-2" style="margin-right: 3em;background-color: #f37a29;border-color: #f37a29;">光源向下</button>
-            <button id= "BulbForward" class="btn btn-info col-md-2" style="margin-right: 3em;background-color: #f37a29;border-color: #f37a29;">光源向前</button>
-            <button id= "BulbBackward" class="btn btn-info col-md-2" style="margin-right: 3em;background-color: #f37a29;border-color: #f37a29;">光源向后</button>
-            <button id= "BulbRotate1" class="btn btn-info col-md-2" style="margin-right: 3em;background-color: #f37a29;border-color: #f37a29;">光源旋转1</button>
-        </div><br/>
-        <div style="margin-bottom: 1em;display: inline-block;width: 570px;">
-            <button id= "BulbRotate2" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">光源旋转2</button>
-            <button id = "pLeftMove">皮卡丘左移</button>
-            <button id = "pRightMove">>皮卡丘右移</button>
-            <button id = "pUpMove">>皮卡丘上移</button>
-            <button id = "pDownMove">皮卡丘下移</button>
-            <button id = "pForwardMove">皮卡丘前进</button>
-            <button id = "pBackMove">皮卡丘后退</button>
-            <button id = "pClockRotate">皮卡丘顺时针自转</button>
-            <button id = "pAntiClockRotate">皮卡丘逆时针自转</button>
-            <button id = "pLarger">皮卡丘变大</button>
-            <button id = "pShrink">皮卡丘变小</button>
 
-            <button id = "yLeftMove">圆企鹅左移</button>
-            <button id = "yRightMove">>圆企鹅右移</button>
-            <button id = "yUpMove">>圆企鹅上移</button>
-            <button id = "yDownMove">圆企鹅下移</button>
-            <button id = "yForwardMove">圆企鹅前进</button>
-            <button id = "yBackMove">圆企鹅后退</button>
-            <button id = "yClockRotate">圆企鹅顺时针自转</button>
-            <button id = "yAntiClockRotate">圆企鹅逆时针自转</button>
-            <button id = "yLarger">圆企鹅变大</button>
-            <button id = "yShrink">圆企鹅变小</button>
+        <div style="margin-bottom: 1em;display: inline-block;width: 570px;">
+        	<button id = "pForwardMove" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;background-color: #f4f515;border-color: #f4f515;">皮卡丘前进</button>
+        	<button id = "pBackMove" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;background-color: #f4f515;border-color: #f4f515;">皮卡丘后退</button>
+        	<button id = "pLarger" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;background-color: #f4f515;border-color: #f4f515;">皮卡丘变大</button>
+        	<button id = "pShrink" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;background-color: #f4f515;border-color: #f4f515;">皮卡丘变小</button>
+        </div><br/>
 
-            <button id = "frontView">正视图</button>
-            <button id = "leftView">左视图</button>
-            <button id = "rightView">右视图</button>
-            <button id = "backView">后视图</button>
-            <button id = "planformView">俯视图</button>
+        <div style="margin-bottom: 1em;display: inline-block;width: 570px;">
+            <button id = "pClockRotate" class="btn btn-info col-md-4" style="margin-right: 3em;color: #000;font-weight: bold;background-color: #f4f515;border-color: #f4f515;">皮卡丘顺时针自转</button>
+            <button id = "pAntiClockRotate" class="btn btn-info col-md-4" style="margin-right: 3em;color: #000;font-weight: bold;background-color: #f4f515;border-color: #f4f515;">皮卡丘逆时针自转</button>
+        </div><br/>
 
-            <button id = "eyeForward">相机前进</button>
-            <button id = "eyeBackward">相机后退</button>
-            <button id = "eyeFreeWalk">相机漫游</button>
-            <button id = "eyeStopWalk">停止漫游</button>
+        <div style="margin-bottom: 1em;display: inline-block;width: 570px;">
+           <button id = "yLeftMove" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">圆企鹅左移</button>
+           <button id = "yRightMove" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">圆企鹅右移</button>
+           <button id = "yUpMove" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">圆企鹅上移</button>
+           <button id = "yDownMove" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">圆企鹅下移</button>
+        </div><br/>
+
+        <div style="margin-bottom: 1em;display: inline-block;width: 570px;">
+        	<button id = "yForwardMove" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">圆企鹅前进</button>
+        	<button id = "yBackMove" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">圆企鹅后退</button>
+        	<button id = "yLarger" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">圆企鹅变大</button>
+        	<button id = "yShrink" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">圆企鹅变小</button>
+        </div><br/>
+
+        <div style="margin-bottom: 1em;display: inline-block;width: 570px;">
+            <button id = "yClockRotate" class="btn btn-info col-md-4" style="margin-right: 3em;color: #000;font-weight: bold;">圆企鹅顺时针自转</button>
+            <button id = "yAntiClockRotate" class="btn btn-info col-md-4" style="margin-right: 3em;color: #000;font-weight: bold;">圆企鹅逆时针自转</button>
+        </div><br/>
+
+        <div style="margin-bottom: 1em;display: inline-block;width: 570px;">
+            <button id= "BulbUp" class="btn btn-info col-md-2" style="margin-right: 3em;background-color: #f16bdb;border-color: #f16bdb;">光源向上</button>
+            <button id= "BulbLeft" class="btn btn-info col-md-2" style="margin-right: 3em;background-color: #f16bdb;border-color: #f16bdb;">光源向左</button>
+            <button id= "BulbRight" class="btn btn-info col-md-2" style="margin-right: 3em;background-color: #f16bdb;border-color: #f16bdb;">光源向右</button>
+            <button id= "BulbDown" class="btn btn-info col-md-2" style="margin-right: 3em;background-color: #f16bdb;border-color: #f16bdb;">光源向下</button>
+        </div><br/>
+
+        <div style="margin-bottom: 1em;display: inline-block;width: 570px;">
+            <button id= "BulbForward" class="btn btn-info col-md-2" style="margin-right: 3em;background-color: #f16bdb;border-color: #f16bdb;">光源向前</button>
+            <button id= "BulbBackward" class="btn btn-info col-md-2" style="margin-right: 3em;background-color: #f16bdb;border-color: #f16bdb;">光源向后</button>
+            <button id= "BulbRotate1" class="btn btn-info col-md-2" style="margin-right: 3em;background-color: #f16bdb;border-color: #f16bdb;">光源旋转1</button>
+            <button id= "BulbRotate2" class="btn btn-info col-md-2" style="margin-right: 3em;background-color: #f16bdb;border-color: #f16bdb;">光源旋转2</button>
+        </div><br/>
+
+        <div style="margin-bottom: 1em;display: inline-block;width: 570px;">
+ 			<button id= "LightRotate1" class="btn btn-info col-md-2" style="margin-right: 3em;background-color: #4ce07f;border-color: #4ce07f;">光照旋转1</button>
+            <button id= "LightRotate2" class="btn btn-info col-md-2" style="margin-right: 3em;background-color: #4ce07f;border-color: #4ce07f;">光照旋转2</button>
+            <button id= "LightRotate3" class="btn btn-info col-md-2" style="margin-right: 3em;background-color: #4ce07f;border-color: #4ce07f;">光照旋转3</button>
+        </div><br/>
+
+        <div style="margin-bottom: 1em;display: inline-block;width: 570px;">
+            <button id = "frontView" class="btn btn-info col-md-2" style="margin-right: 3em;background-color: #6718ec;border-color: #6718ec;">正视图</button>
+            <button id = "backView" class="btn btn-info col-md-2" style="margin-right: 3em;background-color: #6718ec;border-color: #6718ec;">后视图</button>
+            <button id = "planformView" class="btn btn-info col-md-2" style="margin-right: 3em;background-color: #6718ec;border-color: #6718ec;">俯视图</button>
+        </div><br/>
+
+        <div style="margin-bottom: 1em;display: inline-block;width: 570px;">
+        	<button id = "leftView" class="btn btn-info col-md-2" style="margin-right: 3em;background-color: #6718ec;border-color: #6718ec;">左视图</button>
+        	<button id = "rightView" class="btn btn-info col-md-2" style="margin-right: 3em;background-color: #6718ec;border-color: #6718ec;">右视图</button>
+        </div><br/>
+
+        <div style="margin-bottom: 1em;display: inline-block;width: 570px;">
+          <button id = "eyeForward" class="btn btn-info col-md-2" style="margin-right: 3em;background-color: #6718ec;border-color: #6718ec;">相机前进</button>
+          <button id = "eyeBackward" class="btn btn-info col-md-2" style="margin-right: 3em;background-color: #6718ec;border-color: #6718ec;">相机后退</button>
+          <button id = "eyeFreeWalk" class="btn btn-info col-md-2" style="margin-right: 3em;background-color: #6718ec;border-color: #6718ec;">相机漫游</button>
+          <button id = "eyeStopWalk" class="btn btn-info col-md-2" style="margin-right: 3em;background-color: #6718ec;border-color: #6718ec;">停止漫游</button>
         </div><br/>
 
         <input type="checkbox" id="lighting" class="btn btn-info" checked /> Use lighting<br/>
@@ -208,7 +221,7 @@ void main()
         <img id = "yBodyImg" src = "../Resources/yBody.gif" hidden></img>
         <img id = "ySkinImg" src = "../Resources/ySkin.gif" hidden></img>
         <img id = "glassImg" src = "../Resources/glass.jpg" hidden></img>
-        <img id = "testImg" src = "../Resources/test.gif" hidden></img>
+        <img id = "woodImg" src = "../Resources/wood.gif" hidden></img>
 
     </div>
 </div>

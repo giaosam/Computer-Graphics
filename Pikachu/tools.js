@@ -409,6 +409,9 @@ function configureTexture(image, id) {
       case 7:
         gl.activeTexture(gl.TEXTURE7);
         break;
+      case 8:
+        gl.activeTexture(gl.TEXTURE8);
+        break;
     }
 
     gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -444,6 +447,9 @@ function configureTexture(image, id) {
         break;
       case 7:
         gl.uniform1i(gl.getUniformLocation(program, "texture7"), id);
+        break;
+      case 8:
+        gl.uniform1i(gl.getUniformLocation(program, "texture8"), id);
         break;
     }
 }
