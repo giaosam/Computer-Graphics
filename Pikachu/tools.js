@@ -442,6 +442,9 @@ function configureTexture(image, id) {
       case 6:
         gl.uniform1i(gl.getUniformLocation(program, "texture6"), id);
         break;
+      case 7:
+        gl.uniform1i(gl.getUniformLocation(program, "texture7"), id);
+        break;
     }
 }
 

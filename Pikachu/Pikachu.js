@@ -597,7 +597,7 @@ function render() {
     gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
     gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
 
-    tCube.draw(gl, 5);
+    tCube.draw(gl, 7);
 
     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
 
