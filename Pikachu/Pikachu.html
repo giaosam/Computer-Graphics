@@ -1,5 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<link href="../CSS/bootstrap.css" rel="stylesheet" type="text/css" media="all"/>
+<script type="text/javascript" src="../Common/webgl-utils.js"></script>
+<script type="text/javascript" src="../Common/initShaders.js"></script>
+<script type="text/javascript" src="../Common/MV.js"></script>
+<script type="text/javascript" src="Pikachu.js"></script>
+<script type="text/javascript" src="tools.js"></script>
 
 <script id="vertex-shader" type="x-shader/x-vertex">
 
@@ -111,78 +119,75 @@ void main()
 }
 </script>
 
-<link href="../CSS/bootstrap.css" rel="stylesheet" type="text/css" media="all"/>
-<script type="text/javascript" src="../Common/webgl-utils.js"></script>
-<script type="text/javascript" src="../Common/initShaders.js"></script>
-<script type="text/javascript" src="../Common/MV.js"></script>
-<script type="text/javascript" src="Pikachu.js"></script>
-<script type="text/javascript" src="tools.js"></script>
 
+
+</head>
 <body>
-<canvas id="gl-canvas" width="768" height="512">
-Oops ... your browser doesn't support the HTML5 canvas element
-</canvas>
+<div>
+    <div style="width: 768px;height: 512px;display: inline-block;">
+        <canvas id="gl-canvas" width="768" height="512">
+        Oops ... your browser doesn't support the HTML5 canvas element
+        </canvas>
+    </div>
 
-<br/>
-<button id = "AntiRotate" class="btn btn-info">Anti Rotate </button>
-<button id = "ClockRotate">Clock Rotate</button>
-<button id = "IncreaseZ">Increase Z</button>
-<button id = "DecreaseZ">Decrease Z</button>
-<button id = "IncreaseR">Increase R</button>
-<button id = "DecreaseR">Decrease R</button>
-<button id = "IncreaseTheta">Increase theta</button>
-<button id = "DecreaseTheta">Decrease theta</button>
-<button id = "IncreasePhi">Increase phi</button>
-<button id = "DecreasePhi">Decrease phi</button>
 
-<button id = "pLeftMove">皮卡丘左移</button>
-<button id = "pRightMove">>皮卡丘右移</button>
-<button id = "pUpMove">>皮卡丘上移</button>
-<button id = "pDownMove">皮卡丘下移</button>
-<button id = "pForwardMove">皮卡丘前进</button>
-<button id = "pBackMove">皮卡丘后退</button>
-<button id = "pRotate">皮卡丘自转</button>
+    <div style="margin-left: 784px;margin-top: -510px;">
+        <div style="margin-bottom: 1em;display: inline-block;width: 570px;">
+            <button id = "AntiRotate" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">逆时针旋转</button>
+            <button id = "ClockRotate" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">顺时针旋转</button>
+            <button id = "IncreaseZ" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">增加 Z</button>
+            <button id = "DecreaseZ" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">减少 Z</button>
+        </div><br/>
+        <div style="margin-bottom: 1em;display: inline-block;width: 570px;">
+            <button id = "IncreaseR" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">增加 R</button>
+            <button id = "DecreaseR" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">减少 R</button>
+            <button id = "IncreaseTheta" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">增加 theta</button>
+            <button id = "DecreaseTheta" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">减少 theta</button>
+        </div><br/>
+        <div style="margin-bottom: 1em;display: inline-block;width: 570px;">
+            <button id = "IncreasePhi" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">增加 phi</button>
+            <button id = "DecreasePhi" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">减少 phi</button>
+            <button id= "LightRotate1" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">光照旋转1</button>
+            <button id= "LightRotate2" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">光照旋转2</button>
+        </div><br/>
+        <div style="margin-bottom: 1em;display: inline-block;width: 570px;">
+            <button id= "LightRotate3" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">光照旋转3</button>
+            <button id= "BulbUp" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">光源向上</button>
+            <button id= "BulbLeft" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">光源向左</button>
+            <button id= "BulbRight" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">光源向右</button>
+        </div><br/>
+        <div style="margin-bottom: 1em;display: inline-block;width: 570px;">
+            <button id= "BulbDown" class="btn btn-info col-md-2" style="margin-right: 3em;background-color: #f37a29;border-color: #f37a29;">光源向下</button>
+            <button id= "BulbForward" class="btn btn-info col-md-2" style="margin-right: 3em;background-color: #f37a29;border-color: #f37a29;">光源向前</button>
+            <button id= "BulbBackward" class="btn btn-info col-md-2" style="margin-right: 3em;background-color: #f37a29;border-color: #f37a29;">光源向后</button>
+            <button id= "BulbRotate1" class="btn btn-info col-md-2" style="margin-right: 3em;background-color: #f37a29;border-color: #f37a29;">光源旋转1</button>
+        </div><br/>
+        <div style="margin-bottom: 1em;display: inline-block;width: 570px;">
+            <button id= "BulbRotate2" class="btn btn-info col-md-2" style="margin-right: 3em;color: #000;font-weight: bold;">光源旋转2</button>
+            <button id = "pLeftMove">皮卡丘左移</button>
+            <button id = "pRightMove">>皮卡丘右移</button>
+            <button id = "pUpMove">>皮卡丘上移</button>
+            <button id = "pDownMove">皮卡丘下移</button>
+            <button id = "pForwardMove">皮卡丘前进</button>
+            <button id = "pBackMove">皮卡丘后退</button>
+            <button id = "pClockRotate">皮卡丘顺时针自转</button>
+            <button id = "pAntiClockRotate">皮卡丘逆时针自转</button>
+            <button id = "pLarger">皮卡丘变大</button>
+            <button id = "pShrink">皮卡丘变小</button>
+        </div><br/>
 
-<button id="LightRotate1">Light Rotate1 </button>
-<button id="LightRotate2">Light Rotate2 </button>
-<button id="LightRotate3">Light Rotate3 </button>
-<br/>
-<br />
-<br />
+        <input type="checkbox" id="lighting" class="btn btn-info" checked /> Use lighting<br/>
 
-&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;  &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;
-<button id="BulbUp">Bulb Up </button>
-
-<br /><br /><br />&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;
-<button id="BulbLeft">Bulb Left </button>
-&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;
-<button id="BulbRight">Bulb Right </button><br /><br /><br />
-
-&nbsp;&nbsp; &nbsp;  &nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp; &nbsp;
-<button id="BulbDown">Bulb Down </button>
-
-<br /><br />
-&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;
-<button id="BulbForward">Bulb Forward </button>
-&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;
-<button id="BulbBackward">Bulb Backward </button>
-
-<br /><br />
-&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;
-<button id="BulbRotate1">Bulb Rotate1 </button>
-&nbsp;&nbsp; &nbsp; &nbsp;&nbsp; &nbsp;
-<button id="BulbRotate2">Bulb Rotate2 </button>
-
-<input type="checkbox" id="lighting" checked /> Use lighting<br/>
-
-<img id = "pHeadImg" src = "../Resources/pHead.gif" hidden></img>
-<img id = "pEarImg" src = "../Resources/pEar.gif" hidden></img>
-<img id = "pBodyImg" src = "../Resources/pBody.gif" hidden></img>
-<img id = "pSkinImg" src = "../Resources/pSkin.gif" hidden></img>
-<img id = "yHeadImg" src = "../Resources/yHead.gif" hidden></img>
-<img id = "yBodyImg" src = "../Resources/yBody.gif" hidden></img>
-<img id = "ySkinImg" src = "../Resources/ySkin.gif" hidden></img>
-<img id = "glassImg" src = "../Resources/glass.jpg" hidden></img>
+        <img id = "pHeadImg" src = "../Resources/pHead.gif" hidden></img>
+        <img id = "pEarImg" src = "../Resources/pEar.gif" hidden></img>
+        <img id = "pBodyImg" src = "../Resources/pBody.gif" hidden></img>
+        <img id = "pSkinImg" src = "../Resources/pSkin.gif" hidden></img>
+        <img id = "yHeadImg" src = "../Resources/yHead.gif" hidden></img>
+        <img id = "yBodyImg" src = "../Resources/yBody.gif" hidden></img>
+        <img id = "ySkinImg" src = "../Resources/ySkin.gif" hidden></img>
+        <img id = "glassImg" src = "../Resources/glass.jpg" hidden></img>
+    </div>
+</div>
 
 </body>
 </html>

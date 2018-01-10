@@ -17,11 +17,6 @@ var pZ = 0;
 var pR = 0;
 var pS = 1;
 
-// 矩阵变换所用到的相关矩阵变量：
-var T; // 平移矩阵
-var S; // 放大缩小矩阵
-var R; // 旋转变换矩阵，用来调节物体在空间中的摆放的角度
-
 var tCube;
 
 var bulbX = 0;
@@ -372,6 +367,22 @@ window.onload = function init() {
         pZ -= 0.5;
     };
 
+    document.getElementById("pLarger").onclick = function(){
+        pS += 0.2;
+    };
+
+    document.getElementById("pShrink").onclick = function(){
+        if(pS > 0)
+          pS -= 0.2;
+    };
+
+    document.getElementById("pClockRotate").onclick = function(){
+        pR += 10;
+    };
+
+    document.getElementById("pAntiClockRotate").onclick = function(){
+        pR -= 10;
+    };
 
 
     canvas.addEventListener("mousedown", function(evendinglixiangzhut){
@@ -466,11 +477,11 @@ function render() {
         vec3(modelViewMatrix[2][0], modelViewMatrix[2][1], modelViewMatrix[2][2])
     ];
 
-    //头的下部分球 head bottom sphere
-    var RY = rotateY(RotateAngle - 90);
-    var T = translate(-3.5 + pX, 0.5 + pY, 0 + pZ);
-    var S =
-    conversionMatrix = mult(T, RY);
+    // 头
+    var S = scalem(pS, pS, pS);
+    var R = rotateY(-90 + pR);
+    var T = translate((-3.5 + pX) * pS, (0.5 + pY) * pS, pZ * pS);
+    conversionMatrix = matricesCompute(T, R, S);
     matricesConfigure(conversionMatrix, modelViewMatrix, projectionMatrix, normalMatrix, modelViewMatrixLoc, projectionMatrixLoc, normalMatrixLoc);
     modelViewMatrix = mult(modelViewMatrix, conversionMatrix);
     normalMatrix = [
@@ -487,12 +498,10 @@ function render() {
 
 
     //左耳朵 left ear
-    var RY = rotateY(- 90);
-    var T = translate(-3.5 + pX, 0.6 + pY, 1.5 + pZ);
-    var RZ = rotateZ(45);
-    // var S = scalem(0.7, 0.2, 0.2);
-    conversionMatrix = mult(T, mult(RZ, RY));
-    conversionMatrix = mult(conversionMatrix, translate(1.5, 1.5, 0));
+    var S = scalem(pS, pS, pS);
+    var R = mult(rotateY(pR), mult(rotateZ(55), rotateY(-120)));
+    var T = translate((-2.3 + pX) * pS, (1.5 + pY) * pS, pZ * pS);
+    conversionMatrix = matricesCompute(T, R, S);
     modelViewMatrix = lookAt(eye, at, up);
     modelViewMatrix = mult(modelViewMatrix ,conversionMatrix);
     normalMatrix = [
@@ -507,12 +516,10 @@ function render() {
 
 
     //右耳朵 right ear
-    var RY = rotateY(RotateAngle - 90);
-    var T = translate(-3.5 + pX, 0.5 + pY, -1.2 + pZ);
-    var RZ = rotateZ(-30);
-    // var S = scalem(0.7, 0.2, 0.2);
-    conversionMatrix = mult(T, mult(RZ, RY));
-    conversionMatrix = mult(conversionMatrix, translate(-1.5, 1.5, 0));
+    var S = scalem(pS, pS, pS);
+    var R = mult(rotateY(pR), mult(rotateZ(-15), rotateY(-90)));
+    var T = translate((-4.2 + pX) * pS, (1.9 + pY) * pS, pZ * pS);
+    conversionMatrix = matricesCompute(T, R, S);
     modelViewMatrix = lookAt(eye, at, up);
     modelViewMatrix = mult(modelViewMatrix ,conversionMatrix);
     normalMatrix = [
@@ -527,10 +534,10 @@ function render() {
 
 
     //身体竖 body main
-    var RY = rotateY(RotateAngle + 90);
-    var T = translate(-3.5 + pX, -1.2 + pY, 0 + pZ);
-
-    conversionMatrix = mult(T, RY);
+    var S = scalem(pS, pS, pS);
+    var R = rotateY(90 + pR);
+    var T = translate((-3.5 + pX) * pS, (-1.2 + pY) * pS, 0 + pZ * pS);
+    conversionMatrix = matricesCompute(T, R, S);
     modelViewMatrix = lookAt(eye, at, up);
     modelViewMatrix = mult(modelViewMatrix ,conversionMatrix);
     normalMatrix = [
@@ -544,11 +551,10 @@ function render() {
     pBody.draw(gl, 2);
 
     //左手 left hand
-    var RX = rotateX(-90 + RotateAngle);
-    var T = translate(-4.5 + pX, -0.5 + pY, 0 + pZ);
-    var RZ = rotateZ(30);
-    // var S = scalem(0.6, 0.18, 0.2);
-    conversionMatrix = mult(T, mult(RZ, RX));
+    var S = scalem(pS, pS, pS);
+    var R = mult(rotateY(pR), mult(rotateZ(30), rotateX(-90)));
+    var T = translate((-4.5 + pX) * pS, (-0.5 + pY) * pS, pZ * pS);
+    conversionMatrix = matricesCompute(T, R, S);
     modelViewMatrix = lookAt(eye, at, up);
     modelViewMatrix = mult(modelViewMatrix ,conversionMatrix);
     normalMatrix = [
@@ -563,13 +569,10 @@ function render() {
 
 
     //右手 right hand
-    var RX = rotateX(RotateAngle - 90);
-    var RZ = rotateZ(0);
-    var RY = rotateY(30);
-    var T = translate(-2.5 + pX, -1.1 + pY, 0 + pZ);
-
-    // var S = scalem(0.6, 0.18, 0.2);
-    conversionMatrix = mult(T, mult(RY, mult(RZ, RX)));
+    var S = scalem(pS, pS, pS);
+    var R = mult(rotateY(pR), mult(rotateY(30), rotateX(-90)));
+    var T = translate((-2.5 + pX) * pS, (-1.1 + pY) * pS, pZ * pS);
+    conversionMatrix = matricesCompute(T, R, S);
     modelViewMatrix = lookAt(eye, at, up);
     modelViewMatrix = mult(modelViewMatrix ,conversionMatrix);
     normalMatrix = [
