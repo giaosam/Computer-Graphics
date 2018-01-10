@@ -587,12 +587,6 @@ function render() {
  */
 function eventListen() {
   //event listeners for buttons
-  document.getElementById("AntiRotate").onclick = function() {
-      RotateAngle -= 5;
-  };
-  document.getElementById("ClockRotate").onclick = function() {
-      RotateAngle += 5;
-  };
   document.getElementById("IncreaseZ").onclick = function(){
       near  *= 1.1;
       far *= 1.1;
@@ -601,24 +595,7 @@ function eventListen() {
       near *= 0.9;
       far *= 0.9;
   };
-  document.getElementById("IncreaseR").onclick = function(){
-      radius += 0.5;
-  };
-  document.getElementById("DecreaseR").onclick = function(){
-      radius -= 0.5;
-  };
-  document.getElementById("IncreaseTheta").onclick = function(){
-      theta += dr;
-  };
-  document.getElementById("DecreaseTheta").onclick = function(){
-      theta -= dr;
-  };
-  document.getElementById("IncreasePhi").onclick = function(){
-      phi += dr;
-  };
-  document.getElementById("DecreasePhi").onclick = function(){
-      phi -= dr;
-  };
+
 
   document.getElementById("LightRotate1").onclick = function () {
       //lightPosition = vec4(0, 1.0, 0, 0.0);
