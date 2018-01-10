@@ -260,181 +260,8 @@ window.onload = function init() {
     projectionMatrixLoc = gl.getUniformLocation(program, "projectionMatrix");
     normalMatrixLoc = gl.getUniformLocation(program, "normalMatrix");
 
-
-    //event listeners for buttons
-    document.getElementById("AntiRotate").onclick = function() {
-        RotateAngle -= 5;
-    };
-    document.getElementById("ClockRotate").onclick = function() {
-        RotateAngle += 5;
-    };
-    document.getElementById("IncreaseZ").onclick = function(){
-        near  *= 1.1;
-        far *= 1.1;
-    };
-    document.getElementById("DecreaseZ").onclick = function(){
-        near *= 0.9;
-        far *= 0.9;
-    };
-    document.getElementById("IncreaseR").onclick = function(){
-        radius += 0.5;
-    };
-    document.getElementById("DecreaseR").onclick = function(){
-        radius -= 0.5;
-    };
-    document.getElementById("IncreaseTheta").onclick = function(){
-        theta += dr;
-    };
-    document.getElementById("DecreaseTheta").onclick = function(){
-        theta -= dr;
-    };
-    document.getElementById("IncreasePhi").onclick = function(){
-        phi += dr;
-    };
-    document.getElementById("DecreasePhi").onclick = function(){
-        phi -= dr;
-    };
-
-    document.getElementById("LightRotate1").onclick = function () {
-        //lightPosition = vec4(0, 1.0, 0, 0.0);
-        lightPosition[0] += 0.2;
-        if (lightPosition[0] > 1) { lightPosition[0] -= 2; }
-        gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
-        flatten(lightPosition));
-    };
-
-    document.getElementById("LightRotate2").onclick = function () {
-        lightPosition[1] += 0.2;
-        if (lightPosition[1] > 1) { lightPosition[1] -= 2; }
-        gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
-        flatten(lightPosition));
-    };
-
-    document.getElementById("LightRotate3").onclick = function () {
-        lightPosition[2] += 0.2;
-        if (lightPosition[2] > 1) { lightPosition[2] -= 2; }
-        gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
-        flatten(lightPosition));
-    };
-
-    document.getElementById("BulbRotate1").onclick = function () {
-        if (bulbRotate1)
-            bulbRotate1 = false;
-        else
-            bulbRotate1 = true;
-    };
-
-    document.getElementById("BulbRotate2").onclick = function () {
-        if (bulbRotate2)
-            bulbRotate2 = false;
-        else
-            bulbRotate2 = true;
-    };
-
-    document.getElementById("BulbUp").onclick = function () {
-        bulbY += 0.2;
-        lightPosition[1] = bulbY;
-        gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
-        flatten(lightPosition));
-    };
-
-    document.getElementById("BulbDown").onclick = function () {
-        bulbY -= 0.2;
-        lightPosition[1] = bulbY;
-        gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
-        flatten(lightPosition));
-    };
-
-    document.getElementById("BulbLeft").onclick = function () {
-        bulbX -= 0.2;
-        lightPosition[0] = bulbX;
-        gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
-        flatten(lightPosition));
-    };
-
-    document.getElementById("BulbRight").onclick = function () {
-        bulbX += 0.2;
-        lightPosition[0] = bulbX;
-        gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
-        flatten(lightPosition));
-    };
-
-    document.getElementById("BulbForward").onclick = function () {
-        bulbZ += 0.2;
-        lightPosition[2] = bulbZ;
-        gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
-        flatten(lightPosition));
-    };
-
-    document.getElementById("BulbBackward").onclick = function () {
-        bulbZ -= 0.2;
-        lightPosition[2] = bulbZ;
-        gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
-        flatten(lightPosition));
-    };
-
-
-    document.getElementById("pLeftMove").onclick = function(){
-        pX -= 0.5;
-    };
-
-    document.getElementById("pRightMove").onclick = function(){
-        pX += 0.5;
-    };
-
-    document.getElementById("pUpMove").onclick = function(){
-        pY += 0.5;
-    };
-
-    document.getElementById("pDownMove").onclick = function(){
-        pY -= 0.5;
-    };
-
-    document.getElementById("pForwardMove").onclick = function(){
-        pZ += 0.5;
-    };
-
-    document.getElementById("pBackMove").onclick = function(){
-        pZ -= 0.5;
-    };
-
-    document.getElementById("pLarger").onclick = function(){
-        pS += 0.2;
-    };
-
-    document.getElementById("pShrink").onclick = function(){
-        if(pS > 0)
-          pS -= 0.2;
-    };
-
-    document.getElementById("pClockRotate").onclick = function(){
-        pR += 10;
-    };
-
-    document.getElementById("pAntiClockRotate").onclick = function(){
-        pR -= 10;
-    };
-
-
-    canvas.addEventListener("mousedown", function(evendinglixiangzhut){
-      var x = 2*event.clientX/canvas.width-1;
-      var y = 2*(canvas.height-event.clientY)/canvas.height-1;
-      startMotion(x, y);
-    });
-
-    canvas.addEventListener("mouseup", function(event){
-      var x = 2*event.clientX/canvas.width-1;
-      var y = 2*(canvas.height-event.clientY)/canvas.height-1;
-      stopMotion(x, y);
-    });
-
-    canvas.addEventListener("mousemove", function(event){
-
-      var x = 2*event.clientX/canvas.width-1;
-      var y = 2*(canvas.height-event.clientY)/canvas.height-1;
-      mouseMotion(x, y);
-    });
-
+    // 调用事件监听函数，监听所有HTML控件触发产生的事件
+    eventListen();
 
     var ambientProduct = mult(lightAmbient, materialAmbient);
     var diffuseProduct = mult(lightDiffuse, materialDiffuse);
@@ -622,7 +449,7 @@ function render() {
 
     // 圆企鹅头部
     var S = scalem(yS, yS, yS);
-    var R = rotateY(-90 + pR);;
+    var R = rotateY(-90 + yR);;
     var T = translate((3.5 + yX) * yS, (0.05 + yY) * yS, yZ * yS);
     conversionMatrix = matricesCompute(T, R, S);
     matricesConfigure(conversionMatrix, modelViewMatrix, projectionMatrix, normalMatrix, modelViewMatrixLoc, projectionMatrixLoc, normalMatrixLoc);
@@ -644,7 +471,7 @@ function render() {
     // 圆企鹅身体
     var S = scalem(yS, yS, yS);
     var R = rotateY(-90 + yR);
-    var T = translate((3.5 + yX) * yS, (-1.5 + yY) * yS, 0 + yZ * yS);
+    var T = translate((3.5 + yX) * yS, (-1.5 + yY) * yS, yZ * yS);
     conversionMatrix = matricesCompute(T, R, S);
     modelViewMatrix = lookAt(eye, at, up);
     modelViewMatrix = mult(modelViewMatrix ,conversionMatrix);
@@ -660,8 +487,8 @@ function render() {
 
     // 圆企鹅左手
     var S = scalem(yS, yS, yS);
-    var R = mult(rotateY(yR), mult(translate(-yS, 0, 0), mult(rotateX(30), mult(rotateZ(108), rotateX(90)))));
-    var T = translate((3.6 + yX) * yS, (-1.65 + yY) * yS, (0.2 + yZ) * yS);
+    var R = mult(rotateY(yR), mult(translate(-0.9 * yS, 0, 0.2 * yS), mult(rotateX(30), mult(rotateZ(108), rotateX(90)))));
+    var T = translate((3.5 + yX) * yS, (-1.65 + yY) * yS, (0.2 + yZ) * yS);
     conversionMatrix = matricesCompute(T, R, S);
     modelViewMatrix = lookAt(eye, at, up);
     modelViewMatrix = mult(modelViewMatrix ,conversionMatrix);
@@ -678,8 +505,8 @@ function render() {
 
     // 圆企鹅右手
     var S = scalem(yS, yS, yS);
-    var R = mult(rotateY(yR), mult(translate(-yS, 0, 0), mult(rotateX(-30), mult(rotateZ(-120), rotateX(90)))));
-    var T = translate((5.4 + yX) * yS, (-1.6 + yY) * yS, yZ * yS);
+    var R = mult(rotateY(yR), mult(translate(yS, 0, 0), mult(rotateX(-30), mult(rotateZ(-120), rotateX(90)))));
+    var T = translate((3.5 + yX) * yS, (-1.6 + yY) * yS, yZ * yS);
     conversionMatrix = matricesCompute(T, R, S);
     modelViewMatrix = lookAt(eye, at, up);
     modelViewMatrix = mult(modelViewMatrix ,conversionMatrix);
@@ -751,4 +578,228 @@ function render() {
     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
 
     requestAnimFrame(render);
+}
+
+
+
+/**
+ * 对所有控件触发产生的事件进行监听
+ */
+function eventListen() {
+  //event listeners for buttons
+  document.getElementById("AntiRotate").onclick = function() {
+      RotateAngle -= 5;
+  };
+  document.getElementById("ClockRotate").onclick = function() {
+      RotateAngle += 5;
+  };
+  document.getElementById("IncreaseZ").onclick = function(){
+      near  *= 1.1;
+      far *= 1.1;
+  };
+  document.getElementById("DecreaseZ").onclick = function(){
+      near *= 0.9;
+      far *= 0.9;
+  };
+  document.getElementById("IncreaseR").onclick = function(){
+      radius += 0.5;
+  };
+  document.getElementById("DecreaseR").onclick = function(){
+      radius -= 0.5;
+  };
+  document.getElementById("IncreaseTheta").onclick = function(){
+      theta += dr;
+  };
+  document.getElementById("DecreaseTheta").onclick = function(){
+      theta -= dr;
+  };
+  document.getElementById("IncreasePhi").onclick = function(){
+      phi += dr;
+  };
+  document.getElementById("DecreasePhi").onclick = function(){
+      phi -= dr;
+  };
+
+  document.getElementById("LightRotate1").onclick = function () {
+      //lightPosition = vec4(0, 1.0, 0, 0.0);
+      lightPosition[0] += 0.2;
+      if (lightPosition[0] > 1) { lightPosition[0] -= 2; }
+      gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
+      flatten(lightPosition));
+  };
+
+  document.getElementById("LightRotate2").onclick = function () {
+      lightPosition[1] += 0.2;
+      if (lightPosition[1] > 1) { lightPosition[1] -= 2; }
+      gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
+      flatten(lightPosition));
+  };
+
+  document.getElementById("LightRotate3").onclick = function () {
+      lightPosition[2] += 0.2;
+      if (lightPosition[2] > 1) { lightPosition[2] -= 2; }
+      gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
+      flatten(lightPosition));
+  };
+
+  document.getElementById("BulbRotate1").onclick = function () {
+      if (bulbRotate1)
+          bulbRotate1 = false;
+      else
+          bulbRotate1 = true;
+  };
+
+  document.getElementById("BulbRotate2").onclick = function () {
+      if (bulbRotate2)
+          bulbRotate2 = false;
+      else
+          bulbRotate2 = true;
+  };
+
+  document.getElementById("BulbUp").onclick = function () {
+      bulbY += 0.2;
+      lightPosition[1] = bulbY;
+      gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
+      flatten(lightPosition));
+  };
+
+  document.getElementById("BulbDown").onclick = function () {
+      bulbY -= 0.2;
+      lightPosition[1] = bulbY;
+      gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
+      flatten(lightPosition));
+  };
+
+  document.getElementById("BulbLeft").onclick = function () {
+      bulbX -= 0.2;
+      lightPosition[0] = bulbX;
+      gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
+      flatten(lightPosition));
+  };
+
+  document.getElementById("BulbRight").onclick = function () {
+      bulbX += 0.2;
+      lightPosition[0] = bulbX;
+      gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
+      flatten(lightPosition));
+  };
+
+  document.getElementById("BulbForward").onclick = function () {
+      bulbZ += 0.2;
+      lightPosition[2] = bulbZ;
+      gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
+      flatten(lightPosition));
+  };
+
+  document.getElementById("BulbBackward").onclick = function () {
+      bulbZ -= 0.2;
+      lightPosition[2] = bulbZ;
+      gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
+      flatten(lightPosition));
+  };
+
+  // 对操控皮卡丘控件的事件除法进行处理：
+  document.getElementById("pLeftMove").onclick = function(){
+      pX -= 0.5;
+  };
+
+  document.getElementById("pRightMove").onclick = function(){
+      pX += 0.5;
+  };
+
+  document.getElementById("pUpMove").onclick = function(){
+      pY += 0.5;
+  };
+
+  document.getElementById("pDownMove").onclick = function(){
+      pY -= 0.5;
+  };
+
+  document.getElementById("pForwardMove").onclick = function(){
+      pZ += 0.5;
+  };
+
+  document.getElementById("pBackMove").onclick = function(){
+      pZ -= 0.5;
+  };
+
+  document.getElementById("pLarger").onclick = function(){
+      pS += 0.2;
+  };
+
+  document.getElementById("pShrink").onclick = function(){
+      if(pS > 0)
+        pS -= 0.2;
+  };
+
+  document.getElementById("pClockRotate").onclick = function(){
+      pR += 10;
+  };
+
+  document.getElementById("pAntiClockRotate").onclick = function(){
+      pR -= 10;
+  };
+
+  // 对操控圆企鹅控件的事件除法进行处理：
+  document.getElementById("yLeftMove").onclick = function(){
+      yX -= 0.5;
+  };
+
+  document.getElementById("yRightMove").onclick = function(){
+      yX += 0.5;
+  };
+
+  document.getElementById("yUpMove").onclick = function(){
+      yY += 0.5;
+  };
+
+  document.getElementById("yDownMove").onclick = function(){
+      yY -= 0.5;
+  };
+
+  document.getElementById("yForwardMove").onclick = function(){
+      yZ += 0.5;
+  };
+
+  document.getElementById("yBackMove").onclick = function(){
+      yZ -= 0.5;
+  };
+
+  document.getElementById("yLarger").onclick = function(){
+      yS += 0.2;
+  };
+
+  document.getElementById("yShrink").onclick = function(){
+      if(yS > 0)
+        yS -= 0.2;
+  };
+
+  document.getElementById("yClockRotate").onclick = function(){
+      yR += 10;
+  };
+
+  document.getElementById("yAntiClockRotate").onclick = function(){
+      yR -= 10;
+  };
+
+
+  canvas.addEventListener("mousedown", function(evendinglixiangzhut){
+    var x = 2*event.clientX/canvas.width-1;
+    var y = 2*(canvas.height-event.clientY)/canvas.height-1;
+    startMotion(x, y);
+  });
+
+  canvas.addEventListener("mouseup", function(event) {
+    var x = 2*event.clientX/canvas.width-1;
+    var y = 2*(canvas.height-event.clientY)/canvas.height-1;
+    stopMotion(x, y);
+  });
+
+  canvas.addEventListener("mousemove", function(event){
+
+    var x = 2*event.clientX/canvas.width-1;
+    var y = 2*(canvas.height-event.clientY)/canvas.height-1;
+    mouseMotion(x, y);
+  });
+
 }
