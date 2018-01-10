@@ -30,7 +30,9 @@ var yR = 0;
 var yS = 1;
 
 var pBulb;
-var tCube;
+var ground;
+var leftPlatform;
+var rightPlatform;
 
 var bulbX = 0;
 var bulbY = 0;
@@ -41,8 +43,8 @@ var bulbT1 = 0;
 var bulbT2 = 0;
 
 var near = 0.3;
-var far = 20.0;
-var radius = 12.0; // 照相机到物体的距离
+var far = 25.0;
+var radius = 16.0; // 照相机到物体的距离
 var theta  = 0.1745;
 var phi    = 0.0;
 var dr = 5.0 * Math.PI/180.0;
@@ -115,16 +117,13 @@ function mouseMotion(x, y)
       dx = curPos[0] - lastPos[0];
       dy = curPos[1] - lastPos[1];
       dz = curPos[2] - lastPos[2];
-      //console.log(dx,dy,dz);
 
       if (dx || dy || dz) {
-           // angle = -0.1 * Math.sqrt(dx*dx + dy*dy + dz*dz);
-
-           // axis[0] = lastPos[1]*curPos[2] - lastPos[2]*curPos[1];
-           // axis[1] = lastPos[2]*curPos[0] - lastPos[0]*curPos[2];
-           // axis[2] = lastPos[0]*curPos[1] - lastPos[1]*curPos[0];
 
            if (dx > 0){
+               if (theta > 0.2){
+                return;
+               }
                theta += dr;
            }
 
@@ -133,11 +132,11 @@ function mouseMotion(x, y)
            }
 
            if (dy > 0){
-               phi += dr;
+               phi -= dr;
            }
 
            if (dy < 0){
-               phi -= dr;
+               phi += dr;
            }
 
            if (dz > 0){
@@ -248,11 +247,20 @@ window.onload = function init() {
     yRightArm.createSphere();
     yRightArm.initBuffer(gl);
 
+    // 地板
+    ground = new Cube(50);
+    ground.createCube();
+    ground.initBuffer(gl);
 
-    // 测试立方体
-    // tCube = new Cube(2);
-    // tCube.createCube();
-    // tCube.initBuffer(gl);
+    // 左平台
+    leftPlatform = new Cube(3);
+    leftPlatform.createCube();
+    leftPlatform.initBuffer(gl);
+
+    // 右平台
+    rightPlatform = new Cube(3);
+    rightPlatform.createCube();
+    rightPlatform.initBuffer(gl);
 
 
     //获得模型视图矩阵和投影矩阵的位置
@@ -540,7 +548,7 @@ function render() {
         flatten(lightPosition));
     }
 
-    //光源
+    // 光源
     var RY = rotateY(RotateAngle + 90);
     var T = translate(lightPosition[0], lightPosition[1], lightPosition[2]);
 
@@ -557,22 +565,59 @@ function render() {
 
     pBulb.draw(gl, 2);
 
-    // // 测试报告
-    // var RX = rotateX(60);
-    // var T = translate(3, 0, 0);
-    //
-    // var transformMatrix = mult(T, RX);
-    // modelViewMatrix = lookAt(eye, at, up);
-    // modelViewMatrix = mult(modelViewMatrix, transformMatrix);
-    // normalMatrix = [
-    //     vec3(modelViewMatrix[0][0], modelViewMatrix[0][1], modelViewMatrix[0][2]),
-    //     vec3(modelViewMatrix[1][0], modelViewMatrix[1][1], modelViewMatrix[1][2]),
-    //     vec3(modelViewMatrix[2][0], modelViewMatrix[2][1], modelViewMatrix[2][2])
-    // ];
-    // gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
-    // gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
-    //
-    // tCube.draw(gl, 7);
+    // 地板
+    var RX = rotateX(0);
+    var T = translate(0, -29.5, 0);
+    var RY = rotateY(75);
+    
+    var transformMatrix = mult(T, mult(RY, RX));
+    modelViewMatrix = lookAt(eye, at, up);
+    modelViewMatrix = mult(modelViewMatrix, transformMatrix);
+    normalMatrix = [
+        vec3(modelViewMatrix[0][0], modelViewMatrix[0][1], modelViewMatrix[0][2]),
+        vec3(modelViewMatrix[1][0], modelViewMatrix[1][1], modelViewMatrix[1][2]),
+        vec3(modelViewMatrix[2][0], modelViewMatrix[2][1], modelViewMatrix[2][2])
+    ];
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
+    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
+    
+    ground.draw(gl, 7);
+
+    // 左平台
+    var RX = rotateX(0);
+    var T = translate(-3.4, -3.7, 0);
+    var RY = rotateY(75);
+    
+    var transformMatrix = mult(T, mult(RY, RX));
+    modelViewMatrix = lookAt(eye, at, up);
+    modelViewMatrix = mult(modelViewMatrix, transformMatrix);
+    normalMatrix = [
+        vec3(modelViewMatrix[0][0], modelViewMatrix[0][1], modelViewMatrix[0][2]),
+        vec3(modelViewMatrix[1][0], modelViewMatrix[1][1], modelViewMatrix[1][2]),
+        vec3(modelViewMatrix[2][0], modelViewMatrix[2][1], modelViewMatrix[2][2])
+    ];
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
+    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
+    
+    leftPlatform.draw(gl, 7);
+
+    // 右平台
+    var RX = rotateX(0);
+    var T = translate(3.4, -3.9, 0);
+    var RY = rotateY(84);
+    
+    var transformMatrix = mult(T, mult(RY, RX));
+    modelViewMatrix = lookAt(eye, at, up);
+    modelViewMatrix = mult(modelViewMatrix, transformMatrix);
+    normalMatrix = [
+        vec3(modelViewMatrix[0][0], modelViewMatrix[0][1], modelViewMatrix[0][2]),
+        vec3(modelViewMatrix[1][0], modelViewMatrix[1][1], modelViewMatrix[1][2]),
+        vec3(modelViewMatrix[2][0], modelViewMatrix[2][1], modelViewMatrix[2][2])
+    ];
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
+    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
+    
+    rightPlatform.draw(gl, 7);
 
 
     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
@@ -587,14 +632,14 @@ function render() {
  */
 function eventListen() {
   //event listeners for buttons
-  document.getElementById("IncreaseZ").onclick = function(){
-      near  *= 1.1;
-      far *= 1.1;
-  };
-  document.getElementById("DecreaseZ").onclick = function(){
-      near *= 0.9;
-      far *= 0.9;
-  };
+  // document.getElementById("IncreaseZ").onclick = function(){
+  //     near  *= 1.1;
+  //     far *= 1.1;
+  // };
+  // document.getElementById("DecreaseZ").onclick = function(){
+  //     near *= 0.9;
+  //     far *= 0.9;
+  // };
 
 
   document.getElementById("LightRotate1").onclick = function () {
