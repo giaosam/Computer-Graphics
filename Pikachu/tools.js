@@ -471,3 +471,14 @@ function matricesConfigure(tMatrix, mvMatrix, pMatrix, nMatrix, mvMatrixLoc, pMa
   gl.uniformMatrix4fv(pMatrixLoc, false, flatten(pMatrix));
   gl.uniformMatrix3fv(nMatrixLoc, false, flatten(nMatrix));
 }
+
+/**
+ * 矩阵变换的运算：完成物体的平移、旋转、放大缩小
+ * @param  {[type]} translateMat  平移矩阵
+ * @param  {[type]} rotateMat     旋转矩阵，将物体旋转到符合的角度
+ * @param  {[type]} scaleMat      放大缩小矩阵，调节物体大小
+ * @return {[type]} 矩阵变换的复合矩阵
+ */
+function matricesCompute(translateMat, rotateMat, scaleMat) {
+  return mult(translateMat, mult(rotateMat, scaleMat));
+}

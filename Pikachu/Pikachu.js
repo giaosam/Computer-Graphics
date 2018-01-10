@@ -11,7 +11,16 @@ var pBody;
 var pLeftArm;
 var pRightArm;
 var pBulb;
-var forwardX = 0;
+var pX = 0;
+var pY = 0;
+var pZ = 0;
+var pR = 0;
+var pS = 1;
+
+// 矩阵变换所用到的相关矩阵变量：
+var T; // 平移矩阵
+var S; // 放大缩小矩阵
+var R; // 旋转变换矩阵，用来调节物体在空间中的摆放的角度
 
 var tCube;
 
@@ -55,7 +64,7 @@ var lightSpecular = vec4(1, 1, 1, 1.0);//反射光
 var materialAmbient = vec4(1.0, 0.8, 0, 1.0);
 var materialDiffuse = vec4(1.0, 1.0, 1.0, 1.0);
 var materialSpecular = vec4(1.0, 1.0, 1.0, 1.0);
-var materialShininess = 0.75;
+var materialShininess = 0.50;
 
 var projection;
 
@@ -339,6 +348,32 @@ window.onload = function init() {
     };
 
 
+    document.getElementById("pLeftMove").onclick = function(){
+        pX -= 0.5;
+    };
+
+    document.getElementById("pRightMove").onclick = function(){
+        pX += 0.5;
+    };
+
+    document.getElementById("pUpMove").onclick = function(){
+        pY += 0.5;
+    };
+
+    document.getElementById("pDownMove").onclick = function(){
+        pY -= 0.5;
+    };
+
+    document.getElementById("pForwardMove").onclick = function(){
+        pZ += 0.5;
+    };
+
+    document.getElementById("pBackMove").onclick = function(){
+        pZ -= 0.5;
+    };
+
+
+
     canvas.addEventListener("mousedown", function(evendinglixiangzhut){
       var x = 2*event.clientX/canvas.width-1;
       var y = 2*(canvas.height-event.clientY)/canvas.height-1;
@@ -433,7 +468,8 @@ function render() {
 
     //头的下部分球 head bottom sphere
     var RY = rotateY(RotateAngle - 90);
-    var T = translate(-3.5, 0.5 + forwardX, 0);
+    var T = translate(-3.5 + pX, 0.5 + pY, 0 + pZ);
+    var S =
     conversionMatrix = mult(T, RY);
     matricesConfigure(conversionMatrix, modelViewMatrix, projectionMatrix, normalMatrix, modelViewMatrixLoc, projectionMatrixLoc, normalMatrixLoc);
     modelViewMatrix = mult(modelViewMatrix, conversionMatrix);
@@ -451,8 +487,8 @@ function render() {
 
 
     //左耳朵 left ear
-    var RY = rotateY(RotateAngle - 90);
-    var T = translate(-3.5, 0.6 + forwardX, 1.5);
+    var RY = rotateY(- 90);
+    var T = translate(-3.5 + pX, 0.6 + pY, 1.5 + pZ);
     var RZ = rotateZ(45);
     // var S = scalem(0.7, 0.2, 0.2);
     conversionMatrix = mult(T, mult(RZ, RY));
@@ -472,7 +508,7 @@ function render() {
 
     //右耳朵 right ear
     var RY = rotateY(RotateAngle - 90);
-    var T = translate(-3.5, 0.5 + forwardX, -1.2);
+    var T = translate(-3.5 + pX, 0.5 + pY, -1.2 + pZ);
     var RZ = rotateZ(-30);
     // var S = scalem(0.7, 0.2, 0.2);
     conversionMatrix = mult(T, mult(RZ, RY));
@@ -492,7 +528,7 @@ function render() {
 
     //身体竖 body main
     var RY = rotateY(RotateAngle + 90);
-    var T = translate(-3.5, -1.2 + forwardX, 0);
+    var T = translate(-3.5 + pX, -1.2 + pY, 0 + pZ);
 
     conversionMatrix = mult(T, RY);
     modelViewMatrix = lookAt(eye, at, up);
@@ -509,7 +545,7 @@ function render() {
 
     //左手 left hand
     var RX = rotateX(-90 + RotateAngle);
-    var T = translate(-4.5, -0.5 + forwardX, 0);
+    var T = translate(-4.5 + pX, -0.5 + pY, 0 + pZ);
     var RZ = rotateZ(30);
     // var S = scalem(0.6, 0.18, 0.2);
     conversionMatrix = mult(T, mult(RZ, RX));
@@ -530,7 +566,7 @@ function render() {
     var RX = rotateX(RotateAngle - 90);
     var RZ = rotateZ(0);
     var RY = rotateY(30);
-    var T = translate(-2.5, -1.1 + forwardX, 0);
+    var T = translate(-2.5 + pX, -1.1 + pY, 0 + pZ);
 
     // var S = scalem(0.6, 0.18, 0.2);
     conversionMatrix = mult(T, mult(RY, mult(RZ, RX)));
@@ -584,7 +620,7 @@ function render() {
 
     //光源
     var RX = rotateX(60);
-    var T = translate(2, 0, 0);
+    var T = translate(3, 0, 0);
 
     var transformMatrix = mult(T, RX);
     modelViewMatrix = lookAt(eye, at, up);
