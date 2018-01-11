@@ -106,6 +106,10 @@ Sphere.prototype = {
         gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 6);
         gl.activeTexture(gl.TEXTURE6);
         break;
+      case 7:
+        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 7);
+        gl.activeTexture(gl.TEXTURE7);
+        break;
     }
     gl.enableVertexAttribArray(this.vTextureCoords);
 
@@ -248,13 +252,13 @@ Cube.prototype = {
   draw: function(gl, id) {
     // 选取符合id的纹理：设定立方体只有7和8两个纹理可供选择
     switch(id) {
-      case 7:
-        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 7);
-        gl.activeTexture(gl.TEXTURE7);
-        break;
       case 8:
         gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 8);
         gl.activeTexture(gl.TEXTURE8);
+        break;
+      case 9:
+        gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 9);
+        gl.activeTexture(gl.TEXTURE9);
         break;
     }
     gl.bindBuffer(gl.ARRAY_BUFFER, this.vTextureCoordBuffer);
@@ -378,6 +382,9 @@ function configureTexture(image, id) {
       case 8:
         gl.activeTexture(gl.TEXTURE8);
         break;
+      case 9:
+        gl.activeTexture(gl.TEXTURE9);
+        break;
     }
 
     gl.bindTexture(gl.TEXTURE_2D, texture);
@@ -416,6 +423,9 @@ function configureTexture(image, id) {
         break;
       case 8:
         gl.uniform1i(gl.getUniformLocation(program, "texture8"), id);
+        break;
+      case 9:
+        gl.uniform1i(gl.getUniformLocation(program, "texture9"), id);
         break;
     }
 }

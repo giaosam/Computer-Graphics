@@ -74,6 +74,7 @@ uniform sampler2D texture5;
 uniform sampler2D texture6;
 uniform sampler2D texture7;
 uniform sampler2D texture8;
+uniform sampler2D texture9;
 
 uniform int bTexCoord;
 varying  vec2 fTexCoord;
@@ -114,6 +115,8 @@ void main()
     gl_FragColor = fColor * texture2D(texture7, fTexCoord);
   else if (bTexCoord == 8)
     gl_FragColor = fColor * texture2D(texture8, fTexCoord);
+  else if (bTexCoord == 9)
+    gl_FragColor = fColor * texture2D(texture9, fTexCoord);
 }
 </script>
 
@@ -214,7 +217,8 @@ void main()
         <img id = "yHeadImg" src = "../Resources/yHead.gif" hidden></img>
         <img id = "yBodyImg" src = "../Resources/yBody.gif" hidden></img>
         <img id = "ySkinImg" src = "../Resources/ySkin.gif" hidden></img>
-        <img id = "glassImg" src = "../Resources/glass.jpg" hidden></img>
+        <img id = "sunImg" src = "../Resources/sun.gif" hidden></img>
+        <img id = "grassImg" src = "../Resources/grass.gif" hidden></img>
         <img id = "woodImg" src = "../Resources/wood.gif" hidden></img>
 
     </div>

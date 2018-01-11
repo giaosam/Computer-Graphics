@@ -361,11 +361,14 @@ function texturesDistribute() {
   var ySkinImg = document.getElementById("ySkinImg");
   configureTexture(ySkinImg, 6);
 
-  var glassImg = document.getElementById("glassImg");
-  configureTexture(glassImg, 7);
+  var sunImg = document.getElementById("sunImg");
+  configureTexture(sunImg, 7);
+
+  var grassImg = document.getElementById("grassImg");
+  configureTexture(grassImg, 8);
 
   var woodImg = document.getElementById("woodImg");
-  configureTexture(woodImg, 8);
+  configureTexture(woodImg, 9);
 }
 
 
@@ -649,7 +652,7 @@ function renderOthers() {
   gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
   gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
   // 绘制地板
-  ground.draw(gl, 7);
+  ground.draw(gl, 8);
 
 
   // 左平台
@@ -664,7 +667,7 @@ function renderOthers() {
   gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
   gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
   // 绘制左平台
-  leftPlatform.draw(gl, 8);
+  leftPlatform.draw(gl, 9);
 
 
   // 右平台
@@ -679,7 +682,7 @@ function renderOthers() {
   gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
   gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
   // 绘制右平台
-  rightPlatform.draw(gl, 8);
+  rightPlatform.draw(gl, 9);
 
 
   // 光源
@@ -732,7 +735,7 @@ function renderOthers() {
   gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
   gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
   // 绘制光源
-  pBulb.draw(gl, 2);
+  pBulb.draw(gl, 7);
 }
 
 /**
