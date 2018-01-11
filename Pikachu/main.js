@@ -121,9 +121,7 @@ function mouseMotion(x, y)
       if (dx || dy || dz) {
 
            if (dx > 0){
-               if (theta > 0.2){
-                return;
-               }
+
                theta += dr;
            }
 
@@ -132,7 +130,11 @@ function mouseMotion(x, y)
            }
 
            if (dy > 0){
-               phi -= dr;
+            if (phi < 0){
+                return;
+               
+            }
+            phi -= dr;
            }
 
            if (dy < 0){
