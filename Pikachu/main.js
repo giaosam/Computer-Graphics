@@ -149,13 +149,6 @@ function mouseMotion(x, y)
            if (dy < 0)
                phi += dr;
 
-           if (dz > 0) { //distance += 0.01;
-           }
-
-
-           if (dz < 0) { //distance -= 0.01;
-           }
-
            lastPos[0] = curPos[0];
            lastPos[1] = curPos[1];
            lastPos[2] = curPos[2];
