@@ -69,6 +69,7 @@ var modelViewMatrixLoc; //shader 变量
 var projectionMatrixLoc; //shader 变量
 var normalMatrix;
 var normalMatrixLoc;
+var projection;
 
 
 // 光相关属性变量
@@ -84,9 +85,8 @@ var materialShininess = 0.50;
 
 var lightPosition2 = vec4(-3.7, 0, 0, 0.0);//十万伏特中心位置
 
-var projection;
 
-//虚拟跟踪球实现代码
+// 虚拟跟踪球实现代码
 var lastPos = [0, 0, 0];
 var startX, startY;
 var trackingMouse = false;
@@ -94,6 +94,14 @@ var trackballMove = false;
 var angle = 0.0;
 var axis = [0, 0, 1];
 var rotationMatrix;
+
+
+// 场景漫游判断变量
+var enableWalk = false;
+var distancePlus = true;
+var thetaPlus = true;
+var phiPlus = true;
+
 
 function startMotion(x, y)
 {
@@ -295,6 +303,7 @@ window.onload = function init() {
 
 function render() {
     gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+    freeWalk(enableWalk);
 
     //对eye的值进行计算
     eye = vec3(distance * Math.sin(theta) * Math.cos(phi), distance * Math.sin(theta) * Math.sin(phi), distance * Math.cos(theta));
@@ -358,6 +367,67 @@ function texturesDistribute() {
   var woodImg = document.getElementById("woodImg");
   configureTexture(woodImg, 8);
 }
+
+
+/**
+ * 相机漫游实现函数
+ * @param  {[type]} enableWalk  判定漫游功能是否启动
+ */
+function freeWalk(enableWalk) {
+  if(enableWalk) {
+    if(distancePlus) {
+      if(distance <= 21)
+        distance += 0.001;
+      else {
+        distancePlus = false;
+        distance -= 0.001;
+      }
+    }
+    else {
+      if(distance >= 11)
+        distance -= 0.001;
+      else {
+        distancePlus = true;
+        distance += 0.001;
+      }
+    }
+
+    if(thetaPlus) {
+      if(theta <= Math.PI)
+        theta += Math.PI / 1800;
+      else {
+        thetaPlus = false;
+        theta -= Math.PI / 1800;
+      }
+    }
+    else {
+      if(theta > 0)
+        theta -= Math.PI / 1800;
+      else {
+        thetaPlus = true;
+        theta += Math.PI / 1800;
+      }
+    }
+
+    if(phiPlus) {
+      if(phi < Math.PI)
+        phi += Math.PI / 1500;
+      else {
+        phiPlus = false;
+        phi -= Math.PI / 1500;
+      }
+    }
+    else {
+      if(phi > 0)
+        phi -= Math.PI / 1500;
+      else {
+        phiPlus = true;
+        phi += Math.PI / 1500;
+      }
+    }
+  }
+}
+
 
 /**
  * 皮卡丘整体的渲染函数
@@ -698,132 +768,129 @@ function eventListen() {
   };
 
   // 对操控皮卡丘控件的事件除法进行处理：
-  document.getElementById("pLeftMove").onclick = function(){
+  document.getElementById("pLeftMove").onclick = function() {
       pX -= 0.5;
   };
 
-  document.getElementById("pRightMove").onclick = function(){
+  document.getElementById("pRightMove").onclick = function() {
       pX += 0.5;
   };
 
-  document.getElementById("pUpMove").onclick = function(){
+  document.getElementById("pUpMove").onclick = function() {
       pY += 0.5;
   };
 
-  document.getElementById("pDownMove").onclick = function(){
+  document.getElementById("pDownMove").onclick = function() {
       pY -= 0.5;
   };
 
-  document.getElementById("pForwardMove").onclick = function(){
+  document.getElementById("pForwardMove").onclick = function() {
       pZ += 0.5;
   };
 
-  document.getElementById("pBackMove").onclick = function(){
+  document.getElementById("pBackMove").onclick = function() {
       pZ -= 0.5;
   };
 
-  document.getElementById("pLarger").onclick = function(){
+  document.getElementById("pLarger").onclick = function() {
       pS += 0.2;
   };
 
-  document.getElementById("pShrink").onclick = function(){
+  document.getElementById("pShrink").onclick = function() {
       if(pS > 0)
         pS -= 0.2;
   };
 
-  document.getElementById("pClockRotate").onclick = function(){
+  document.getElementById("pClockRotate").onclick = function() {
       pR += 10;
   };
 
-  document.getElementById("pAntiClockRotate").onclick = function(){
+  document.getElementById("pAntiClockRotate").onclick = function() {
       pR -= 10;
   };
 
   // 对操控圆企鹅控件的事件除法进行处理：
-  document.getElementById("yLeftMove").onclick = function(){
+  document.getElementById("yLeftMove").onclick = function() {
       yX -= 0.5;
   };
 
-  document.getElementById("yRightMove").onclick = function(){
+  document.getElementById("yRightMove").onclick = function() {
       yX += 0.5;
   };
 
-  document.getElementById("yUpMove").onclick = function(){
+  document.getElementById("yUpMove").onclick = function() {
       yY += 0.5;
   };
 
-  document.getElementById("yDownMove").onclick = function(){
+  document.getElementById("yDownMove").onclick = function() {
       yY -= 0.5;
   };
 
-  document.getElementById("yForwardMove").onclick = function(){
+  document.getElementById("yForwardMove").onclick = function() {
       yZ += 0.5;
   };
 
-  document.getElementById("yBackMove").onclick = function(){
+  document.getElementById("yBackMove").onclick = function() {
       yZ -= 0.5;
   };
 
-  document.getElementById("yLarger").onclick = function(){
+  document.getElementById("yLarger").onclick = function() {
       yS += 0.2;
   };
 
-  document.getElementById("yShrink").onclick = function(){
+  document.getElementById("yShrink").onclick = function() {
       if(yS > 0)
         yS -= 0.2;
   };
 
-  document.getElementById("yClockRotate").onclick = function(){
+  document.getElementById("yClockRotate").onclick = function() {
       yR += 10;
   };
 
-  document.getElementById("yAntiClockRotate").onclick = function(){
+  document.getElementById("yAntiClockRotate").onclick = function() {
       yR -= 10;
   };
 
-  document.getElementById("frontView").onclick = function(){
+  document.getElementById("frontView").onclick = function() {
     theta = 0;
     phi = 0;
   };
 
-  document.getElementById("leftView").onclick = function(){
+  document.getElementById("leftView").onclick = function() {
     theta = -Math.PI / 2;
     phi = 0;
   };
 
-  document.getElementById("rightView").onclick = function(){
+  document.getElementById("rightView").onclick = function() {
     theta = Math.PI / 2;
     phi = 0;
   };
 
-  document.getElementById("backView").onclick = function(){
+  document.getElementById("backView").onclick = function() {
     theta = Math.PI;
     phi = 0;
   };
 
-  document.getElementById("planformView").onclick = function(){
+  document.getElementById("planformView").onclick = function() {
     theta = Math.PI / 2;
     phi = Math.PI / 2;
 
   };
 
-  document.getElementById("eyeForward").onclick = function(){
+  document.getElementById("eyeForward").onclick = function() {
     distance -= 0.5;
   };
 
-  document.getElementById("eyeBackward").onclick = function(){
+  document.getElementById("eyeBackward").onclick = function() {
     distance += 0.5;
   };
 
-  document.getElementById("eyeFreeWalk").onclick = function(){
-    theta = Math.PI;
-    phi = 0;
+  document.getElementById("eyeFreeWalk").onclick = function() {
+    enableWalk = true;
   };
 
-  document.getElementById("eyeStopWalk").onclick = function(){
-    theta = Math.PI / 2;
-    phi = Math.PI / 2;
-
+  document.getElementById("eyeStopWalk").onclick = function() {
+    enableWalk = false;
   };
 
   canvas.addEventListener("mousedown", function(evendinglixiangzhut){
