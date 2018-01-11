@@ -1,6 +1,6 @@
 'use strict';
 
-/*********************************************************************************************************************************
+/****************************************************************************************************************************************
  * 球状物体类，用来计算球的顶点坐标、纹理坐标、法向量、索引的数据并且绑定buffer
  * @param       {[type]} xR x轴直径
  * @param       {[type]} yR y轴直径
@@ -76,6 +76,7 @@ Sphere.prototype = {
    * @param  {[type]} id 纹理图片的唯一标识号
    */
   draw: function(gl, id) {
+    // 选取符合id的纹理
     switch(id) {
       case 0:
         gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
@@ -124,7 +125,7 @@ Sphere.prototype = {
 
 
 /**
- * 球状物体绘制函数
+ * 球状物体数据获取函数
  * @param  {[type]} xRadius             x轴半径
  * @param  {[type]} yRadius             y轴半径
  * @param  {[type]} zRadius             z轴半径
@@ -187,6 +188,10 @@ function initSphereBuffers(xRadius, yRadius, zRadius, vPositionData, vTextureCoo
 /***********************************************************************************************************************************************/
 
 
+/***********************************************************************************************************************************************
+ * 正方体物体类，用来计算正方体的顶点坐标、纹理坐标、法向量、索引的数据并且绑定buffer
+ * @param       {[type]} sideLength 正方体边长
+ */
 function Cube(sideLength) {
   this.side = sideLength;
 
@@ -241,6 +246,7 @@ Cube.prototype = {
    * @param  {[type]} id 纹理图片的唯一标识号
    */
   draw: function(gl, id) {
+    // 选取符合id的纹理：设定立方体只有7和8两个纹理可供选择
     switch(id) {
       case 7:
         gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 7);
@@ -266,6 +272,13 @@ Cube.prototype = {
 }
 
 
+/**
+ * 正方体物体数据获取函数
+ * @param  {[type]} side                边长
+ * @param  {[type]} vPositionData       存放顶点坐标位置数据
+ * @param  {[type]} vTextureCoordData   存放顶点对应的二维纹理坐标数据
+ * @param  {[type]} vNormalData         存放每个顶点对应的法向量数据
+ */
 function initCubeBuffers(side, vPositionData, vTextureCoordData, vNormalData) {
   var n = side / 2;
   // 顶点坐标、纹理坐标、法向量计算
@@ -327,54 +340,7 @@ function quad(a, b, c, d, n, vPositionData, vTextureCoordData, vNormalData) {
   vTextureCoordData.push(texCoord[3]);
   vNormalData.push(normal);
 }
-
-//画圆台函数
-function torus(row, column, irad, orad){
-    var pos = new Array(), col = new Array(), idx = new Array();
-    for(var i = 0; i <= row; i++){
-        var r = Math.PI * 2 / row * i;
-        var rr = Math.cos(r);
-        var ry = Math.sin(r);
-        for(var ii = 0; ii <= column; ii++){
-            var tr = Math.PI * 2 / column * ii;
-            var tx = (rr * irad + orad) * Math.cos(tr);
-            var ty = ry * irad;
-            var tz = (rr * irad + orad) * Math.sin(tr);
-            pos.push(tx, ty, tz);
-            var tc = hsva(360 / column * ii, 1, 1, 1);
-            col.push(tc[0], tc[1], tc[2], tc[3]);
-        }
-    }
-    for(i = 0; i < row; i++){
-        for(ii = 0; ii < column; ii++){
-            r = (column + 1) * i + ii;
-            idx.push(r, r + column + 1, r + 1);
-            idx.push(r + column + 1, r + column + 2, r + 1);
-        }
-    }
-    return [pos, col, idx];
-}
-
-function hsva(h, s, v, a){
-    if(s > 1 || v > 1 || a > 1){return;}
-
-    var th = h % 360;
-    var i = Math.floor(th / 60);
-    var f = th / 60 - i;
-    var m = v * (1 - s);
-    var n = v * (1 - s * f);
-    var k = v * (1 - s * (1 - f));
-    var color = new Array();
-    if(!s > 0 && !s < 0){
-        color.push(v, v, v, a);
-    } else {
-        var r = new Array(v, n, m, m, k, v);
-        var g = new Array(k, v, v, n, m, m);
-        var b = new Array(m, m, k, v, v, n);
-        color.push(192/255, 192/255, 192/255, a);
-    }
-    return color;
-}
+/************************************************************************************************************************************/
 
 /**
  * 指定图像来配置该图像的纹理信息
@@ -454,29 +420,6 @@ function configureTexture(image, id) {
     }
 }
 
-/**
- * 矩阵的相关运算和配置
- * @param  {[type]} tMatrix     [description]
- * @param  {[type]} mvMatrix    [description]
- * @param  {[type]} pMatrix     [description]
- * @param  {[type]} nMatrix     [description]
- * @param  {[type]} mvMatrixLoc [description]
- * @param  {[type]} pMatrixLoc  [description]
- * @param  {[type]} nMatrixLoc  [description]
- * @return {[type]}             [description]
- */
-function matricesConfigure(tMatrix, mvMatrix, pMatrix, nMatrix, mvMatrixLoc, pMatrixLoc, nMatrixLoc) {
-  mvMatrix = mult(mvMatrix, tMatrix);
-  normalMatrix = [
-      vec3(mvMatrix[0][0], mvMatrix[0][1], mvMatrix[0][2]),
-      vec3(mvMatrix[1][0], mvMatrix[1][1], mvMatrix[1][2]),
-      vec3(mvMatrix[2][0], mvMatrix[2][1], mvMatrix[2][2])
-  ];
-
-  gl.uniformMatrix4fv(mvMatrixLoc, false, flatten(mvMatrix));
-  gl.uniformMatrix4fv(pMatrixLoc, false, flatten(pMatrix));
-  gl.uniformMatrix3fv(nMatrixLoc, false, flatten(nMatrix));
-}
 
 /**
  * 矩阵变换的运算：完成物体的平移、旋转、放大缩小
@@ -488,3 +431,52 @@ function matricesConfigure(tMatrix, mvMatrix, pMatrix, nMatrix, mvMatrixLoc, pMa
 function matricesCompute(translateMat, rotateMat, scaleMat) {
   return mult(translateMat, mult(rotateMat, scaleMat));
 }
+
+
+// //画圆台函数
+// function torus(row, column, irad, orad){
+//     var pos = new Array(), col = new Array(), idx = new Array();
+//     for(var i = 0; i <= row; i++){
+//         var r = Math.PI * 2 / row * i;
+//         var rr = Math.cos(r);
+//         var ry = Math.sin(r);
+//         for(var ii = 0; ii <= column; ii++){
+//             var tr = Math.PI * 2 / column * ii;
+//             var tx = (rr * irad + orad) * Math.cos(tr);
+//             var ty = ry * irad;
+//             var tz = (rr * irad + orad) * Math.sin(tr);
+//             pos.push(tx, ty, tz);
+//             var tc = hsva(360 / column * ii, 1, 1, 1);
+//             col.push(tc[0], tc[1], tc[2], tc[3]);
+//         }
+//     }
+//     for(i = 0; i < row; i++){
+//         for(ii = 0; ii < column; ii++){
+//             r = (column + 1) * i + ii;
+//             idx.push(r, r + column + 1, r + 1);
+//             idx.push(r + column + 1, r + column + 2, r + 1);
+//         }
+//     }
+//     return [pos, col, idx];
+// }
+//
+// function hsva(h, s, v, a){
+//     if(s > 1 || v > 1 || a > 1){return;}
+//
+//     var th = h % 360;
+//     var i = Math.floor(th / 60);
+//     var f = th / 60 - i;
+//     var m = v * (1 - s);
+//     var n = v * (1 - s * f);
+//     var k = v * (1 - s * (1 - f));
+//     var color = new Array();
+//     if(!s > 0 && !s < 0){
+//         color.push(v, v, v, a);
+//     } else {
+//         var r = new Array(v, n, m, m, k, v);
+//         var g = new Array(k, v, v, n, m, m);
+//         var b = new Array(m, m, k, v, v, n);
+//         color.push(192/255, 192/255, 192/255, a);
+//     }
+//     return color;
+// }
