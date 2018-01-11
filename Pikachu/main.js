@@ -34,13 +34,14 @@ var ground;
 var leftPlatform;
 var rightPlatform;
 
-var bulbX = 0;
-var bulbY = 0;
-var bulbZ = 0;
 var bulbRotate1 = false;
-var bulbRotate2 = false;
+var attack = false;
+var rotateSpeed = 0.03;//光源转速
 var bulbT1 = 0;
 var bulbT2 = 0;
+var speed = 0; //十万伏特旋转速度
+var attackX = -3;//十万伏特中心坐标
+var attackY = 0;
 
 var near = 0.3;
 var far = 70.0;
@@ -66,7 +67,7 @@ var projectionMatrixLoc; //shader 变量
 var normalMatrix;
 var normalMatrixLoc;
 
-var lightPosition = vec4(0.0, 0.0, -1.0, 0.0);
+var lightPosition = vec4(0.0, 3.0, 0, 0.0);
 var lightAmbient = vec4(1, 1, 1, 1.0);//环境光
 var lightDiffuse = vec4(0.8, 0.8, 0.8, 1.0);//散射光
 var lightSpecular = vec4(1, 1, 1, 1.0);//反射光
@@ -75,6 +76,8 @@ var materialAmbient = vec4(1.0, 0.8, 0, 1.0);
 var materialDiffuse = vec4(1.0, 1.0, 1.0, 1.0);
 var materialSpecular = vec4(1.0, 1.0, 1.0, 1.0);
 var materialShininess = 0.50;
+
+var lightPosition2 = vec4(-3.7, 0, 0, 0.0);//十万伏特中心位置
 
 var projection;
 
@@ -532,24 +535,6 @@ function render() {
     yRightArm.draw(gl, 6);
 
 
-    var T = translate(bulbX, bulbY, bulbZ);
-    if (bulbRotate1) {
-        bulbT1 += 0.03;
-        lightPosition[0] = 4 * Math.sin(bulbT1);
-        lightPosition[1] = 4 * Math.cos(bulbT1);
-        T = translate(lightPosition[0], lightPosition[1], lightPosition[2]);
-        gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
-        flatten(lightPosition));
-    }
-    if (bulbRotate2) {
-        bulbT2 += 0.03;
-        lightPosition[1] = 4 * Math.sin(bulbT2);
-        lightPosition[2] = 4 * Math.cos(bulbT2);
-        T = translate(bulbX, lightPosition[1], lightPosition[2]);
-        gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
-        flatten(lightPosition));
-    }
-
     // 地板
     var RX = rotateX(0);
     var T = translate(0, -64, 0);
@@ -604,10 +589,52 @@ function render() {
 
     rightPlatform.draw(gl, 8);
 
+
+
     // 光源
-    var RY = rotateY(RotateAngle + 90);
     var T = translate(lightPosition[0], lightPosition[1], lightPosition[2]);
 
+    if (!attack) {
+        bulbT2 = 0;
+        speed = 0.01;
+        lightPosition2[0] = 0;
+        lightPosition2[1] = 0;
+        lightPosition2[2] = 0;
+        if (bulbRotate1) {
+            bulbT1 += rotateSpeed;
+            T = translate(lightPosition[0] + 4 * Math.sin(bulbT1), lightPosition[1], lightPosition[2] + 4 * Math.cos(bulbT1));
+            lightPosition[0] += 4 * Math.sin(bulbT1);
+            lightPosition[2] += 4 * Math.cos(bulbT1);
+            gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
+            flatten(lightPosition));
+            lightPosition[0] -= 4 * Math.sin(bulbT1);
+            lightPosition[2] -= 4 * Math.cos(bulbT1);
+        }
+    } else {
+        bulbT2 += speed;
+        speed += 0.01;
+
+        if (speed > 3) {
+            lightPosition2 = vec4(lightPosition2[0] + 0.03 * speed + 2 * Math.sin(bulbT2), attackY, lightPosition2[2] + 0.03 * speed + 2 * Math.cos(bulbT2), 0.0);
+            T = translate(lightPosition2[0], lightPosition2[1], lightPosition2[2]);
+            gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
+            flatten(lightPosition2));
+
+        } else {
+            lightPosition2 = vec4(attackX + 2 * Math.sin(bulbT2), attackY, 2 * Math.cos(bulbT2), 0.0);
+            T = translate(lightPosition2[0], lightPosition2[1], lightPosition2[2]);
+            gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
+            flatten(lightPosition2));
+
+        }
+        
+        if (speed > 4) attack = false;
+
+    }
+
+    
+    var RY = rotateY(RotateAngle + 90);
+    
     var transformMatrix = mult(T, RY);
     modelViewMatrix = lookAt(eye, at, up);
     modelViewMatrix = mult(modelViewMatrix, transformMatrix);
@@ -634,83 +661,29 @@ function render() {
  */
 function eventListen() {
   //event listeners for buttons
-  document.getElementById("LightRotate1").onclick = function () {
-      //lightPosition = vec4(0, 1.0, 0, 0.0);
-      lightPosition[0] += 0.2;
-      if (lightPosition[0] > 1) { lightPosition[0] -= 2; }
-      gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
-      flatten(lightPosition));
-  };
+ 
 
-  document.getElementById("LightRotate2").onclick = function () {
-      lightPosition[1] += 0.2;
-      if (lightPosition[1] > 1) { lightPosition[1] -= 2; }
-      gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
-      flatten(lightPosition));
-  };
+    document.getElementById("BulbRotate1").onclick = function () {
+        if (bulbRotate1)
+            bulbRotate1 = false;
+        else
+            bulbRotate1 = true;
+    };
 
-  document.getElementById("LightRotate3").onclick = function () {
-      lightPosition[2] += 0.2;
-      if (lightPosition[2] > 1) { lightPosition[2] -= 2; }
-      gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
-      flatten(lightPosition));
-  };
+    document.getElementById("RotateSpeedUp").onclick = function () {
+        rotateSpeed += 0.005;
+    };
 
-  document.getElementById("BulbRotate1").onclick = function () {
-      if (bulbRotate1)
-          bulbRotate1 = false;
-      else
-          bulbRotate1 = true;
-  };
+    document.getElementById("RotateSpeedDown").onclick = function () {
+        rotateSpeed -= 0.005;
+    };
 
-  document.getElementById("BulbRotate2").onclick = function () {
-      if (bulbRotate2)
-          bulbRotate2 = false;
-      else
-          bulbRotate2 = true;
-  };
-
-  document.getElementById("BulbUp").onclick = function () {
-      bulbY += 0.2;
-      lightPosition[1] = bulbY;
-      gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
-      flatten(lightPosition));
-  };
-
-  document.getElementById("BulbDown").onclick = function () {
-      bulbY -= 0.2;
-      lightPosition[1] = bulbY;
-      gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
-      flatten(lightPosition));
-  };
-
-  document.getElementById("BulbLeft").onclick = function () {
-      bulbX -= 0.2;
-      lightPosition[0] = bulbX;
-      gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
-      flatten(lightPosition));
-  };
-
-  document.getElementById("BulbRight").onclick = function () {
-      bulbX += 0.2;
-      lightPosition[0] = bulbX;
-      gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
-      flatten(lightPosition));
-  };
-
-  document.getElementById("BulbForward").onclick = function () {
-      bulbZ += 0.2;
-      lightPosition[2] = bulbZ;
-      gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
-      flatten(lightPosition));
-  };
-
-  document.getElementById("BulbBackward").onclick = function () {
-      bulbZ -= 0.2;
-      lightPosition[2] = bulbZ;
-      gl.uniform4fv(gl.getUniformLocation(program, "lightPosition"),
-      flatten(lightPosition));
-  };
+    document.getElementById("Attack").onclick = function () {
+        if (attack)
+            attack = false;
+        else
+            attack = true;
+    };
 
   // 对操控皮卡丘控件的事件除法进行处理：
   document.getElementById("pLeftMove").onclick = function(){
