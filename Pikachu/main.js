@@ -121,20 +121,17 @@ function mouseMotion(x, y)
       if (dx || dy || dz) {
 
            if (dx > 0){
-               if (theta > 0.17){
-                return;
-               }
                theta += dr;
            }
 
            if (dx < 0){
-            //  if( < 0) {
-            //    return;
-            //  }
                theta -= dr;
            }
 
            if (dy > 0){
+              if(phi < 0) {
+                return;
+              }
                phi -= dr;
            }
 
@@ -555,7 +552,7 @@ function render() {
 
     // 地板
     var RX = rotateX(0);
-    var T = translate(0, -65, 0);
+    var T = translate(0, -64, 0);
     var RY = rotateY(75);
 
     var transformMatrix = mult(T, mult(RY, RX));
