@@ -31,7 +31,6 @@ varying vec2 fTexCoord;
 void main()
 {
     vec3 pos = -(modelViewMatrix * vPosition).xyz;
-
     vec3 light = lightPosition.xyz;
 
     if(lightPosition.w == 0.0)
@@ -57,8 +56,6 @@ void main()
 
 precision mediump float;
 
-// varying vec4 fColor;
-
 uniform vec4 ambientProduct;
 uniform vec4 diffuseProduct;
 uniform vec4 specularProduct;
@@ -80,9 +77,7 @@ uniform sampler2D texture8;
 
 uniform int bTexCoord;
 varying  vec2 fTexCoord;
-// var lighting = document.getElementById("lighting").checked;
-//
-//
+
 void main()
 {
   vec4 fColor;
@@ -211,8 +206,6 @@ void main()
           <button id = "eyeFreeWalk" class="btn btn-info col-md-2" style="margin-right: 3em;background-color: ##4e4a45;border-color: ##4e4a45;">相机漫游</button>
           <button id = "eyeStopWalk" class="btn btn-info col-md-2" style="margin-right: 3em;background-color: ##4e4a45;border-color: ##4e4a45;">停止漫游</button>
         </div><br/>
-
-        <input type="checkbox" id="lighting" class="btn btn-info" checked /> Use lighting<br/>
 
         <img id = "pHeadImg" src = "../Resources/pHead.gif" hidden></img>
         <img id = "pEarImg" src = "../Resources/pEar.gif" hidden></img>
