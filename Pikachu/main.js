@@ -43,8 +43,8 @@ var bulbT1 = 0;
 var bulbT2 = 0;
 
 var near = 0.3;
-var far = 25.0;
-var radius = 16.0; // 照相机到物体的距离
+var far = 70.0;
+var distance = 16.0; // 照相机到物体的距离
 var theta  = 0.1745;
 var phi    = 0.0;
 var dr = 5.0 * Math.PI/180.0;
@@ -121,7 +121,6 @@ function mouseMotion(x, y)
       if (dx || dy || dz) {
 
            if (dx > 0){
-
                theta += dr;
            }
 
@@ -130,11 +129,10 @@ function mouseMotion(x, y)
            }
 
            if (dy > 0){
-            if (phi < 0){
+              if(phi < 0) {
                 return;
-               
-            }
-            phi -= dr;
+              }
+               phi -= dr;
            }
 
            if (dy < 0){
@@ -142,11 +140,11 @@ function mouseMotion(x, y)
            }
 
            if (dz > 0){
-               //radius += 0.01;
+               //distance += 0.01;
            }
 
            if (dz < 0){
-               //radius -= 0.01;
+               //distance -= 0.01;
            }
 
            lastPos[0] = curPos[0];
@@ -250,7 +248,7 @@ window.onload = function init() {
     yRightArm.initBuffer(gl);
 
     // 地板
-    ground = new Cube(50);
+    ground = new Cube(120);
     ground.createCube();
     ground.initBuffer(gl);
 
@@ -319,6 +317,9 @@ window.onload = function init() {
      var glassImg = document.getElementById("glassImg");
      configureTexture(glassImg, 7);
 
+     var woodImg = document.getElementById("woodImg");
+     configureTexture(woodImg, 8);
+
      render();
 }
 
@@ -327,12 +328,11 @@ function render() {
     var lighting = document.getElementById("lighting").checked;
 
     //对eye的值进行计算
-    eye = vec3(radius * Math.sin(theta) * Math.cos(phi), radius * Math.sin(theta) * Math.sin(phi), radius * Math.cos(theta));
-
+    eye = vec3(distance * Math.sin(theta) * Math.cos(phi), distance * Math.sin(theta) * Math.sin(phi), distance * Math.cos(theta));
     //虚拟跟踪球实现代码
     if(trackballMove) {
-        eye = vec3(radius*Math.sin(theta)*Math.cos(phi),
-        radius*Math.sin(theta)*Math.sin(phi), radius*Math.cos(theta));
+        eye = vec3(distance * Math.sin(theta) * Math.cos(phi),
+        distance * Math.sin(theta) * Math.sin(phi), distance * Math.cos(theta));
     }
 
 
@@ -366,7 +366,7 @@ function render() {
     pHead.draw(gl, 0);
 
 
-    //左耳朵 left ear
+    // 皮卡丘左耳朵
     var S = scalem(pS, pS, pS);
     var R = mult(rotateY(pR), mult(translate(1.2 * pS, 0, 0), mult(rotateZ(55), rotateY(-120))));
     var T = translate((-3.5 + pX) * pS, (1.5 + pY) * pS, pZ * pS);
@@ -384,7 +384,7 @@ function render() {
     pLeftEar.draw(gl, 1);
 
 
-    //右耳朵 right ear
+    // 皮卡丘右耳朵
     var S = scalem(pS, pS, pS);
     var R = mult(rotateY(pR), mult(translate(-0.7 * pS, 0, 0), mult(rotateZ(-15), rotateY(-90))));
     var T = translate((-3.5 + pX) * pS, (1.9 + pY) * pS, pZ * pS);
@@ -402,7 +402,7 @@ function render() {
     pRightEar.draw(gl, 1);
 
 
-    //身体竖 body main
+    // 皮卡丘身体
     var S = scalem(pS, pS, pS);
     var R = rotateY(90 + pR);
     var T = translate((-3.5 + pX) * pS, (-1.2 + pY) * pS, 0 + pZ * pS);
@@ -419,7 +419,7 @@ function render() {
 
     pBody.draw(gl, 2);
 
-    // 左手 left hand
+    // 皮卡丘左手
     var S = scalem(pS, pS, pS);
     var R = mult(rotateY(pR), mult(translate(-pS, 0, 0), mult(rotateZ(30), rotateX(-90))));
     var T = translate((-3.5 + pX) * pS, (-0.5 + pY) * pS, pZ * pS);
@@ -437,7 +437,7 @@ function render() {
     pLeftArm.draw(gl, 3);
 
 
-    // 右手 right hand
+    // 皮卡丘右手
     var S = scalem(pS, pS, pS);
     var R = mult(rotateY(pR), mult(translate(pS, 0, 0), mult(rotateY(30), rotateX(-90))));
     var T = translate((-3.5 + pX) * pS, (-1.1 + pY) * pS, pZ * pS);
@@ -550,6 +550,60 @@ function render() {
         flatten(lightPosition));
     }
 
+    // 地板
+    var RX = rotateX(0);
+    var T = translate(0, -64, 0);
+    var RY = rotateY(75);
+
+    var transformMatrix = mult(T, mult(RY, RX));
+    modelViewMatrix = lookAt(eye, at, up);
+    modelViewMatrix = mult(modelViewMatrix, transformMatrix);
+    normalMatrix = [
+        vec3(modelViewMatrix[0][0], modelViewMatrix[0][1], modelViewMatrix[0][2]),
+        vec3(modelViewMatrix[1][0], modelViewMatrix[1][1], modelViewMatrix[1][2]),
+        vec3(modelViewMatrix[2][0], modelViewMatrix[2][1], modelViewMatrix[2][2])
+    ];
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
+    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
+
+    ground.draw(gl, 7);
+
+    // 左平台
+    var RX = rotateX(0);
+    var T = translate(-3.4, -3.7, 0);
+    var RY = rotateY(75);
+
+    var transformMatrix = mult(T, mult(RY, RX));
+    modelViewMatrix = lookAt(eye, at, up);
+    modelViewMatrix = mult(modelViewMatrix, transformMatrix);
+    normalMatrix = [
+        vec3(modelViewMatrix[0][0], modelViewMatrix[0][1], modelViewMatrix[0][2]),
+        vec3(modelViewMatrix[1][0], modelViewMatrix[1][1], modelViewMatrix[1][2]),
+        vec3(modelViewMatrix[2][0], modelViewMatrix[2][1], modelViewMatrix[2][2])
+    ];
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
+    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
+
+    leftPlatform.draw(gl, 8);
+
+    // 右平台
+    var RX = rotateX(0);
+    var T = translate(3.4, -3.9, 0);
+    var RY = rotateY(84);
+
+    var transformMatrix = mult(T, mult(RY, RX));
+    modelViewMatrix = lookAt(eye, at, up);
+    modelViewMatrix = mult(modelViewMatrix, transformMatrix);
+    normalMatrix = [
+        vec3(modelViewMatrix[0][0], modelViewMatrix[0][1], modelViewMatrix[0][2]),
+        vec3(modelViewMatrix[1][0], modelViewMatrix[1][1], modelViewMatrix[1][2]),
+        vec3(modelViewMatrix[2][0], modelViewMatrix[2][1], modelViewMatrix[2][2])
+    ];
+    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
+    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
+
+    rightPlatform.draw(gl, 8);
+
     // 光源
     var RY = rotateY(RotateAngle + 90);
     var T = translate(lightPosition[0], lightPosition[1], lightPosition[2]);
@@ -567,60 +621,6 @@ function render() {
 
     pBulb.draw(gl, 2);
 
-    // 地板
-    var RX = rotateX(0);
-    var T = translate(0, -29.5, 0);
-    var RY = rotateY(75);
-    
-    var transformMatrix = mult(T, mult(RY, RX));
-    modelViewMatrix = lookAt(eye, at, up);
-    modelViewMatrix = mult(modelViewMatrix, transformMatrix);
-    normalMatrix = [
-        vec3(modelViewMatrix[0][0], modelViewMatrix[0][1], modelViewMatrix[0][2]),
-        vec3(modelViewMatrix[1][0], modelViewMatrix[1][1], modelViewMatrix[1][2]),
-        vec3(modelViewMatrix[2][0], modelViewMatrix[2][1], modelViewMatrix[2][2])
-    ];
-    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
-    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
-    
-    ground.draw(gl, 7);
-
-    // 左平台
-    var RX = rotateX(0);
-    var T = translate(-3.4, -3.7, 0);
-    var RY = rotateY(75);
-    
-    var transformMatrix = mult(T, mult(RY, RX));
-    modelViewMatrix = lookAt(eye, at, up);
-    modelViewMatrix = mult(modelViewMatrix, transformMatrix);
-    normalMatrix = [
-        vec3(modelViewMatrix[0][0], modelViewMatrix[0][1], modelViewMatrix[0][2]),
-        vec3(modelViewMatrix[1][0], modelViewMatrix[1][1], modelViewMatrix[1][2]),
-        vec3(modelViewMatrix[2][0], modelViewMatrix[2][1], modelViewMatrix[2][2])
-    ];
-    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
-    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
-    
-    leftPlatform.draw(gl, 7);
-
-    // 右平台
-    var RX = rotateX(0);
-    var T = translate(3.4, -3.9, 0);
-    var RY = rotateY(84);
-    
-    var transformMatrix = mult(T, mult(RY, RX));
-    modelViewMatrix = lookAt(eye, at, up);
-    modelViewMatrix = mult(modelViewMatrix, transformMatrix);
-    normalMatrix = [
-        vec3(modelViewMatrix[0][0], modelViewMatrix[0][1], modelViewMatrix[0][2]),
-        vec3(modelViewMatrix[1][0], modelViewMatrix[1][1], modelViewMatrix[1][2]),
-        vec3(modelViewMatrix[2][0], modelViewMatrix[2][1], modelViewMatrix[2][2])
-    ];
-    gl.uniformMatrix4fv(modelViewMatrixLoc, false, flatten(modelViewMatrix));
-    gl.uniformMatrix3fv(normalMatrixLoc, false, flatten(normalMatrix));
-    
-    rightPlatform.draw(gl, 7);
-
 
     gl.uniform1i(gl.getUniformLocation(program, "bTexCoord"), 0);
 
@@ -634,16 +634,6 @@ function render() {
  */
 function eventListen() {
   //event listeners for buttons
-  // document.getElementById("IncreaseZ").onclick = function(){
-  //     near  *= 1.1;
-  //     far *= 1.1;
-  // };
-  // document.getElementById("DecreaseZ").onclick = function(){
-  //     near *= 0.9;
-  //     far *= 0.9;
-  // };
-
-
   document.getElementById("LightRotate1").onclick = function () {
       //lightPosition = vec4(0, 1.0, 0, 0.0);
       lightPosition[0] += 0.2;
@@ -806,6 +796,50 @@ function eventListen() {
       yR -= 10;
   };
 
+  document.getElementById("frontView").onclick = function(){
+    theta = 0;
+    phi = 0;
+  };
+
+  document.getElementById("leftView").onclick = function(){
+    theta = -Math.PI / 2;
+    phi = 0;
+  };
+
+  document.getElementById("rightView").onclick = function(){
+    theta = Math.PI / 2;
+    phi = 0;
+  };
+
+  document.getElementById("backView").onclick = function(){
+    theta = Math.PI;
+    phi = 0;
+  };
+
+  document.getElementById("planformView").onclick = function(){
+    theta = Math.PI / 2;
+    phi = Math.PI / 2;
+
+  };
+
+  document.getElementById("eyeForward").onclick = function(){
+    distance -= 0.5;
+  };
+
+  document.getElementById("eyeBackward").onclick = function(){
+    distance += 0.5;
+  };
+
+  document.getElementById("eyeFreeWalk").onclick = function(){
+    theta = Math.PI;
+    phi = 0;
+  };
+
+  document.getElementById("eyeStopWalk").onclick = function(){
+    theta = Math.PI / 2;
+    phi = Math.PI / 2;
+
+  };
 
   canvas.addEventListener("mousedown", function(evendinglixiangzhut){
     var x = 2*event.clientX/canvas.width-1;
