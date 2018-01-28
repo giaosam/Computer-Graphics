@@ -1,6 +1,8 @@
 # Computer-Graphics
 The lab in computer graphics with WebGL.
 
+![Alt text](/Resources/intro.png)
+
 ## Features:
   * Nice design in graphics.
   * Providing two interactive ways.
